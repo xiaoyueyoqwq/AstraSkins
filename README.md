@@ -169,6 +169,7 @@ If `data/music_kits.json` is missing, the category simply stays hidden.
     "MaxNameTagLength": 20
   },
   "ApplyPlayerCosmeticsOnBotTakeover": false,
+  "EnableAllWeaponsStatTrak": false,
   "EnableMusicKitMvpCounter": false,
   "Definitions": {
     "Weapons": "data/weapons.json",
@@ -197,6 +198,7 @@ If `data/music_kits.json` is missing, the category simply stays hidden.
 | `Customization.Permission` | Restrict customization to a flag; empty = everyone |
 | `Customization.MaxNameTagLength` | Name tag cap, 4–32 (default 20 matches the real game) |
 | `ApplyPlayerCosmeticsOnBotTakeover` | Apply the human player's cosmetics to the possessed bot pawn; off by default to preserve bot loadouts |
+| `EnableAllWeaponsStatTrak` | Start StatTrak at 0 for every weapon or knife with a selected skin |
 | `EnableMusicKitMvpCounter` | Track per-player MVP counts for selected music kits |
 
 ### SQLite
