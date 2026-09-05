@@ -91,7 +91,7 @@
 
 Overrides apply on top of the selected skin, take effect instantly, and persist in the database. They target the weapon currently held (knife included); pass `gloves` as the first argument to target equipped gloves instead. A skin must be selected for the item first.
 
-StatTrak works the same way: enable it on a weapon or knife and the counter goes up with every kill you get with that item, persisting across reconnects and map changes.
+StatTrak works the same way: enable it on a weapon or knife and the counter goes up with every kill you get with that item, persisting across reconnects and map changes. With `EnableStatTrakByDefault` on, every weapon and knife with a selected skin starts counting at 0 without asking, and `!stattrak reset` turns it off for that item.
 
 > **Tip:** seeds only change finishes whose pattern placement varies — Case Hardened, Crimson Web, Marble Fade, Fade. Most other skins look identical on every seed.
 
@@ -170,6 +170,7 @@ If `data/music_kits.json` is missing, the category simply stays hidden.
     "MaxNameTagLength": 20
   },
   "ApplyPlayerCosmeticsOnBotTakeover": false,
+  "EnableStatTrakByDefault": false,
   "EnableMusicKitMvpCounter": false,
   "Definitions": {
     "Weapons": "data/weapons.json",
@@ -198,6 +199,7 @@ If `data/music_kits.json` is missing, the category simply stays hidden.
 | `Customization.Permission` | Restrict customization to a flag; empty = everyone |
 | `Customization.MaxNameTagLength` | Name tag cap, 4–32 (default 20 matches the real game) |
 | `ApplyPlayerCosmeticsOnBotTakeover` | Off by default: a bot you take over keeps its own loadout. Set to `true` to apply your knife, agent and music kit to the possessed bot (guns and gloves already in hand keep their look) |
+| `EnableStatTrakByDefault` | Every weapon and knife with a selected skin starts with a StatTrak counter at 0; players can still turn it off per item with `!stattrak reset` |
 | `EnableMusicKitMvpCounter` | Track per-player MVP counts for selected music kits |
 
 ### SQLite

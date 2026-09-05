@@ -15,6 +15,9 @@ public sealed class PluginConfig : BasePluginConfig
     // Off by default so a possessed bot keeps whatever cosmetics its pawn has
     // (for example from a bot randomizer plugin). Opt in to see your own instead.
     public bool ApplyPlayerCosmeticsOnBotTakeover { get; set; } = false;
+    // Every weapon or knife with a selected skin starts with a StatTrak counter
+    // at 0. Players can still turn it off per item with !stattrak reset.
+    public bool EnableStatTrakByDefault { get; set; } = false;
     public bool EnableMusicKitMvpCounter { get; set; } = false;
     public DefinitionPathConfig Definitions { get; set; } = new();
     public bool EnableAdminReloadCommand { get; set; } = true;

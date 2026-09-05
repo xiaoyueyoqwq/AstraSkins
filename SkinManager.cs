@@ -15,11 +15,17 @@ public sealed class SkinManager : IDisposable
     public const string KnifeTarget = "knife";
     public const string GloveTarget = "glove";
 
+    // Stored in the cosmetic_id column of a "stattrak" row to record an explicit
+    // off under EnableStatTrakByDefault. Not a number, so older builds skip the
+    // row instead of reading it as a count.
+    public const string StatTrakDisabledValue = "off";
+
     private const ulong MinimumCustomItemId = 65578;
 
     private readonly ISkinStorage _storage;
     private readonly ILogger _logger;
     private readonly EconAttributeApplicator _econAttributes;
+    private readonly bool _statTrakByDefault;
     private readonly Dictionary<ulong, PlayerSkinProfile> _profiles = new();
     // _profiles can hold a placeholder while a read is in flight, so loaded
     // completion is tracked separately; without this a failed read leaves the
@@ -95,12 +101,13 @@ public sealed class SkinManager : IDisposable
 
     public DefinitionCatalog Catalog { get; private set; }
 
-    public SkinManager(ISkinStorage storage, DefinitionCatalog catalog, ILogger logger, Action<float, Action>? scheduleDelayed = null)
+    public SkinManager(ISkinStorage storage, DefinitionCatalog catalog, ILogger logger, Action<float, Action>? scheduleDelayed = null, bool statTrakByDefault = false)
     {
         _storage = storage;
         Catalog = catalog;
         _logger = logger;
         _scheduleDelayed = scheduleDelayed;
+        _statTrakByDefault = statTrakByDefault;
         _econAttributes = new EconAttributeApplicator(logger);
     }
 
@@ -825,17 +832,56 @@ public sealed class SkinManager : IDisposable
 
     public bool SetStatTrak(CCSPlayerController player, string target, int? count)
     {
+        // With the default on, "no row" already means "counting from 0", so an
+        // explicit off has to be stored as its own value or the next apply
+        // would bring the counter back.
+        var storedValue = count?.ToString(CultureInfo.InvariantCulture)
+            ?? (_statTrakByDefault ? StatTrakDisabledValue : null);
+
         return SetCustomization(player, target, "stattrak",
-            count?.ToString(CultureInfo.InvariantCulture),
-            customization => customization.StatTrak = count,
+            storedValue,
+            customization =>
+            {
+                customization.StatTrak = count;
+                customization.StatTrakDisabled = count is null && _statTrakByDefault;
+            },
             requiresPaintKit: false);
     }
 
     public int? GetStatTrak(CCSPlayerController player, string target)
     {
-        return GetProfile(player).Customizations.TryGetValue(target, out var customization)
-            ? customization.StatTrak
-            : null;
+        var profile = GetProfile(player);
+        profile.Customizations.TryGetValue(target, out var customization);
+        return ResolveStatTrak(profile, target, customization);
+    }
+
+    // The one place that turns stored state plus the global default into the
+    // count to render: an explicit count wins, an explicit off wins over the
+    // default, and the default only hands a fresh 0 to items the player picked
+    // a skin for. Gloves never get one, the game has no StatTrak gloves.
+    public static int? ResolveStatTrakCount(bool statTrakByDefault, PlayerSkinProfile profile, string target, WeaponCustomization? customization)
+    {
+        if (customization?.StatTrak is int count)
+        {
+            return count;
+        }
+
+        if (!statTrakByDefault || customization?.StatTrakDisabled == true)
+        {
+            return null;
+        }
+
+        return target switch
+        {
+            KnifeTarget => profile.KnifeSkinId is not null || profile.KnifeId is not null ? 0 : null,
+            GloveTarget => null,
+            _ => profile.WeaponSkins.ContainsKey(target) ? 0 : null
+        };
+    }
+
+    private int? ResolveStatTrak(PlayerSkinProfile profile, string target, WeaponCustomization? customization)
+    {
+        return ResolveStatTrakCount(_statTrakByDefault, profile, target, customization);
     }
 
     // Bumps the counter in place: no weapon refresh, since re-creating the
@@ -859,13 +905,23 @@ public sealed class SkinManager : IDisposable
         }
 
         var target = IsKnife(weaponName) ? KnifeTarget : weaponName;
-        if (!profile.Customizations.TryGetValue(target, out var customization) || customization.StatTrak is null)
+        profile.Customizations.TryGetValue(target, out var customization);
+        if (ResolveStatTrak(profile, target, customization) is not int current)
         {
             return;
         }
 
-        var next = customization.StatTrak.Value + 1;
+        // Under the default there may be no row yet: the first kill creates it,
+        // so nothing reaches storage until the counter is actually non-zero.
+        if (customization is null)
+        {
+            customization = new WeaponCustomization();
+            profile.Customizations[target] = customization;
+        }
+
+        var next = current + 1;
         customization.StatTrak = next;
+        customization.StatTrakDisabled = false;
         QueueStorageWrite($"stattrak {next} ({target}) for {steamId}",
             () => _storage.SaveCustomization(steamId, "stattrak", target, next.ToString(CultureInfo.InvariantCulture)));
 
@@ -1687,11 +1743,12 @@ public sealed class SkinManager : IDisposable
 
             // Resolving the entity name on a freshly created weapon is not
             // reliable, so prefer the target the caller already knows.
-            var customization = GetCustomization(player, isKnife ? KnifeTarget : customizationTarget ?? ResolveWeaponEntityName(weapon));
+            var resolvedTarget = isKnife ? KnifeTarget : customizationTarget ?? ResolveWeaponEntityName(weapon);
+            var customization = GetCustomization(player, resolvedTarget);
             var seed = customization?.Seed ?? cosmetic.Seed;
             var wear = customization?.Wear ?? cosmetic.Wear;
 
-            var statTrak = customization?.StatTrak;
+            var statTrak = ResolveStatTrak(GetProfile(player), resolvedTarget, customization);
 
             weapon.FallbackPaintKit = cosmetic.PaintKit;
             weapon.FallbackSeed = seed;
@@ -2043,7 +2100,7 @@ public sealed class SkinManager : IDisposable
                 return false;
             }
 
-            var statTrak = GetCustomization(player, KnifeTarget)?.StatTrak;
+            var statTrak = ResolveStatTrak(GetProfile(player), KnifeTarget, GetCustomization(player, KnifeTarget));
 
             TryChangeKnifeSubclass(weapon, knife.ItemDefinitionIndex);
             weapon.FallbackPaintKit = 0;

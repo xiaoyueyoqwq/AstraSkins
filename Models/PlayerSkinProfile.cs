@@ -22,5 +22,9 @@ public sealed class WeaponCustomization
     public float? Wear { get; set; }
     public string? NameTag { get; set; }
     public int? StatTrak { get; set; }
-    public bool IsEmpty => Seed is null && Wear is null && NameTag is null && StatTrak is null;
+    // Only meaningful with EnableStatTrakByDefault: records that the player
+    // turned StatTrak off on this item, which a null count cannot express once
+    // the default would hand out a 0 again.
+    public bool StatTrakDisabled { get; set; }
+    public bool IsEmpty => Seed is null && Wear is null && NameTag is null && StatTrak is null && !StatTrakDisabled;
 }
