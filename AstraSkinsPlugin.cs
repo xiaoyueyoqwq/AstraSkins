@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Runtime.InteropServices;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes;
@@ -29,11 +30,24 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
     private DateTime _nextMusicKitHealthCheckUtc = DateTime.MinValue;
     private bool _ready;
     private bool _giveNamedItemHooked;
+    private bool _getItemInLoadoutHooked;
+    private MemoryFunctionWithReturn<nint, int, int, nint>? _getItemInLoadout;
+    private MemoryFunctionVoid<nint>? _sendInventoryUpdateEvent;
+    private int _inventoryServicesInventoryOffset;
+    private int _inventorySoCacheOffset;
+    private int _soCacheOwnerOffset;
+    private bool _inventoryOffsetsReady;
+    private readonly Dictionary<(ulong SteamId, int Team, int Slot), DateTime> _loadoutHookLogUtc = new();
+    private readonly Dictionary<(nint Inventory, int Team, int Slot), DateTime> _unmatchedLoadoutHookLogUtc = new();
+    private readonly Dictionary<nint, ulong> _inventoryToSteamId = new();
+    private readonly HashSet<nint> _diagnosedUnmatchedInventories = new();
+    private readonly HashSet<ulong> _afterSetReturnSent = new();
+    private static readonly TimeSpan LoadoutHookLogInterval = TimeSpan.FromSeconds(5);
 
     public PluginConfig Config { get; set; } = new();
 
     public override string ModuleName => "Astra Skins";
-    public override string ModuleVersion => "1.0.10";
+    public override string ModuleVersion => "1.0.10-buy-menu-wip";
     public override string ModuleAuthor => "Ayrton09";
     public override string ModuleDescription => string.Empty;
 
@@ -76,6 +90,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         RegisterEventHandler<EventPlayerDisconnect>(OnPlayerDisconnect);
         RegisterEventHandler<EventPlayerTeam>(OnPlayerTeam);
         HookGiveNamedItem();
+        ResolveInventoryNatives();
 
         if (hotReload && _ready)
         {
@@ -89,12 +104,20 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
     public override void Unload(bool hotReload)
     {
         UnhookGiveNamedItem();
+        UnhookGetItemInLoadout();
         _skinManager?.Dispose();
         _storage?.Dispose();
         _storage = null;
         _skinManager = null;
         _menuManager = null;
         _steamIdsBySlot.Clear();
+        _loadoutHookLogUtc.Clear();
+        _unmatchedLoadoutHookLogUtc.Clear();
+        _inventoryToSteamId.Clear();
+        _diagnosedUnmatchedInventories.Clear();
+        _afterSetReturnSent.Clear();
+        _sendInventoryUpdateEvent = null;
+        _inventoryOffsetsReady = false;
         _ready = false;
     }
 
@@ -117,7 +140,8 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         _config = config;
         _storage = storage;
         _skinManager = new SkinManager(storage, catalog, Logger,
-            (delay, action) => AddTimer(delay, () => action(), TimerFlags.STOP_ON_MAPCHANGE));
+            (delay, action) => AddTimer(delay, () => action(), TimerFlags.STOP_ON_MAPCHANGE),
+            OnLoadoutDisplayChanged);
         _menuManager = new MenuManager(_skinManager, config, Localizer, Logger);
         _nextMusicKitHealthCheckUtc = DateTime.MinValue;
         _ready = true;
@@ -744,6 +768,8 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
             if (_steamIdsBySlot.Remove(player.Slot, out var steamId))
             {
                 _skinManager?.Forget(steamId);
+                ForgetInventoryCache(steamId);
+                ClearLoadoutHookLogs(steamId);
             }
         }
 
@@ -936,6 +962,461 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         finally
         {
             _giveNamedItemHooked = false;
+        }
+    }
+
+
+    private HookResult OnGetItemInLoadoutPost(DynamicHook hook)
+    {
+        try
+        {
+            if (!_ready || _skinManager is null)
+            {
+                return HookResult.Continue;
+            }
+
+            var inventory = hook.GetParam<nint>(0);
+            var team = hook.GetParam<int>(1);
+            var slot = hook.GetParam<int>(2);
+            if (inventory == nint.Zero)
+            {
+                return HookResult.Continue;
+            }
+
+            var originalView = hook.GetReturn<nint>();
+            var player = GetPlayerFromInventory(inventory, out var matchHow);
+            if (!IsLiveHuman(player))
+            {
+                DiagnoseUnmatchedInventory(inventory);
+                LogLoadoutHook(
+                    0,
+                    team,
+                    slot,
+                    matchHow,
+                    originalView == nint.Zero ? "original-view-zero" : "unmatched",
+                    inventory);
+                return HookResult.Continue;
+            }
+
+            if (originalView == nint.Zero)
+            {
+                LogLoadoutHook(player!.SteamID, team, slot, matchHow, "original-view-zero");
+                return HookResult.Continue;
+            }
+
+            if (_skinManager.TryGetLoadoutItemView(player!, team, slot, originalView, out var itemView, out var reason) &&
+                itemView != nint.Zero)
+            {
+                hook.SetReturn(itemView);
+                LogLoadoutHook(player!.SteamID, team, slot, matchHow, "set-return");
+                ScheduleAfterSetReturnInventoryUpdate(player);
+                return HookResult.Changed;
+            }
+
+            LogLoadoutHook(player!.SteamID, team, slot, matchHow, string.IsNullOrWhiteSpace(reason) ? "no-view" : reason);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning(ex, "Astra Skins failed to apply cosmetics from GetItemInLoadout hook.");
+        }
+
+        return HookResult.Continue;
+    }
+
+    private void ResolveInventoryNatives()
+    {
+        try
+        {
+            _inventoryServicesInventoryOffset = GameData.GetOffset("AstraSkins_CCSPlayerController_InventoryServices_m_pInventory");
+            _inventorySoCacheOffset = GameData.GetOffset("AstraSkins_CCSPlayerInventory_m_pSOCache");
+            _soCacheOwnerOffset = GameData.GetOffset("AstraSkins_CGCClientSharedObjectCache_m_Owner");
+            _inventoryOffsetsReady = true;
+        }
+        catch (Exception ex)
+        {
+            _inventoryOffsetsReady = false;
+            Logger.LogWarning(
+                ex,
+                "Astra Skins failed to load inventory offsets. Buy-menu player matching and inventory updates may fail.");
+        }
+
+        try
+        {
+            var signature = GameData.GetSignature("AstraSkins_CCSPlayerInventory_SendInventoryUpdateEvent");
+            if (string.IsNullOrWhiteSpace(signature))
+            {
+                Logger.LogError(
+                    "Astra Skins gamedata signature AstraSkins_CCSPlayerInventory_SendInventoryUpdateEvent is missing. Copy astra_skins.json to addons/counterstrikesharp/gamedata/.");
+            }
+            else
+            {
+                _sendInventoryUpdateEvent = new MemoryFunctionVoid<nint>(signature);
+            }
+        }
+        catch (Exception ex)
+        {
+            _sendInventoryUpdateEvent = null;
+            Logger.LogError(
+                ex,
+                "Astra Skins failed to load gamedata signature AstraSkins_CCSPlayerInventory_SendInventoryUpdateEvent. Buy-menu weapon previews may stay vanilla.");
+        }
+    }
+
+    private void HookGetItemInLoadout()
+    {
+        if (_getItemInLoadoutHooked)
+        {
+            return;
+        }
+
+        if (_skinManager is null || !_skinManager.LoadoutPreviewAvailable)
+        {
+            Logger.LogWarning("Astra Skins cannot construct loadout item views. Buy-menu weapon previews will stay vanilla.");
+            return;
+        }
+
+        try
+        {
+            var signature = GameData.GetSignature("AstraSkins_CCSPlayerInventory_GetItemInLoadout");
+            if (string.IsNullOrWhiteSpace(signature))
+            {
+                Logger.LogError(
+                    "Astra Skins gamedata signature AstraSkins_CCSPlayerInventory_GetItemInLoadout is missing. Copy astra_skins.json to addons/counterstrikesharp/gamedata/.");
+                return;
+            }
+
+            _getItemInLoadout = new MemoryFunctionWithReturn<nint, int, int, nint>(signature);
+            _getItemInLoadout.Hook(OnGetItemInLoadoutPost, HookMode.Post);
+            _getItemInLoadoutHooked = true;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning(ex, "Astra Skins could not hook GetItemInLoadout. Buy-menu weapon previews will stay vanilla.");
+            _getItemInLoadout = null;
+        }
+    }
+
+    private void UnhookGetItemInLoadout()
+    {
+        if (!_getItemInLoadoutHooked)
+        {
+            return;
+        }
+
+        try
+        {
+            _getItemInLoadout?.Unhook(OnGetItemInLoadoutPost, HookMode.Post);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogDebug(ex, "Astra Skins failed to unhook GetItemInLoadout.");
+        }
+        finally
+        {
+            _getItemInLoadoutHooked = false;
+            _getItemInLoadout = null;
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    private readonly struct SharedObjectId
+    {
+        public readonly ulong Id;
+        public readonly uint Type;
+        public readonly uint Padding;
+    }
+
+    private CCSPlayerController? GetPlayerFromInventory(nint inventory, out string matchHow)
+    {
+        matchHow = "unmatched";
+        if (!_inventoryOffsetsReady)
+        {
+            matchHow = "offsets-missing";
+            return null;
+        }
+
+        if (_inventoryToSteamId.TryGetValue(inventory, out var cachedSteamId) && cachedSteamId != 0)
+        {
+            var cached = Utilities.GetPlayers()
+                .FirstOrDefault(player => IsLiveHuman(player) && player.SteamID == cachedSteamId);
+            if (cached is not null)
+            {
+                matchHow = "cache";
+                return cached;
+            }
+        }
+
+        try
+        {
+            var soCache = Marshal.ReadIntPtr(inventory + _inventorySoCacheOffset);
+            if (soCache != nint.Zero)
+            {
+                var owner = Marshal.PtrToStructure<SharedObjectId>(soCache + _soCacheOwnerOffset);
+                if (owner.Id != 0)
+                {
+                    var matched = Utilities.GetPlayers()
+                        .FirstOrDefault(player => IsLiveHuman(player) && player.SteamID == owner.Id);
+                    if (matched is not null)
+                    {
+                        matchHow = "soid";
+                        RememberInventory(inventory, matched.SteamID);
+                        return matched;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning(ex, "Astra Skins failed to read SOCache owner from inventory {Inventory}.", inventory);
+        }
+
+        foreach (var player in Utilities.GetPlayers())
+        {
+            if (!IsLiveHuman(player))
+            {
+                continue;
+            }
+
+            var services = player.InventoryServices;
+            if (services is null || services.Handle == nint.Zero)
+            {
+                continue;
+            }
+
+            if (services.Handle + _inventoryServicesInventoryOffset == inventory)
+            {
+                matchHow = "handle";
+                RememberInventory(inventory, player.SteamID);
+                return player;
+            }
+
+            try
+            {
+                var pointed = Marshal.ReadIntPtr(services.Handle + _inventoryServicesInventoryOffset);
+                if (pointed != nint.Zero && pointed == inventory)
+                {
+                    matchHow = "handle-ptr";
+                    RememberInventory(inventory, player.SteamID);
+                    return player;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogDebug(ex, "Astra Skins failed to ReadIntPtr inventory for {SteamId}.", player.SteamID);
+            }
+        }
+
+        return null;
+    }
+
+    private void OnLoadoutDisplayChanged(ulong steamId)
+    {
+        _ = steamId;
+    }
+
+    private void SendInventoryUpdateForSteamId(ulong steamId, string reason)
+    {
+        if (steamId == 0)
+        {
+            return;
+        }
+
+        var player = Utilities.GetPlayers().FirstOrDefault(p => IsLiveHuman(p) && p.SteamID == steamId);
+        if (player is not null)
+        {
+            SendInventoryUpdateForPlayer(player, reason);
+        }
+    }
+
+    private void SendInventoryUpdateForPlayer(CCSPlayerController player, string reason)
+    {
+        if (_sendInventoryUpdateEvent is null || !_inventoryOffsetsReady || !IsLiveHuman(player))
+        {
+            return;
+        }
+
+        var services = player.InventoryServices;
+        if (services is null || services.Handle == nint.Zero)
+        {
+            Logger.LogWarning(
+                "Astra Skins cannot SendInventoryUpdateEvent ({Reason}): InventoryServices missing for {SteamId}.",
+                reason,
+                player.SteamID);
+            return;
+        }
+
+        try
+        {
+            var embedded = services.Handle + _inventoryServicesInventoryOffset;
+            _sendInventoryUpdateEvent.Invoke(embedded);
+            RememberInventory(embedded, player.SteamID);
+            try
+            {
+                var pointed = Marshal.ReadIntPtr(services.Handle + _inventoryServicesInventoryOffset);
+                if (pointed != nint.Zero)
+                {
+                    RememberInventory(pointed, player.SteamID);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogDebug(ex, "Astra Skins failed to cache ReadIntPtr inventory for {SteamId}.", player.SteamID);
+            }
+
+            Logger.LogInformation(
+                "Astra Skins SendInventoryUpdateEvent steam={SteamId} reason={Reason}",
+                player.SteamID,
+                reason);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning(ex, "Astra Skins SendInventoryUpdateEvent failed ({Reason}) for {SteamId}.", reason, player.SteamID);
+        }
+    }
+
+    private void ScheduleAfterSetReturnInventoryUpdate(CCSPlayerController player)
+    {
+        var steamId = player.SteamID;
+        if (steamId == 0 || !_afterSetReturnSent.Add(steamId))
+        {
+            return;
+        }
+
+        Server.NextWorldUpdate(() =>
+        {
+            if (!_ready)
+            {
+                return;
+            }
+
+            var current = Utilities.GetPlayers().FirstOrDefault(candidate => IsLiveHuman(candidate) && candidate.SteamID == steamId);
+            if (current is not null)
+            {
+                SendInventoryUpdateForPlayer(current, "after-set-return");
+            }
+        });
+    }
+
+    private void RememberInventory(nint inventory, ulong steamId)
+    {
+        if (inventory == nint.Zero || steamId == 0)
+        {
+            return;
+        }
+
+        _inventoryToSteamId[inventory] = steamId;
+    }
+
+    private void ForgetInventoryCache(ulong steamId)
+    {
+        if (steamId == 0)
+        {
+            return;
+        }
+
+        foreach (var key in _inventoryToSteamId.Where(pair => pair.Value == steamId).Select(pair => pair.Key).ToArray())
+        {
+            _inventoryToSteamId.Remove(key);
+        }
+
+        _afterSetReturnSent.Remove(steamId);
+    }
+
+    private void DiagnoseUnmatchedInventory(nint inventory)
+    {
+        if (inventory == nint.Zero || !_diagnosedUnmatchedInventories.Add(inventory))
+        {
+            return;
+        }
+
+        ulong thisSoid = 0;
+        try
+        {
+            var soCache = Marshal.ReadIntPtr(inventory + _inventorySoCacheOffset);
+            if (soCache != nint.Zero)
+            {
+                thisSoid = Marshal.PtrToStructure<SharedObjectId>(soCache + _soCacheOwnerOffset).Id;
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogDebug(ex, "Astra Skins unmatched inventory {Inventory} SOID read failed.", inventory);
+        }
+
+        var humans = new List<string>();
+        foreach (var player in Utilities.GetPlayers().Where(IsLiveHuman))
+        {
+            nint embedded = nint.Zero;
+            nint pointed = nint.Zero;
+            var services = player.InventoryServices;
+            if (services is not null && services.Handle != nint.Zero)
+            {
+                embedded = services.Handle + _inventoryServicesInventoryOffset;
+                try
+                {
+                    pointed = Marshal.ReadIntPtr(services.Handle + _inventoryServicesInventoryOffset);
+                }
+                catch
+                {
+                    pointed = nint.Zero;
+                }
+            }
+
+            humans.Add($"steam={player.SteamID} embedded={embedded} ptr={pointed}");
+        }
+
+        Logger.LogWarning(
+            "Astra Skins unmatched GetItemInLoadout this={Inventory} soid={Soid} humans={Humans}",
+            inventory,
+            thisSoid,
+            humans.Count == 0 ? "(none)" : string.Join("; ", humans));
+    }
+
+    private void LogLoadoutHook(ulong steamId, int team, int slot, string matchHow, string result, nint inventory = 0)
+    {
+        var now = DateTime.UtcNow;
+        if (steamId == 0)
+        {
+            var unmatchedKey = (inventory, team, slot);
+            if (_unmatchedLoadoutHookLogUtc.TryGetValue(unmatchedKey, out var unmatchedLast) &&
+                now - unmatchedLast < LoadoutHookLogInterval)
+            {
+                return;
+            }
+
+            _unmatchedLoadoutHookLogUtc[unmatchedKey] = now;
+            Logger.LogInformation(
+                "Astra Skins GetItemInLoadout steam={SteamId} team={Team} slot={Slot} match={Match} result={Result} inventory={Inventory}",
+                steamId,
+                team,
+                slot,
+                matchHow,
+                result,
+                inventory);
+            return;
+        }
+
+        var key = (steamId, team, slot);
+        if (_loadoutHookLogUtc.TryGetValue(key, out var last) && now - last < LoadoutHookLogInterval)
+        {
+            return;
+        }
+
+        _loadoutHookLogUtc[key] = now;
+        Logger.LogInformation(
+            "Astra Skins GetItemInLoadout steam={SteamId} team={Team} slot={Slot} match={Match} result={Result}",
+            steamId,
+            team,
+            slot,
+            matchHow,
+            result);
+    }
+
+    private void ClearLoadoutHookLogs(ulong steamId)
+    {
+        foreach (var key in _loadoutHookLogUtc.Keys.Where(entry => entry.SteamId == steamId).ToArray())
+        {
+            _loadoutHookLogUtc.Remove(key);
         }
     }
 
