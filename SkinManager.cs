@@ -267,6 +267,15 @@ public sealed class SkinManager : IDisposable
             return;
         }
 
+        // Music netprop writes on an in-round corpse retrigger DeathCam and cut
+        // MVP / round cues. Team select and connect have no pawn yet; those
+        // still need the kit written.
+        var existingPawn = player.PlayerPawn.Value;
+        if (existingPawn is not null && existingPawn.IsValid && !player.PawnIsAlive)
+        {
+            return;
+        }
+
         // A placeholder in _profiles is not a completed read. Treating its
         // empty MusicKitId as "player chose none" skips retries until reconnect.
         if (!_loadedProfiles.Contains(steamId) || !_profiles.TryGetValue(steamId, out var profile))
@@ -283,16 +292,6 @@ public sealed class SkinManager : IDisposable
 
         var (kitId, mvpCount) = ResolveMusicKitState(profile);
         if (kitId <= 0)
-        {
-            return;
-        }
-
-        var inventory = player.InventoryServices;
-        var inventoryMatches = inventory is null || inventory.MusicID == (ushort)Math.Clamp(kitId, 0, ushort.MaxValue);
-        if (player.MusicKitID == kitId &&
-            player.MusicKitMVPs == mvpCount &&
-            !player.MvpNoMusic &&
-            inventoryMatches)
         {
             return;
         }
@@ -579,22 +578,40 @@ public sealed class SkinManager : IDisposable
         return (kitId, mvpCount);
     }
 
+    // The client plays its own cues from m_pInventoryServices.m_unMusicID, so
+    // that pointer has to be flagged or the value only leaves the server when
+    // Valve touches the component. Only fields that differ are written and
+    // flagged so repeated calls from round events do not resend anything.
     private void ApplyMusicKitState(CCSPlayerController player, int kitId, int mvpCount, bool logFailures)
     {
         try
         {
             var inventory = player.InventoryServices;
-            if (inventory is not null)
+            var inventoryKitId = checked((ushort)Math.Clamp(kitId, 0, ushort.MaxValue));
+            if (inventory is not null && inventory.MusicID != inventoryKitId)
             {
-                inventory.MusicID = checked((ushort)Math.Clamp(kitId, 0, ushort.MaxValue));
+                inventory.MusicID = inventoryKitId;
+                Utilities.SetStateChanged(player, "CCSPlayerController", "m_pInventoryServices");
             }
 
-            player.MusicKitID = kitId;
-            Utilities.SetStateChanged(player, "CCSPlayerController", "m_iMusicKitID");
-            player.MusicKitMVPs = Math.Max(0, mvpCount);
-            Utilities.SetStateChanged(player, "CCSPlayerController", "m_iMusicKitMVPs");
-            player.MvpNoMusic = false;
-            Utilities.SetStateChanged(player, "CCSPlayerController", "m_bMvpNoMusic");
+            if (player.MusicKitID != kitId)
+            {
+                player.MusicKitID = kitId;
+                Utilities.SetStateChanged(player, "CCSPlayerController", "m_iMusicKitID");
+            }
+
+            var clampedMvpCount = Math.Max(0, mvpCount);
+            if (player.MusicKitMVPs != clampedMvpCount)
+            {
+                player.MusicKitMVPs = clampedMvpCount;
+                Utilities.SetStateChanged(player, "CCSPlayerController", "m_iMusicKitMVPs");
+            }
+
+            if (player.MvpNoMusic)
+            {
+                player.MvpNoMusic = false;
+                Utilities.SetStateChanged(player, "CCSPlayerController", "m_bMvpNoMusic");
+            }
         }
         catch (Exception ex)
         {
