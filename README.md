@@ -23,6 +23,7 @@
 - 🎵 **Music kits** — pick any of 99 kits from the menu, with an optional per-kit MVP counter shown on the scoreboard.
 - 💾 **Persistent selections** — SQLite or MySQL, keyed by SteamID64. Selections survive reconnects, map changes, and restarts.
 - 🌍 **7 languages** — per-player localization (English, Spanish, Chinese, Portuguese, German, French, Russian).
+- 🎬 **Team intro** shows your agent, gloves, and weapon skins on the match intro and team select screens, not the defaults.
 - 🗣️ **Agent radio voices** — agents keep their voice lines where the CS2 schema exposes the voice data.
 - 🤖 **Bot takeover aware** leaves a possessed bot's loadout alone by default, so bot cosmetics plugins keep working. Opt in to see your own skins on the bot instead.
 - 🛡️ **Permission gating** — restrict individual skins, knives, gloves, agents, or the whole customization feature to admin flags.

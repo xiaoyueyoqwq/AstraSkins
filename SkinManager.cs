@@ -369,7 +369,6 @@ public sealed class SkinManager : IDisposable
         profile.WeaponSkins[weaponEntity] = cosmeticId;
         QueueStorageWrite($"weapon skin {cosmeticId} ({weaponEntity}) for {steamId}", () => _storage.SaveWeaponSkin(steamId, weaponEntity, cosmeticId));
         ApplyWeaponSelection(player, weaponEntity, skin, logFailures: true);
-        ApplyTeamPreviewCosmetics(player);
         return true;
     }
 
@@ -398,7 +397,6 @@ public sealed class SkinManager : IDisposable
         }
 
         ApplyKnifeSelection(player, skin, logFailures: true);
-        ApplyTeamPreviewCosmetics(player);
         return true;
     }
 
@@ -416,7 +414,6 @@ public sealed class SkinManager : IDisposable
         var selectedKnifeId = knife.Id;
         QueueStorageWrite($"knife type {selectedKnifeId} for {steamId}", () => _storage.SaveKnifeType(steamId, selectedKnifeId));
         ApplyKnifeTypeSelection(player, knife, logFailures: true);
-        ApplyTeamPreviewCosmetics(player);
         return true;
     }
 
@@ -432,7 +429,6 @@ public sealed class SkinManager : IDisposable
         profile.GloveSkinId = cosmeticId;
         QueueStorageWrite($"glove skin {cosmeticId} for {steamId}", () => _storage.SaveGloveSkin(steamId, cosmeticId));
         ApplyGloveSelection(player, glove, logFailures: true);
-        ApplyTeamPreviewCosmetics(player);
         return true;
     }
 
@@ -453,7 +449,6 @@ public sealed class SkinManager : IDisposable
         var agentIdToSave = agent.Id;
         QueueStorageWrite($"agent {agentIdToSave} ({normalizedTeam}) for {steamId}", () => _storage.SaveAgent(steamId, normalizedTeam, agentIdToSave));
         ApplyAgentSelection(player, agent, logFailures: true);
-        ApplyTeamPreviewCosmetics(player);
         return true;
     }
 
@@ -1759,6 +1754,22 @@ public sealed class SkinManager : IDisposable
         }
     }
 
+    // Everything that lives on the CEconItemView itself, shared by live weapons
+    // and the team intro preview slots. Quality 9 is what makes the client
+    // render the StatTrak counter.
+    private bool PaintEconItem(CCSPlayerController player, CEconItemView item, CosmeticEntry cosmetic, bool isKnife, int seed, float wear, int? statTrak, string? nameTag, string context)
+    {
+        if (cosmetic.ItemDefinitionIndex.HasValue)
+        {
+            item.ItemDefinitionIndex = cosmetic.ItemDefinitionIndex.Value;
+        }
+
+        item.EntityQuality = statTrak.HasValue ? 9 : isKnife ? 3 : 0;
+        UpdateEconItemIdentity(item, player);
+        ApplyCustomName(item, cosmetic, nameTag);
+        return _econAttributes.ApplyPaintAttributes(item, cosmetic.Id, cosmetic.PaintKit, seed, wear, context, statTrak);
+    }
+
     private bool ApplyCosmeticToWeapon(CCSPlayerController player, CBasePlayerWeapon weapon, CosmeticEntry cosmetic, bool isKnife, bool logFailures, string? customizationTarget = null)
     {
         try
@@ -1805,17 +1816,8 @@ public sealed class SkinManager : IDisposable
             weapon.OriginalOwnerXuidLow = (uint)(player.SteamID & 0xFFFFFFFF);
             weapon.OriginalOwnerXuidHigh = (uint)(player.SteamID >> 32);
 
-            if (cosmetic.ItemDefinitionIndex.HasValue)
-            {
-                item.ItemDefinitionIndex = cosmetic.ItemDefinitionIndex.Value;
-            }
-
-            // Quality 9 is what makes the client render the StatTrak counter.
-            item.EntityQuality = statTrak.HasValue ? 9 : isKnife ? 3 : 0;
-            UpdateEconItemIdentity(item, player);
-            ApplyCustomName(item, cosmetic, customization?.NameTag);
-
-            var attributesApplied = _econAttributes.ApplyPaintAttributes(item, cosmetic.Id, cosmetic.PaintKit, seed, wear, $"{ResolveWeaponEntityName(weapon)} entity {weapon.Index}", statTrak);
+            var attributesApplied = PaintEconItem(player, item, cosmetic, isKnife, seed, wear, statTrak, customization?.NameTag,
+                $"{ResolveWeaponEntityName(weapon)} entity {weapon.Index}");
             ApplyWeaponBodyGroup(weapon, cosmetic);
             ApplyStatTrakBodyGroup(weapon, statTrak.HasValue);
             MarkWeaponStateChanged(weapon);
@@ -2544,24 +2546,9 @@ public sealed class SkinManager : IDisposable
             var customization = GetCustomization(player, customizationTarget);
             var seed = customization?.Seed ?? cosmetic.Seed;
             var wear = customization?.Wear ?? cosmetic.Wear;
-            var statTrak = customization?.StatTrak;
+            var statTrak = ResolveStatTrak(GetProfile(player), customizationTarget, customization);
 
-            if (cosmetic.ItemDefinitionIndex.HasValue)
-            {
-                item.ItemDefinitionIndex = cosmetic.ItemDefinitionIndex.Value;
-            }
-
-            item.EntityQuality = statTrak.HasValue ? 9 : isKnife ? 3 : 0;
-            UpdateEconItemIdentity(item, player);
-            ApplyCustomName(item, cosmetic, customization?.NameTag);
-            var attributesApplied = _econAttributes.ApplyPaintAttributes(
-                item,
-                cosmetic.Id,
-                cosmetic.PaintKit,
-                seed,
-                wear,
-                context,
-                statTrak);
+            var attributesApplied = PaintEconItem(player, item, cosmetic, isKnife, seed, wear, statTrak, customization?.NameTag, context);
             if (!attributesApplied && logFailures)
             {
                 _logger.LogWarning(
@@ -2582,11 +2569,11 @@ public sealed class SkinManager : IDisposable
     private bool ApplyPreviewKnifeType(CCSPlayerController player, CEconItemView item, KnifeDefinition knife)
     {
         var customization = GetCustomization(player, KnifeTarget);
-        var statTrak = customization?.StatTrak;
+        var statTrak = ResolveStatTrak(GetProfile(player), KnifeTarget, customization);
         item.ItemDefinitionIndex = knife.ItemDefinitionIndex;
         item.EntityQuality = statTrak.HasValue ? 9 : 3;
         UpdateEconItemIdentity(item, player);
-        var nameTag = GetCustomization(player, KnifeTarget)?.NameTag;
+        var nameTag = customization?.NameTag;
         if (!string.IsNullOrWhiteSpace(nameTag))
         {
             item.CustomName = nameTag;
