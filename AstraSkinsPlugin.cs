@@ -33,7 +33,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
     public PluginConfig Config { get; set; } = new();
 
     public override string ModuleName => "Astra Skins";
-    public override string ModuleVersion => "1.0.10-team-preview-intro";
+    public override string ModuleVersion => "1.0.10-team-select-preview";
     public override string ModuleAuthor => "Ayrton09";
     public override string ModuleDescription => string.Empty;
 
@@ -77,6 +77,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         RegisterEventHandler<EventRoundMvp>(OnRoundMvp, HookMode.Pre);
         RegisterEventHandler<EventPlayerDisconnect>(OnPlayerDisconnect);
         RegisterEventHandler<EventPlayerTeam>(OnPlayerTeam);
+        RegisterEventHandler<EventPlayerConnectFull>(OnPlayerConnectFull, HookMode.Post);
         HookGiveNamedItem();
 
         if (hotReload && _ready)
@@ -704,6 +705,8 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         Server.NextFrame(apply);
         AddTimer(0.10f, apply, TimerFlags.STOP_ON_MAPCHANGE);
         AddTimer(0.25f, apply, TimerFlags.STOP_ON_MAPCHANGE);
+        AddTimer(0.50f, apply, TimerFlags.STOP_ON_MAPCHANGE);
+        AddTimer(1.00f, apply, TimerFlags.STOP_ON_MAPCHANGE);
     }
 
     private HookResult OnRoundFreezeEndPre(EventRoundFreezeEnd @event, GameEventInfo info)
@@ -811,6 +814,17 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
                 _skinManager?.ApplyMusicKitWhenProfileReady(player, logFailures: false);
                 ScheduleTeamPreviewApply(player);
             }
+        }
+
+        return HookResult.Continue;
+    }
+
+    private HookResult OnPlayerConnectFull(EventPlayerConnectFull @event, GameEventInfo info)
+    {
+        var player = @event.Userid;
+        if (_ready && IsLiveHuman(player))
+        {
+            ScheduleTeamPreviewApply(player);
         }
 
         return HookResult.Continue;
