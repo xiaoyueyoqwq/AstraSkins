@@ -65,6 +65,9 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         RegisterListener<Listeners.OnClientAuthorized>(OnClientAuthorized);
         RegisterListener<Listeners.OnMapStart>(OnMapStart);
         RegisterListener<Listeners.OnTick>(OnTick);
+        RegisterListener<Listeners.OnEntityCreated>(OnEntityCreated);
+        RegisterListener<Listeners.OnEntitySpawned>(OnEntityCreated);
+        RegisterListener<Listeners.OnEntityDeleted>(OnEntityDeleted);
         RegisterListener<Listeners.OnPlayerButtonsChanged>(OnPlayerButtonsChanged);
         RegisterListener<Listeners.OnServerPrecacheResources>(OnServerPrecacheResources);
         RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawnPre, HookMode.Pre);
@@ -368,6 +371,10 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         var agentVoiceCount = catalog.Agents.Count(a => !string.IsNullOrWhiteSpace(a.VoicePrefix));
         command.ReplyToCommand($"{FormatPrefix()} Debug: ready={_ready}, db={_config.DatabaseMode}, inputCooldown={_config.Menu.CooldownMilliseconds}ms, selectionCooldown={_config.Menu.SelectionCooldownMilliseconds}ms");
         command.ReplyToCommand($"{FormatPrefix()} Data: weapons={catalog.Weapons.Count}/{weaponSkinCount}, knives={catalog.Knives.Count}/{knifeSkinCount}, gloves={catalog.Gloves.Count}/{gloveSkinCount}, agents={catalog.Agents.Count} voices={agentVoiceCount}, musicKits={catalog.MusicKits.Count}");
+        foreach (var line in _skinManager.DescribeTeamPreviewState())
+        {
+            command.ReplyToCommand($"{FormatPrefix()} Preview: {line}");
+        }
 
         if (player is null || !IsLiveHuman(player))
         {
@@ -875,6 +882,9 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         }
 
         _menuManager?.OnTick();
+        // Runs after the game's frame, so a preview slot Valve filled this
+        // frame is rewritten before the same snapshot is sent.
+        _skinManager?.EnsureTeamPreviewCosmetics();
 
         var now = DateTime.UtcNow;
         if (now < _nextMusicKitHealthCheckUtc)
@@ -884,7 +894,22 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
 
         _nextMusicKitHealthCheckUtc = now.AddSeconds(1);
         EnsureMusicKitForLivePlayers();
-        _skinManager?.EnsureTeamPreviewCosmetics();
+    }
+
+    private void OnEntityCreated(CEntityInstance entity)
+    {
+        if (_ready)
+        {
+            _skinManager?.TrackTeamPreviewEntity(entity);
+        }
+    }
+
+    private void OnEntityDeleted(CEntityInstance entity)
+    {
+        if (_ready)
+        {
+            _skinManager?.UntrackTeamPreviewEntity(entity);
+        }
     }
 
     private void EnsureMusicKitForLivePlayers()
