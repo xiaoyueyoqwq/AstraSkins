@@ -42,7 +42,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
     public PluginConfig Config { get; set; } = new();
 
     public override string ModuleName => "Astra Skins";
-    public override string ModuleVersion => "1.0.10-mkfix8";
+    public override string ModuleVersion => "1.0.10-wait-music-wip";
     public override string ModuleAuthor => "Ayrton09";
     public override string ModuleDescription => string.Empty;
 
@@ -79,6 +79,8 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawnPre, HookMode.Pre);
         RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawnPost, HookMode.Post);
         RegisterEventHandler<EventBotTakeover>(OnBotTakeover, HookMode.Post);
+        RegisterEventHandler<EventRoundPrestart>(OnRoundPrestart);
+        RegisterEventHandler<EventTeamIntroStart>(OnTeamIntroStart);
         RegisterEventHandler<EventTeamIntroEnd>(OnTeamIntroEndPre, HookMode.Pre);
         RegisterEventHandler<EventRoundStart>(OnRoundStartPre, HookMode.Pre);
         RegisterEventHandler<EventRoundFreezeEnd>(OnRoundFreezeEndPre, HookMode.Pre);
@@ -87,6 +89,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         RegisterEventHandler<EventRoundMvp>(OnRoundMvp, HookMode.Pre);
         RegisterEventHandler<EventPlayerDisconnect>(OnPlayerDisconnect);
         RegisterEventHandler<EventPlayerTeam>(OnPlayerTeam, HookMode.Pre);
+        RegisterEventHandler<EventPlayerConnectFull>(OnPlayerConnectFull, HookMode.Post);
         HookGiveNamedItem();
 
         if (hotReload && _ready)
@@ -674,6 +677,19 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         return HookResult.Continue;
     }
 
+    private HookResult OnRoundPrestart(EventRoundPrestart @event, GameEventInfo info)
+    {
+        // Wait music is sampled here; writing after team_intro_end is too late.
+        ApplyMusicKitToLivePlayers();
+        return HookResult.Continue;
+    }
+
+    private HookResult OnTeamIntroStart(EventTeamIntroStart @event, GameEventInfo info)
+    {
+        ApplyMusicKitToLivePlayers();
+        return HookResult.Continue;
+    }
+
     private HookResult OnTeamIntroEndPre(EventTeamIntroEnd @event, GameEventInfo info)
     {
         ApplyMusicKitToLivePlayers();
@@ -920,6 +936,20 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
                 ScheduleMusicKitReapply(0.15f);
                 ScheduleMusicKitReapply(0.5f);
             }
+        }
+
+        return HookResult.Continue;
+    }
+
+    private HookResult OnPlayerConnectFull(EventPlayerConnectFull @event, GameEventInfo info)
+    {
+        var player = @event.Userid;
+        if (_ready && IsLiveHuman(player))
+        {
+            _skinManager?.ApplyMusicKitWhenProfileReady(player!, logFailures: false);
+            ScheduleMusicKitReapply(0.15f);
+            ScheduleMusicKitReapply(0.5f);
+            ScheduleMusicKitReapply(1.0f);
         }
 
         return HookResult.Continue;

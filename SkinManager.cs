@@ -267,6 +267,15 @@ public sealed class SkinManager : IDisposable
             return;
         }
 
+        // Writing music netprops on an in-round corpse retriggers DeathCam and
+        // cuts MVP / round cues. Team-select and connect often have no pawn yet
+        // (PawnIsAlive is false); those still need the kit written.
+        var existingPawn = player.PlayerPawn.Value;
+        if (existingPawn is not null && existingPawn.IsValid && !player.PawnIsAlive)
+        {
+            return;
+        }
+
         // A placeholder in _profiles is not a completed read. Treating its
         // empty MusicKitId as "player chose none" skips retries until reconnect.
         if (!_loadedProfiles.Contains(steamId) || !_profiles.TryGetValue(steamId, out var profile))
