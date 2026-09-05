@@ -27,6 +27,18 @@ public sealed class SkinManager : IDisposable
     private readonly HashSet<ulong> _loadedProfiles = new();
     private readonly HashSet<ulong> _loadingProfiles = new();
     private readonly HashSet<ulong> _applyAfterLoadRequests = new();
+    // Last state written to each CCSGO_TeamPreviewCharacterPosition, keyed by
+    // entity index. Valve rewrites these items when it (re)assigns Xuid; the
+    // periodic ensure only writes again when the entity no longer matches.
+    private readonly Dictionary<uint, TeamPreviewSignature> _teamPreviewSignatures = new();
+
+    private readonly record struct TeamPreviewSignature(
+        ulong Xuid,
+        ushort AgentDefinitionIndex,
+        ushort GlovesDefinitionIndex,
+        uint GlovesItemIdLow,
+        ushort WeaponDefinitionIndex,
+        uint WeaponItemIdLow);
     private readonly HashSet<ulong> _activeSteamIds = new();
     private readonly Dictionary<ulong, ulong> _profileEpochs = new();
     private readonly object _storageQueueLock = new();
@@ -131,6 +143,7 @@ public sealed class SkinManager : IDisposable
         _loadedProfiles.Clear();
         _loadingProfiles.Clear();
         _applyAfterLoadRequests.Clear();
+        _teamPreviewSignatures.Clear();
         _profiles.Clear();
         _profileEpochs.Clear();
 
@@ -716,6 +729,48 @@ public sealed class SkinManager : IDisposable
             {
                 _logger.LogWarning(ex, "Astra Skins failed to enumerate team preview entities.");
             }
+        }
+    }
+
+    public void ForgetTeamPreviewState()
+    {
+        _teamPreviewSignatures.Clear();
+    }
+
+    // Team select on a first connect has no event that fires after Valve fills
+    // Xuid, so poll: any preview slot owned by a live human whose items differ
+    // from what was last written is written again. Matching slots cost a few
+    // schema reads and send nothing.
+    public void EnsureTeamPreviewCosmetics()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        try
+        {
+            foreach (var preview in EnumerateTeamPreviewPositions())
+            {
+                var xuid = preview.Xuid;
+                if (xuid == 0)
+                {
+                    _teamPreviewSignatures.Remove(preview.Index);
+                    continue;
+                }
+
+                if (_teamPreviewSignatures.TryGetValue(preview.Index, out var expected) &&
+                    expected == ReadTeamPreviewSignature(preview))
+                {
+                    continue;
+                }
+
+                ApplyTeamPreviewToPosition(preview, null, logFailures: false);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Astra Skins failed to ensure team preview cosmetics.");
         }
     }
 
@@ -2319,6 +2374,7 @@ public sealed class SkinManager : IDisposable
             ApplyTeamPreviewAgent(preview, owner, profile, team, logFailures);
             ApplyTeamPreviewGloves(preview, owner, profile, logFailures);
             ApplyTeamPreviewWeapon(preview, owner, profile, logFailures);
+            _teamPreviewSignatures[preview.Index] = ReadTeamPreviewSignature(preview);
         }
         catch (Exception ex)
         {
@@ -2327,6 +2383,20 @@ public sealed class SkinManager : IDisposable
                 _logger.LogWarning(ex, "Astra Skins failed to apply team preview cosmetics to a preview entity.");
             }
         }
+    }
+
+    private static TeamPreviewSignature ReadTeamPreviewSignature(CCSGO_TeamPreviewCharacterPosition preview)
+    {
+        var agent = preview.AgentItem;
+        var gloves = preview.GlovesItem;
+        var weapon = preview.WeaponItem;
+        return new TeamPreviewSignature(
+            preview.Xuid,
+            agent.Handle == IntPtr.Zero ? (ushort)0 : agent.ItemDefinitionIndex,
+            gloves.Handle == IntPtr.Zero ? (ushort)0 : gloves.ItemDefinitionIndex,
+            gloves.Handle == IntPtr.Zero ? 0u : gloves.ItemIDLow,
+            weapon.Handle == IntPtr.Zero ? (ushort)0 : weapon.ItemDefinitionIndex,
+            weapon.Handle == IntPtr.Zero ? 0u : weapon.ItemIDLow);
     }
 
     private void ApplyTeamPreviewAgent(

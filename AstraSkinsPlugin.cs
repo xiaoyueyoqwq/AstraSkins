@@ -33,7 +33,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
     public PluginConfig Config { get; set; } = new();
 
     public override string ModuleName => "Astra Skins";
-    public override string ModuleVersion => "1.0.10-team-preview-intro";
+    public override string ModuleVersion => "1.0.10-team-select-preview-ensure";
     public override string ModuleAuthor => "Ayrton09";
     public override string ModuleDescription => string.Empty;
 
@@ -77,6 +77,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         RegisterEventHandler<EventRoundMvp>(OnRoundMvp, HookMode.Pre);
         RegisterEventHandler<EventPlayerDisconnect>(OnPlayerDisconnect);
         RegisterEventHandler<EventPlayerTeam>(OnPlayerTeam);
+        RegisterEventHandler<EventPlayerConnectFull>(OnPlayerConnectFull, HookMode.Post);
         HookGiveNamedItem();
 
         if (hotReload && _ready)
@@ -816,6 +817,21 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         return HookResult.Continue;
     }
 
+    // First team select shows the preview before any spawn. Valve fills the
+    // team_select Xuid some frames after this; the periodic ensure covers the
+    // rest, this just gets the first write in as early as possible.
+    private HookResult OnPlayerConnectFull(EventPlayerConnectFull @event, GameEventInfo info)
+    {
+        var player = @event.Userid;
+        if (_ready && IsLiveHuman(player))
+        {
+            _skinManager?.PreloadProfile(player!);
+            ScheduleTeamPreviewApply(player);
+        }
+
+        return HookResult.Continue;
+    }
+
     private void OnClientAuthorized(int playerSlot, SteamID steamId)
     {
         if (!_ready || _skinManager is null)
@@ -826,6 +842,9 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         if (steamId.SteamId64 != 0)
         {
             _steamIdsBySlot[playerSlot] = steamId.SteamId64;
+            // Start the profile read now so the team-select preview does not
+            // wait for a first spawn to trigger it.
+            _skinManager.PreloadProfile(steamId.SteamId64);
         }
 
         var player = Utilities.GetPlayerFromSlot(playerSlot);
@@ -844,6 +863,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
             return;
         }
 
+        _skinManager.ForgetTeamPreviewState();
         AddTimer(1.0f, ApplyMusicKitToLivePlayers, TimerFlags.STOP_ON_MAPCHANGE);
     }
 
@@ -864,6 +884,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
 
         _nextMusicKitHealthCheckUtc = now.AddSeconds(1);
         EnsureMusicKitForLivePlayers();
+        _skinManager?.EnsureTeamPreviewCosmetics();
     }
 
     private void EnsureMusicKitForLivePlayers()
