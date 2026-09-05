@@ -37,6 +37,12 @@ public sealed class SkinManager : IDisposable
     // entity index. Valve rewrites these items when it (re)assigns Xuid; the
     // periodic ensure only writes again when the entity no longer matches.
     private readonly Dictionary<uint, TeamPreviewSignature> _teamPreviewSignatures = new();
+    // Preview entities by index -> raw entity handle. Kept so the per-tick
+    // ensure resolves entities directly instead of scanning designer names.
+    private readonly Dictionary<uint, uint> _teamPreviewEntities = new();
+    private readonly Dictionary<uint, int> _teamPreviewRewriteCounts = new();
+    private DateTime _nextTeamPreviewRescanUtc = DateTime.MinValue;
+    private static readonly TimeSpan TeamPreviewRescanInterval = TimeSpan.FromSeconds(5);
 
     private readonly record struct TeamPreviewSignature(
         ulong Xuid,
@@ -827,12 +833,59 @@ public sealed class SkinManager : IDisposable
     public void ForgetTeamPreviewState()
     {
         _teamPreviewSignatures.Clear();
+        _teamPreviewEntities.Clear();
+        _teamPreviewRewriteCounts.Clear();
+        _nextTeamPreviewRescanUtc = DateTime.MinValue;
+    }
+
+    public void TrackTeamPreviewEntity(CEntityInstance entity)
+    {
+        if (_disposed || entity is null || !entity.IsValid)
+        {
+            return;
+        }
+
+        try
+        {
+            if (Array.IndexOf(TeamPreviewDesignerNames, entity.DesignerName) < 0)
+            {
+                return;
+            }
+
+            _teamPreviewEntities[entity.Index] = entity.EntityHandle.Raw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Astra Skins failed to track a team preview entity.");
+        }
+    }
+
+    public void UntrackTeamPreviewEntity(CEntityInstance entity)
+    {
+        if (_disposed || entity is null)
+        {
+            return;
+        }
+
+        try
+        {
+            if (_teamPreviewEntities.Remove(entity.Index))
+            {
+                _teamPreviewSignatures.Remove(entity.Index);
+                _teamPreviewRewriteCounts.Remove(entity.Index);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Astra Skins failed to untrack a team preview entity.");
+        }
     }
 
     // Team select on a first connect has no event that fires after Valve fills
-    // Xuid, so poll: any preview slot owned by a live human whose items differ
-    // from what was last written is written again. Matching slots cost a few
-    // schema reads and send nothing.
+    // Xuid, so poll every tick: any preview slot owned by a live human whose
+    // items differ from what was last written is written again in the same
+    // frame, before the snapshot goes out. Matching slots cost a few schema
+    // reads and send nothing.
     public void EnsureTeamPreviewCosmetics()
     {
         if (_disposed)
@@ -851,18 +904,58 @@ public sealed class SkinManager : IDisposable
                     continue;
                 }
 
-                if (_teamPreviewSignatures.TryGetValue(preview.Index, out var expected) &&
-                    expected == ReadTeamPreviewSignature(preview))
+                var hadSignature = _teamPreviewSignatures.TryGetValue(preview.Index, out var expected);
+                if (hadSignature && expected == ReadTeamPreviewSignature(preview))
                 {
                     continue;
                 }
 
-                ApplyTeamPreviewToPosition(preview, null, logFailures: false);
+                if (ApplyTeamPreviewToPosition(preview, null, logFailures: false) && hadSignature && expected.Xuid == xuid)
+                {
+                    _teamPreviewRewriteCounts[preview.Index] = _teamPreviewRewriteCounts.GetValueOrDefault(preview.Index) + 1;
+                }
             }
         }
         catch (Exception ex)
         {
             _logger.LogDebug(ex, "Astra Skins failed to ensure team preview cosmetics.");
+        }
+    }
+
+    public IEnumerable<string> DescribeTeamPreviewState()
+    {
+        if (_disposed)
+        {
+            yield break;
+        }
+
+        var lines = new List<string>();
+        try
+        {
+            foreach (var preview in EnumerateTeamPreviewPositions())
+            {
+                var xuid = preview.Xuid;
+                var signature = ReadTeamPreviewSignature(preview);
+                var status = xuid == 0
+                    ? "idle"
+                    : _teamPreviewSignatures.TryGetValue(preview.Index, out var expected)
+                        ? expected == signature ? "written" : "stale"
+                        : FindUsablePlayerBySteamId(xuid) is null ? "unmanaged" : "pending";
+                lines.Add(
+                    $"{preview.DesignerName}#{preview.Index} v{preview.Variant} o{preview.Ordinal} xuid={xuid} " +
+                    $"agent={signature.AgentDefinitionIndex} gloves={signature.GlovesDefinitionIndex}/{signature.GlovesItemIdLow} " +
+                    $"weapon={signature.WeaponDefinitionIndex}/{signature.WeaponItemIdLow} weaponName={preview.WeaponName} " +
+                    $"{status} rewrites={_teamPreviewRewriteCounts.GetValueOrDefault(preview.Index)}");
+            }
+        }
+        catch (Exception ex)
+        {
+            lines.Add($"preview enumeration failed: {ex.Message}");
+        }
+
+        foreach (var line in lines)
+        {
+            yield return line;
         }
     }
 
@@ -2449,7 +2542,47 @@ public sealed class SkinManager : IDisposable
             voicePrefix.Contains("fem", StringComparison.OrdinalIgnoreCase);
     }
 
-    private static IEnumerable<CCSGO_TeamPreviewCharacterPosition> EnumerateTeamPreviewPositions()
+    private IEnumerable<CCSGO_TeamPreviewCharacterPosition> EnumerateTeamPreviewPositions()
+    {
+        var now = DateTime.UtcNow;
+        if (now >= _nextTeamPreviewRescanUtc)
+        {
+            _nextTeamPreviewRescanUtc = now.Add(TeamPreviewRescanInterval);
+            RescanTeamPreviewEntities();
+        }
+
+        if (_teamPreviewEntities.Count == 0)
+        {
+            yield break;
+        }
+
+        List<uint>? stale = null;
+        foreach (var (index, rawHandle) in _teamPreviewEntities)
+        {
+            var preview = Utilities.GetEntityFromIndex<CCSGO_TeamPreviewCharacterPosition>((int)index);
+            if (preview is null || !preview.IsValid || preview.EntityHandle.Raw != rawHandle)
+            {
+                (stale ??= new List<uint>()).Add(index);
+                continue;
+            }
+
+            yield return preview;
+        }
+
+        if (stale is null)
+        {
+            yield break;
+        }
+
+        foreach (var index in stale)
+        {
+            _teamPreviewEntities.Remove(index);
+            _teamPreviewSignatures.Remove(index);
+            _teamPreviewRewriteCounts.Remove(index);
+        }
+    }
+
+    private void RescanTeamPreviewEntities()
     {
         foreach (var designerName in TeamPreviewDesignerNames)
         {
@@ -2457,13 +2590,35 @@ public sealed class SkinManager : IDisposable
             {
                 if (preview is not null && preview.IsValid)
                 {
-                    yield return preview;
+                    _teamPreviewEntities[preview.Index] = preview.EntityHandle.Raw;
                 }
             }
         }
     }
 
-    private void ApplyTeamPreviewToPosition(
+    // Slot scan rather than Utilities.GetPlayers(): that helper drops
+    // controllers whose connect state is not yet PlayerConnected, which is
+    // exactly where a first-connect team select can sit.
+    private static CCSPlayerController? FindUsablePlayerBySteamId(ulong steamId64)
+    {
+        if (steamId64 == 0)
+        {
+            return null;
+        }
+
+        for (var slot = 0; slot < Server.MaxPlayers; slot++)
+        {
+            var player = Utilities.GetPlayerFromSlot(slot);
+            if (player is not null && IsUsablePlayer(player) && player.SteamID == steamId64)
+            {
+                return player;
+            }
+        }
+
+        return null;
+    }
+
+    private bool ApplyTeamPreviewToPosition(
         CCSGO_TeamPreviewCharacterPosition preview,
         CCSPlayerController? filterPlayer,
         bool logFailures)
@@ -2472,13 +2627,13 @@ public sealed class SkinManager : IDisposable
         {
             if (preview is null || !preview.IsValid)
             {
-                return;
+                return false;
             }
 
             var xuid = preview.Xuid;
             if (xuid == 0)
             {
-                return;
+                return false;
             }
 
             CCSPlayerController? owner;
@@ -2486,30 +2641,30 @@ public sealed class SkinManager : IDisposable
             {
                 if (!IsUsablePlayer(filterPlayer) || filterPlayer.SteamID != xuid)
                 {
-                    return;
+                    return false;
                 }
 
                 owner = filterPlayer;
             }
             else
             {
-                owner = Utilities.GetPlayers().FirstOrDefault(p => IsUsablePlayer(p) && p.SteamID == xuid);
+                owner = FindUsablePlayerBySteamId(xuid);
                 if (owner is null)
                 {
-                    return;
+                    return false;
                 }
             }
 
             if (!TryGetSteamId64(owner, out var steamId))
             {
-                return;
+                return false;
             }
 
             if (!_loadedProfiles.Contains(steamId) || !_profiles.TryGetValue(steamId, out var profile))
             {
                 _activeSteamIds.Add(steamId);
                 LoadProfileInBackground(steamId, applyAfterLoad: true, logFailures);
-                return;
+                return false;
             }
 
             var team = TeamKeyFromDesignerName(preview.DesignerName) ?? GetPlayerTeamKey(owner);
@@ -2517,6 +2672,7 @@ public sealed class SkinManager : IDisposable
             ApplyTeamPreviewGloves(preview, owner, profile, logFailures);
             ApplyTeamPreviewWeapon(preview, owner, profile, logFailures);
             _teamPreviewSignatures[preview.Index] = ReadTeamPreviewSignature(preview);
+            return true;
         }
         catch (Exception ex)
         {
@@ -2524,6 +2680,8 @@ public sealed class SkinManager : IDisposable
             {
                 _logger.LogWarning(ex, "Astra Skins failed to apply team preview cosmetics to a preview entity.");
             }
+
+            return false;
         }
     }
 
