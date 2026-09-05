@@ -127,3 +127,37 @@ SSH 用户 `admin`，进程用户 `steam`。CSS file-watch 会在进程重启前
 4. 购买菜单：不要重做 GetItemInLoadout SetReturn。悬停走 soid=0 的别的 inventory。需要新路径。
 
 本地不要从 `feat/team-preview-cosmetics` 继续混装开发。
+
+## Fable 第二轮（未上线、未线上验证，只有 `dotnet build -c Release` 通过）
+
+两支独立分支，都没有开 PR，都没有碰线上、CVar、SQLite、`AstraSkins.json`。
+
+### 1. `fix/music-kit-inventory-netprop` = `d46e9f8`（基于 `c11e83e`）
+
+诊断：所有分支的 `ApplyMusicKitState` 都写了 `InventoryServices.MusicID`（`CCSPlayerController_InventoryServices.m_unMusicID`，网络字段），但从未
+`SetStateChanged(player, "CCSPlayerController", "m_pInventoryServices")`。`m_iMusicKitID` 有打标，`m_unMusicID` 没有。客户端只在引擎自己刷
+InventoryServices 时才拿到新值，所以在 prestart / intro_start 写多少次都不进采样窗口；这也解释 Path 2 的 `SendInventoryUpdateEvent` 为什么会「拉回原皮」——那是唯一真正把 `m_unMusicID` 下发出去的时刻。参考 WeaponPaints `GivePlayerMusicKit`：两者都打标。
+
+改动：
+
+- `ApplyMusicKitState`：写 `MusicID` 后打标 `m_pInventoryServices`；四个字段全部先比较再写 + 打标（状态已一致就什么都不发）。
+- `EnsureMusicKitWhenProfileReady`：不再自己比较，直接走上面的幂等写；带尸体跳过（有有效 pawn 且 `!PawnIsAlive` 才跳过，选边 / 连接阶段无 pawn 照常写）。
+- 按硬约束 1/2 去掉 `c11e83e` 的：`OnPlayerDeath` 里 `TryApplySelectedMusicKit` + 0.15s 定时器；`OnRoundMvp` 里 0.05/0.2 定时器。死亡路径改成回合级 `_pendingMvpCue`，任何真人死亡（不只 C4）若本回合 MVP cue 已开始就 `FireEventToClient(listener)` 重播，不改 netprop。
+- 新增 `round_prestart`、`team_intro_start`、`player_connect_full` 各一次 `ApplyMusicKitWhenProfileReady`（单次写，无补偿定时器）。
+- **没有**重新武装 `SendInventoryUpdateEvent`。
+
+线上验收点：开局 / 新一轮首次入场等待音乐；首次进服选边音乐；C4 炸死 MVP 的 anthem 是否还被切；`css_wsdebug` 里 `MusicID`（库存）与 `MusicKitID`（控制器）是否一致。
+
+如果打标后等待音乐还是丢：下一步该查客户端是不是在 `player_connect_full` 之前就已经采样了一次（这时只能靠 auth 期 preload 让 connect_full 那次写赶上），以及 Valve 的库存同步是否在我们之后又把 `m_unMusicID` 覆盖回去（1s 巡检现在会看到差值并重写，但会晚 ≤1s）。
+
+### 2. `fix/team-select-preview-ensure` = `30b0c0c`（基于 `feat/team-preview-intro`，agent/手套/枪写入未改）
+
+`SkinManager` 按 preview 实体 index 记住上次写入后的签名（Xuid、agent/gloves/weapon 的 `ItemDefinitionIndex`、gloves/weapon 的 `ItemIDLow`）。现有 1s 健康巡检加 `EnsureTeamPreviewCosmetics()`：只重写「Xuid 非 0、能对上真人、当前签名 ≠ 上次写入」的槽；一致的槽只有几次 schema 读，不打标、不下发。Xuid 归 0 时清该槽签名；map start 清全部。
+
+触发补充：`player_connect_full` 先 `PreloadProfile` 再走原有 NextFrame/0.10/0.25 apply；`OnClientAuthorized` 提前开 profile 读。没有加 0.50/1.00 定时器（`wip/team-select-preview` 那两条不需要了）。
+
+线上验收点：首次进服选边界面自己的探员 / 手套 / 枪；切队后再看选边（Valve 重填 Xuid 后 ≤1s 应被巡检补上）；`team_intro_*` 行为应与 `feat/team-preview-intro` 一致。
+
+### 3. 购买菜单
+
+未动。仍按硬约束 4：不要重做 `GetItemInLoadout` Post + `SetReturn`。待 1/2 线上验完再研究悬停 soid=0 属于哪批 inventory。
