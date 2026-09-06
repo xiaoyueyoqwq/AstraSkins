@@ -33,7 +33,45 @@ public sealed class SkinManager : IDisposable
     private readonly HashSet<ulong> _loadedProfiles = new();
     private readonly HashSet<ulong> _loadingProfiles = new();
     private readonly HashSet<ulong> _applyAfterLoadRequests = new();
+    // Last state written to each CCSGO_TeamPreviewCharacterPosition, keyed by
+    // entity index. Valve rewrites these items when it (re)assigns Xuid; the
+    // periodic ensure only writes again when the entity no longer matches.
+    private readonly Dictionary<uint, TeamPreviewSignature> _teamPreviewSignatures = new();
+    // Preview entities by index -> raw entity handle. Kept so the per-tick
+    // ensure resolves entities directly instead of scanning designer names.
+    private readonly Dictionary<uint, uint> _teamPreviewEntities = new();
+    // Per-slot occupancy timeline (ticks) plus the Xuid re-kick bookkeeping.
+    private readonly Dictionary<uint, TeamPreviewSlotState> _teamPreviewSlots = new();
+    private DateTime _nextTeamPreviewRescanUtc = DateTime.MinValue;
+    private static readonly TimeSpan TeamPreviewRescanInterval = TimeSpan.FromSeconds(5);
+    // The client builds a preview character when m_xuid changes and copies the
+    // items it sees in that snapshot. If our items land in a later snapshot
+    // than Valve's Xuid assignment, drop Xuid to 0 for one tick and restore it
+    // so the client rebuilds with our items already present.
+    private const int MaxTeamPreviewRekicks = 2;
+
+    private sealed class TeamPreviewSlotState
+    {
+        public ulong Xuid;
+        public int FirstSeenTick;
+        public int FirstWriteTick = -1;
+        public bool ProfileReadyAtFirstSeen;
+        public int Rewrites;
+        public int Rekicks;
+        public ulong RekickRestoreXuid;
+    }
+
+    private readonly record struct TeamPreviewSignature(
+        ulong Xuid,
+        ushort AgentDefinitionIndex,
+        ushort GlovesDefinitionIndex,
+        uint GlovesItemIdLow,
+        ushort WeaponDefinitionIndex,
+        uint WeaponItemIdLow);
     private readonly HashSet<ulong> _activeSteamIds = new();
+    // Times the ensure pass found the music fields differing from the profile
+    // after they had already been written once.
+    private readonly Dictionary<ulong, (int Count, int LastTick)> _musicKitCorrections = new();
     private readonly Dictionary<ulong, ulong> _profileEpochs = new();
     private readonly object _storageQueueLock = new();
     private Task _storageQueue = Task.CompletedTask;
@@ -73,6 +111,8 @@ public sealed class SkinManager : IDisposable
         [38] = "weapon_scar20",
         [39] = "weapon_sg556",
         [40] = "weapon_ssg08",
+        [42] = "weapon_knife",
+        [59] = "weapon_knife_t",
         [60] = "weapon_m4a1_silencer",
         [61] = "weapon_usp_silencer",
         [63] = "weapon_cz75a",
@@ -97,6 +137,16 @@ public sealed class SkinManager : IDisposable
         [523] = "weapon_knife_widowmaker",
         [525] = "weapon_knife_skeleton",
         [526] = "weapon_knife_kukri"
+    };
+
+    private static readonly string[] TeamPreviewDesignerNames =
+    {
+        "team_intro_counterterrorist",
+        "team_intro_terrorist",
+        "team_select_counterterrorist",
+        "team_select_terrorist",
+        "wingman_intro_counterterrorist",
+        "wingman_intro_terrorist"
     };
 
     public DefinitionCatalog Catalog { get; private set; }
@@ -131,6 +181,7 @@ public sealed class SkinManager : IDisposable
         _loadedProfiles.Clear();
         _loadingProfiles.Clear();
         _applyAfterLoadRequests.Clear();
+        _teamPreviewSignatures.Clear();
         _profiles.Clear();
         _profileEpochs.Clear();
 
@@ -193,6 +244,7 @@ public sealed class SkinManager : IDisposable
         _loadedProfiles.Remove(steamId64);
         _applyAfterLoadRequests.Remove(steamId64);
         _activeSteamIds.Remove(steamId64);
+        _musicKitCorrections.Remove(steamId64);
 
         // A read still in flight must come back stale: bump the epoch instead
         // of deleting it so the callback can tell this lifecycle ended.
@@ -271,7 +323,8 @@ public sealed class SkinManager : IDisposable
         // MVP / round cues. Team select and connect have no pawn yet; those
         // still need the kit written.
         var existingPawn = player.PlayerPawn.Value;
-        if (existingPawn is not null && existingPawn.IsValid && !player.PawnIsAlive)
+        var onPlayingTeam = player.Team is CsTeam.Terrorist or CsTeam.CounterTerrorist;
+        if (onPlayingTeam && existingPawn is not null && existingPawn.IsValid && !player.PawnIsAlive)
         {
             return;
         }
@@ -296,7 +349,31 @@ public sealed class SkinManager : IDisposable
             return;
         }
 
-        ApplyMusicKitState(player, kitId, mvpCount, logFailures);
+        if (ApplyMusicKitState(player, kitId, mvpCount, logFailures))
+        {
+            // First write is the initial apply; any later write means something
+            // (Valve inventory sync, engine reset) undid it after our last pass.
+            var hadStats = _musicKitCorrections.TryGetValue(steamId, out var stats);
+            _musicKitCorrections[steamId] = (hadStats ? stats.Count + 1 : 0, Server.TickCount);
+        }
+    }
+
+    public string DescribeMusicKitState(CCSPlayerController player)
+    {
+        if (!TryGetSteamId64(player, out var steamId))
+        {
+            return "invalid steamid";
+        }
+
+        var inventory = player.InventoryServices;
+        var stats = _musicKitCorrections.GetValueOrDefault(steamId);
+        var expected = _loadedProfiles.Contains(steamId) && _profiles.TryGetValue(steamId, out var profile)
+            ? ResolveMusicKitState(profile).KitId
+            : -1;
+        return $"expectedKit={(expected < 0 ? "profile-not-loaded" : expected.ToString())} controllerKit={player.MusicKitID} " +
+               $"controllerMvps={player.MusicKitMVPs} mvpNoMusic={player.MvpNoMusic} " +
+               $"inventoryMusicId={(inventory is null ? "null" : inventory.MusicID.ToString())} " +
+               $"corrections={stats.Count} lastCorrectionTick={(stats.Count == 0 ? "n/a" : stats.LastTick.ToString())} tick={Server.TickCount}";
     }
 
     // While possessing a bot the controller's PlayerPawn still points at the
@@ -363,6 +440,7 @@ public sealed class SkinManager : IDisposable
         profile.WeaponSkins[weaponEntity] = cosmeticId;
         QueueStorageWrite($"weapon skin {cosmeticId} ({weaponEntity}) for {steamId}", () => _storage.SaveWeaponSkin(steamId, weaponEntity, cosmeticId));
         ApplyWeaponSelection(player, weaponEntity, skin, logFailures: true);
+        ApplyTeamPreviewCosmetics(player);
         return true;
     }
 
@@ -391,6 +469,7 @@ public sealed class SkinManager : IDisposable
         }
 
         ApplyKnifeSelection(player, skin, logFailures: true);
+        ApplyTeamPreviewCosmetics(player);
         return true;
     }
 
@@ -408,6 +487,7 @@ public sealed class SkinManager : IDisposable
         var selectedKnifeId = knife.Id;
         QueueStorageWrite($"knife type {selectedKnifeId} for {steamId}", () => _storage.SaveKnifeType(steamId, selectedKnifeId));
         ApplyKnifeTypeSelection(player, knife, logFailures: true);
+        ApplyTeamPreviewCosmetics(player);
         return true;
     }
 
@@ -423,6 +503,7 @@ public sealed class SkinManager : IDisposable
         profile.GloveSkinId = cosmeticId;
         QueueStorageWrite($"glove skin {cosmeticId} for {steamId}", () => _storage.SaveGloveSkin(steamId, cosmeticId));
         ApplyGloveSelection(player, glove, logFailures: true);
+        ApplyTeamPreviewCosmetics(player);
         return true;
     }
 
@@ -443,6 +524,7 @@ public sealed class SkinManager : IDisposable
         var agentIdToSave = agent.Id;
         QueueStorageWrite($"agent {agentIdToSave} ({normalizedTeam}) for {steamId}", () => _storage.SaveAgent(steamId, normalizedTeam, agentIdToSave));
         ApplyAgentSelection(player, agent, logFailures: true);
+        ApplyTeamPreviewCosmetics(player);
         return true;
     }
 
@@ -582,8 +664,9 @@ public sealed class SkinManager : IDisposable
     // that pointer has to be flagged or the value only leaves the server when
     // Valve touches the component. Only fields that differ are written and
     // flagged so repeated calls from round events do not resend anything.
-    private void ApplyMusicKitState(CCSPlayerController player, int kitId, int mvpCount, bool logFailures)
+    private bool ApplyMusicKitState(CCSPlayerController player, int kitId, int mvpCount, bool logFailures)
     {
+        var changed = false;
         try
         {
             var inventory = player.InventoryServices;
@@ -592,12 +675,14 @@ public sealed class SkinManager : IDisposable
             {
                 inventory.MusicID = inventoryKitId;
                 Utilities.SetStateChanged(player, "CCSPlayerController", "m_pInventoryServices");
+                changed = true;
             }
 
             if (player.MusicKitID != kitId)
             {
                 player.MusicKitID = kitId;
                 Utilities.SetStateChanged(player, "CCSPlayerController", "m_iMusicKitID");
+                changed = true;
             }
 
             var clampedMvpCount = Math.Max(0, mvpCount);
@@ -605,12 +690,14 @@ public sealed class SkinManager : IDisposable
             {
                 player.MusicKitMVPs = clampedMvpCount;
                 Utilities.SetStateChanged(player, "CCSPlayerController", "m_iMusicKitMVPs");
+                changed = true;
             }
 
             if (player.MvpNoMusic)
             {
                 player.MvpNoMusic = false;
                 Utilities.SetStateChanged(player, "CCSPlayerController", "m_bMvpNoMusic");
+                changed = true;
             }
         }
         catch (Exception ex)
@@ -620,6 +707,8 @@ public sealed class SkinManager : IDisposable
                 _logger.LogWarning(ex, "Astra Skins failed to apply music kit for {SteamId}.", TryGetSteamId64(player, out var steamId) ? steamId : 0);
             }
         }
+
+        return changed;
     }
 
     public bool TryGetSelectedMusicKitId(CCSPlayerController player, out int musicKitId)
@@ -751,6 +840,7 @@ public sealed class SkinManager : IDisposable
         // pawn. Apply them before the pawn guard so first team selection and
         // warmup profile loads cannot skip the music kit entirely.
         ApplyMusicKitToPlayer(player, logFailures);
+        ApplyTeamPreviewCosmetics(player, logFailures);
 
         if (!TryGetPawn(player, out var pawn, logFailures))
         {
@@ -761,6 +851,226 @@ public sealed class SkinManager : IDisposable
         ApplyWeapons(player, pawn!, profile, logFailures);
         ApplyGloves(player, pawn!, profile, logFailures);
         ApplyAgent(player, pawn!, profile, logFailures);
+    }
+
+    // Team intro / team select read CCSGO_TeamPreviewCharacterPosition, not the
+    // live pawn. Only write slots whose Xuid matches a human we own.
+    public void ApplyTeamPreviewCosmetics(CCSPlayerController? player = null, bool logFailures = false)
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        if (player is not null && !IsUsablePlayer(player))
+        {
+            return;
+        }
+
+        try
+        {
+            foreach (var preview in EnumerateTeamPreviewPositions())
+            {
+                ApplyTeamPreviewToPosition(preview, player, logFailures);
+            }
+        }
+        catch (Exception ex)
+        {
+            if (logFailures)
+            {
+                _logger.LogWarning(ex, "Astra Skins failed to enumerate team preview entities.");
+            }
+        }
+    }
+
+    public void ForgetTeamPreviewState()
+    {
+        _teamPreviewSignatures.Clear();
+        _teamPreviewEntities.Clear();
+        _teamPreviewSlots.Clear();
+        _nextTeamPreviewRescanUtc = DateTime.MinValue;
+    }
+
+    public void TrackTeamPreviewEntity(CEntityInstance entity)
+    {
+        if (_disposed || entity is null || !entity.IsValid)
+        {
+            return;
+        }
+
+        try
+        {
+            if (Array.IndexOf(TeamPreviewDesignerNames, entity.DesignerName) < 0)
+            {
+                return;
+            }
+
+            _teamPreviewEntities[entity.Index] = entity.EntityHandle.Raw;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Astra Skins failed to track a team preview entity.");
+        }
+    }
+
+    public void UntrackTeamPreviewEntity(CEntityInstance entity)
+    {
+        if (_disposed || entity is null)
+        {
+            return;
+        }
+
+        try
+        {
+            if (_teamPreviewEntities.Remove(entity.Index))
+            {
+                _teamPreviewSignatures.Remove(entity.Index);
+                _teamPreviewSlots.Remove(entity.Index);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Astra Skins failed to untrack a team preview entity.");
+        }
+    }
+
+    // Team select on a first connect has no event that fires after Valve fills
+    // Xuid, so poll every tick: any preview slot owned by a live human whose
+    // items differ from what was last written is written again in the same
+    // frame, before the snapshot goes out. Matching slots cost a few schema
+    // reads and send nothing.
+    public void EnsureTeamPreviewCosmetics()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        try
+        {
+            var tick = Server.TickCount;
+            foreach (var preview in EnumerateTeamPreviewPositions())
+            {
+                var index = preview.Index;
+                _teamPreviewSlots.TryGetValue(index, out var slot);
+
+                // Second half of a re-kick: the previous snapshot carried Xuid 0
+                // with our items, now the Xuid comes back and the client rebuilds.
+                if (slot is not null && slot.RekickRestoreXuid != 0)
+                {
+                    var restore = slot.RekickRestoreXuid;
+                    slot.RekickRestoreXuid = 0;
+                    if (preview.Xuid == 0)
+                    {
+                        preview.Xuid = restore;
+                        TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_xuid");
+                    }
+                }
+
+                var xuid = preview.Xuid;
+                if (xuid == 0)
+                {
+                    _teamPreviewSignatures.Remove(index);
+                    _teamPreviewSlots.Remove(index);
+                    continue;
+                }
+
+                if (slot is null || slot.Xuid != xuid)
+                {
+                    slot = new TeamPreviewSlotState
+                    {
+                        Xuid = xuid,
+                        FirstSeenTick = tick,
+                        ProfileReadyAtFirstSeen = _loadedProfiles.Contains(xuid)
+                    };
+                    _teamPreviewSlots[index] = slot;
+                    _teamPreviewSignatures.Remove(index);
+                }
+
+                var hadSignature = _teamPreviewSignatures.TryGetValue(index, out var expected);
+                if (hadSignature && expected == ReadTeamPreviewSignature(preview))
+                {
+                    continue;
+                }
+
+                if (!ApplyTeamPreviewToPosition(preview, null, logFailures: false))
+                {
+                    continue;
+                }
+
+                var isFirstWrite = slot.FirstWriteTick < 0;
+                if (isFirstWrite)
+                {
+                    slot.FirstWriteTick = tick;
+                }
+                else if (hadSignature)
+                {
+                    slot.Rewrites++;
+                }
+
+                // Same tick as the Xuid assignment means the client never saw
+                // Valve's items, nothing to undo. Anything later needs the re-kick.
+                var clientSawOtherItems = isFirstWrite ? tick > slot.FirstSeenTick : hadSignature;
+                if (clientSawOtherItems && slot.Rekicks < MaxTeamPreviewRekicks)
+                {
+                    slot.Rekicks++;
+                    slot.RekickRestoreXuid = xuid;
+                    preview.Xuid = 0;
+                    TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_xuid");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Astra Skins failed to ensure team preview cosmetics.");
+        }
+    }
+
+    public IEnumerable<string> DescribeTeamPreviewState()
+    {
+        if (_disposed)
+        {
+            yield break;
+        }
+
+        var lines = new List<string>();
+        try
+        {
+            foreach (var preview in EnumerateTeamPreviewPositions())
+            {
+                var xuid = preview.Xuid;
+                _teamPreviewSlots.TryGetValue(preview.Index, out var slot);
+                if (xuid == 0 && slot?.RekickRestoreXuid is > 0)
+                {
+                    xuid = slot.RekickRestoreXuid;
+                }
+
+                var signature = ReadTeamPreviewSignature(preview);
+                var status = xuid == 0
+                    ? "idle"
+                    : _teamPreviewSignatures.TryGetValue(preview.Index, out var expected)
+                        ? expected == signature ? "written" : "stale"
+                        : FindUsablePlayerBySteamId(xuid) is null ? "unmanaged" : "pending";
+                var timeline = slot is null
+                    ? string.Empty
+                    : $" seenTick={slot.FirstSeenTick} writeLag={(slot.FirstWriteTick < 0 ? "n/a" : (slot.FirstWriteTick - slot.FirstSeenTick).ToString())} " +
+                      $"profileReady={slot.ProfileReadyAtFirstSeen} rewrites={slot.Rewrites} rekicks={slot.Rekicks}";
+                lines.Add(
+                    $"{preview.DesignerName}#{preview.Index} v{preview.Variant} o{preview.Ordinal} xuid={xuid} " +
+                    $"agent={signature.AgentDefinitionIndex} gloves={signature.GlovesDefinitionIndex}/{signature.GlovesItemIdLow} " +
+                    $"weapon={signature.WeaponDefinitionIndex}/{signature.WeaponItemIdLow} weaponName={preview.WeaponName} " +
+                    $"{status}{timeline}");
+            }
+        }
+        catch (Exception ex)
+        {
+            lines.Add($"preview enumeration failed: {ex.Message}");
+        }
+
+        foreach (var line in lines)
+        {
+            yield return line;
+        }
     }
 
     public void ApplyAgentToPlayer(CCSPlayerController player, bool logFailures = false, bool loadIfMissing = true)
@@ -2344,6 +2654,394 @@ public sealed class SkinManager : IDisposable
     {
         return !string.IsNullOrWhiteSpace(voicePrefix) &&
             voicePrefix.Contains("fem", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private IEnumerable<CCSGO_TeamPreviewCharacterPosition> EnumerateTeamPreviewPositions()
+    {
+        var now = DateTime.UtcNow;
+        if (now >= _nextTeamPreviewRescanUtc)
+        {
+            _nextTeamPreviewRescanUtc = now.Add(TeamPreviewRescanInterval);
+            RescanTeamPreviewEntities();
+        }
+
+        if (_teamPreviewEntities.Count == 0)
+        {
+            yield break;
+        }
+
+        List<uint>? stale = null;
+        foreach (var (index, rawHandle) in _teamPreviewEntities)
+        {
+            var preview = Utilities.GetEntityFromIndex<CCSGO_TeamPreviewCharacterPosition>((int)index);
+            if (preview is null || !preview.IsValid || preview.EntityHandle.Raw != rawHandle)
+            {
+                (stale ??= new List<uint>()).Add(index);
+                continue;
+            }
+
+            yield return preview;
+        }
+
+        if (stale is null)
+        {
+            yield break;
+        }
+
+        foreach (var index in stale)
+        {
+            _teamPreviewEntities.Remove(index);
+            _teamPreviewSignatures.Remove(index);
+            _teamPreviewSlots.Remove(index);
+        }
+    }
+
+    private void RescanTeamPreviewEntities()
+    {
+        foreach (var designerName in TeamPreviewDesignerNames)
+        {
+            foreach (var preview in Utilities.FindAllEntitiesByDesignerName<CCSGO_TeamPreviewCharacterPosition>(designerName))
+            {
+                if (preview is not null && preview.IsValid)
+                {
+                    _teamPreviewEntities[preview.Index] = preview.EntityHandle.Raw;
+                }
+            }
+        }
+    }
+
+    // Slot scan rather than Utilities.GetPlayers(): that helper drops
+    // controllers whose connect state is not yet PlayerConnected, which is
+    // exactly where a first-connect team select can sit.
+    private static CCSPlayerController? FindUsablePlayerBySteamId(ulong steamId64)
+    {
+        if (steamId64 == 0)
+        {
+            return null;
+        }
+
+        for (var slot = 0; slot < Server.MaxPlayers; slot++)
+        {
+            var player = Utilities.GetPlayerFromSlot(slot);
+            if (player is not null && IsUsablePlayer(player) && player.SteamID == steamId64)
+            {
+                return player;
+            }
+        }
+
+        return null;
+    }
+
+    private bool ApplyTeamPreviewToPosition(
+        CCSGO_TeamPreviewCharacterPosition preview,
+        CCSPlayerController? filterPlayer,
+        bool logFailures)
+    {
+        try
+        {
+            if (preview is null || !preview.IsValid)
+            {
+                return false;
+            }
+
+            var xuid = preview.Xuid;
+            if (xuid == 0)
+            {
+                return false;
+            }
+
+            CCSPlayerController? owner;
+            if (filterPlayer is not null)
+            {
+                if (!IsUsablePlayer(filterPlayer) || filterPlayer.SteamID != xuid)
+                {
+                    return false;
+                }
+
+                owner = filterPlayer;
+            }
+            else
+            {
+                owner = FindUsablePlayerBySteamId(xuid);
+                if (owner is null)
+                {
+                    return false;
+                }
+            }
+
+            if (!TryGetSteamId64(owner, out var steamId))
+            {
+                return false;
+            }
+
+            if (!_loadedProfiles.Contains(steamId) || !_profiles.TryGetValue(steamId, out var profile))
+            {
+                _activeSteamIds.Add(steamId);
+                LoadProfileInBackground(steamId, applyAfterLoad: true, logFailures);
+                return false;
+            }
+
+            var team = TeamKeyFromDesignerName(preview.DesignerName) ?? GetPlayerTeamKey(owner);
+            ApplyTeamPreviewAgent(preview, owner, profile, team, logFailures);
+            ApplyTeamPreviewGloves(preview, owner, profile, logFailures);
+            ApplyTeamPreviewWeapon(preview, owner, profile, logFailures);
+            _teamPreviewSignatures[preview.Index] = ReadTeamPreviewSignature(preview);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            if (logFailures)
+            {
+                _logger.LogWarning(ex, "Astra Skins failed to apply team preview cosmetics to a preview entity.");
+            }
+
+            return false;
+        }
+    }
+
+    private static TeamPreviewSignature ReadTeamPreviewSignature(CCSGO_TeamPreviewCharacterPosition preview)
+    {
+        var agent = preview.AgentItem;
+        var gloves = preview.GlovesItem;
+        var weapon = preview.WeaponItem;
+        return new TeamPreviewSignature(
+            preview.Xuid,
+            agent.Handle == IntPtr.Zero ? (ushort)0 : agent.ItemDefinitionIndex,
+            gloves.Handle == IntPtr.Zero ? (ushort)0 : gloves.ItemDefinitionIndex,
+            gloves.Handle == IntPtr.Zero ? 0u : gloves.ItemIDLow,
+            weapon.Handle == IntPtr.Zero ? (ushort)0 : weapon.ItemDefinitionIndex,
+            weapon.Handle == IntPtr.Zero ? 0u : weapon.ItemIDLow);
+    }
+
+    private void ApplyTeamPreviewAgent(
+        CCSGO_TeamPreviewCharacterPosition preview,
+        CCSPlayerController player,
+        PlayerSkinProfile profile,
+        string? team,
+        bool logFailures)
+    {
+        if (string.IsNullOrWhiteSpace(team) ||
+            !profile.AgentIdsByTeam.TryGetValue(team, out var agentId))
+        {
+            return;
+        }
+
+        if (!Catalog.AgentsById.TryGetValue(agentId, out var agent))
+        {
+            if (logFailures)
+            {
+                _logger.LogWarning(
+                    "Astra Skins agent selection {AgentId} is not present in loaded definitions for player {SteamId}.",
+                    agentId,
+                    player.SteamID);
+            }
+
+            return;
+        }
+
+        if (!agent.Team.Equals(team, StringComparison.OrdinalIgnoreCase))
+        {
+            return;
+        }
+
+        var defIndex = agent.ItemDefinitionIndex.GetValueOrDefault();
+        if (defIndex == 0 || preview.AgentItem.Handle == IntPtr.Zero)
+        {
+            return;
+        }
+
+        preview.AgentItem.ItemDefinitionIndex = defIndex;
+        TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_agentItem");
+    }
+
+    private void ApplyTeamPreviewGloves(
+        CCSGO_TeamPreviewCharacterPosition preview,
+        CCSPlayerController player,
+        PlayerSkinProfile profile,
+        bool logFailures)
+    {
+        if (profile.GloveSkinId is null)
+        {
+            return;
+        }
+
+        if (!Catalog.GloveSkinsById.TryGetValue(profile.GloveSkinId, out var glove))
+        {
+            if (logFailures)
+            {
+                _logger.LogWarning(
+                    "Astra Skins glove selection {CosmeticId} is not present in loaded definitions for player {SteamId}.",
+                    profile.GloveSkinId,
+                    player.SteamID);
+            }
+
+            return;
+        }
+
+        if (!glove.ItemDefinitionIndex.HasValue || preview.GlovesItem.Handle == IntPtr.Zero)
+        {
+            return;
+        }
+
+        var item = preview.GlovesItem;
+        var customization = GetCustomization(player, GloveTarget);
+        var seed = customization?.Seed ?? glove.Seed;
+        var wear = customization?.Wear ?? glove.Wear;
+
+        item.ItemDefinitionIndex = glove.ItemDefinitionIndex.Value;
+        item.EntityQuality = 3;
+        UpdateEconItemIdentity(item, player);
+        ApplyCustomName(item, glove, overrideName: null);
+        _econAttributes.ApplyPaintAttributes(
+            item,
+            glove.Id,
+            glove.PaintKit,
+            seed,
+            wear,
+            $"team preview gloves player {player.SteamID}");
+        TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_glovesItem");
+    }
+
+    private void ApplyTeamPreviewWeapon(
+        CCSGO_TeamPreviewCharacterPosition preview,
+        CCSPlayerController player,
+        PlayerSkinProfile profile,
+        bool logFailures)
+    {
+        var item = preview.WeaponItem;
+        if (item.Handle == IntPtr.Zero)
+        {
+            return;
+        }
+
+        var weaponName = preview.WeaponName;
+        if (string.IsNullOrWhiteSpace(weaponName) &&
+            WeaponEntityByDefinitionIndex.TryGetValue(item.ItemDefinitionIndex, out var mappedName))
+        {
+            weaponName = mappedName;
+        }
+
+        if (string.IsNullOrWhiteSpace(weaponName))
+        {
+            return;
+        }
+
+        if (IsKnife(weaponName))
+        {
+            if (profile.KnifeSkinId is not null &&
+                Catalog.KnifeSkinsById.TryGetValue(profile.KnifeSkinId, out var knifeSkin) &&
+                KnifeSkinMatchesSelectedKnife(profile, knifeSkin) &&
+                ApplyPreviewPaint(player, item, knifeSkin, isKnife: true, KnifeTarget, logFailures, "team preview knife"))
+            {
+                TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_weaponItem");
+                return;
+            }
+
+            if (profile.KnifeId is not null)
+            {
+                var knife = Catalog.Knives.FirstOrDefault(k => k.Id.Equals(profile.KnifeId, StringComparison.OrdinalIgnoreCase));
+                if (knife is not null && ApplyPreviewKnifeType(player, item, knife))
+                {
+                    TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_weaponItem");
+                }
+            }
+
+            return;
+        }
+
+        if (profile.WeaponSkins.TryGetValue(weaponName, out var cosmeticId) &&
+            Catalog.WeaponSkinsById.TryGetValue(cosmeticId, out var skin) &&
+            ApplyPreviewPaint(player, item, skin, isKnife: false, weaponName, logFailures, $"team preview {weaponName}"))
+        {
+            TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_weaponItem");
+        }
+    }
+
+    private bool ApplyPreviewPaint(
+        CCSPlayerController player,
+        CEconItemView item,
+        CosmeticEntry cosmetic,
+        bool isKnife,
+        string customizationTarget,
+        bool logFailures,
+        string context)
+    {
+        try
+        {
+            var customization = GetCustomization(player, customizationTarget);
+            var seed = customization?.Seed ?? cosmetic.Seed;
+            var wear = customization?.Wear ?? cosmetic.Wear;
+            var statTrak = customization?.StatTrak;
+
+            if (cosmetic.ItemDefinitionIndex.HasValue)
+            {
+                item.ItemDefinitionIndex = cosmetic.ItemDefinitionIndex.Value;
+            }
+
+            item.EntityQuality = statTrak.HasValue ? 9 : isKnife ? 3 : 0;
+            UpdateEconItemIdentity(item, player);
+            ApplyCustomName(item, cosmetic, customization?.NameTag);
+            var attributesApplied = _econAttributes.ApplyPaintAttributes(
+                item,
+                cosmetic.Id,
+                cosmetic.PaintKit,
+                seed,
+                wear,
+                context,
+                statTrak);
+            if (!attributesApplied && logFailures)
+            {
+                _logger.LogWarning(
+                    "Astra Skins applied team preview paint but dynamic attribute update failed for {CosmeticId} on {Context}.",
+                    cosmetic.Id,
+                    context);
+            }
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Astra Skins failed to apply {CosmeticId} to {Context}.", cosmetic.Id, context);
+            return false;
+        }
+    }
+
+    private bool ApplyPreviewKnifeType(CCSPlayerController player, CEconItemView item, KnifeDefinition knife)
+    {
+        var customization = GetCustomization(player, KnifeTarget);
+        var statTrak = customization?.StatTrak;
+        item.ItemDefinitionIndex = knife.ItemDefinitionIndex;
+        item.EntityQuality = statTrak.HasValue ? 9 : 3;
+        UpdateEconItemIdentity(item, player);
+        var nameTag = GetCustomization(player, KnifeTarget)?.NameTag;
+        if (!string.IsNullOrWhiteSpace(nameTag))
+        {
+            item.CustomName = nameTag;
+            item.CustomNameOverride = nameTag;
+        }
+
+        _econAttributes.ClearPaintAttributes(item, $"team preview {knife.EntityName}", statTrak);
+        return true;
+    }
+
+    private static string? TeamKeyFromDesignerName(string? designerName)
+    {
+        if (string.IsNullOrWhiteSpace(designerName))
+        {
+            return null;
+        }
+
+        if (designerName.Contains("counterterrorist", StringComparison.OrdinalIgnoreCase))
+        {
+            return "ct";
+        }
+
+        if (designerName.Contains("terrorist", StringComparison.OrdinalIgnoreCase))
+        {
+            return "t";
+        }
+
+        return null;
     }
 
     private bool TryGetPawn(CCSPlayerController player, out CCSPlayerPawn? pawn, bool logFailures)

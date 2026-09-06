@@ -30,6 +30,10 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
     // must not keep the anthem cut; replay goes to the listener, not only the MVP.
     private PendingMvpCue? _pendingMvpCue;
     private DateTime _nextMusicKitHealthCheckUtc = DateTime.MinValue;
+    // Humans that connected but have not spawned yet. Between connect and first
+    // spawn Valve keeps re-syncing the controller inventory, so the 1s health
+    // check is too coarse for the team-select / intro music window.
+    private readonly HashSet<int> _prePawnSlots = new();
     private bool _ready;
     private bool _giveNamedItemHooked;
 
@@ -45,7 +49,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
     public PluginConfig Config { get; set; } = new();
 
     public override string ModuleName => "Astra Skins";
-    public override string ModuleVersion => "1.0.10-mkfix9-music-netprop";
+    public override string ModuleVersion => "1.0.10-mkfix12-preview";
     public override string ModuleAuthor => "Ayrton09";
     public override string ModuleDescription => string.Empty;
 
@@ -77,6 +81,9 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         RegisterListener<Listeners.OnClientAuthorized>(OnClientAuthorized);
         RegisterListener<Listeners.OnMapStart>(OnMapStart);
         RegisterListener<Listeners.OnTick>(OnTick);
+        RegisterListener<Listeners.OnEntityCreated>(OnEntityCreated);
+        RegisterListener<Listeners.OnEntitySpawned>(OnEntityCreated);
+        RegisterListener<Listeners.OnEntityDeleted>(OnEntityDeleted);
         RegisterListener<Listeners.OnPlayerButtonsChanged>(OnPlayerButtonsChanged);
         RegisterListener<Listeners.OnServerPrecacheResources>(OnServerPrecacheResources);
         RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawnPre, HookMode.Pre);
@@ -387,6 +394,10 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         var agentVoiceCount = catalog.Agents.Count(a => !string.IsNullOrWhiteSpace(a.VoicePrefix));
         command.ReplyToCommand($"{FormatPrefix()} Debug: ready={_ready}, db={_config.DatabaseMode}, inputCooldown={_config.Menu.CooldownMilliseconds}ms, selectionCooldown={_config.Menu.SelectionCooldownMilliseconds}ms");
         command.ReplyToCommand($"{FormatPrefix()} Data: weapons={catalog.Weapons.Count}/{weaponSkinCount}, knives={catalog.Knives.Count}/{knifeSkinCount}, gloves={catalog.Gloves.Count}/{gloveSkinCount}, agents={catalog.Agents.Count} voices={agentVoiceCount}, musicKits={catalog.MusicKits.Count}");
+        foreach (var line in _skinManager.DescribeTeamPreviewState())
+        {
+            command.ReplyToCommand($"{FormatPrefix()} Preview: {line}");
+        }
 
         if (player is null || !IsLiveHuman(player))
         {
@@ -397,6 +408,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         var agentT = profile.AgentIdsByTeam.TryGetValue("t", out var tAgent) ? tAgent : "none";
         var agentCt = profile.AgentIdsByTeam.TryGetValue("ct", out var ctAgent) ? ctAgent : "none";
         command.ReplyToCommand($"{FormatPrefix()} Player: steam={player.SteamID}, team={player.Team}, ownedWeapons={_skinManager.GetOwnedWeaponDefinitions(player).Count}");
+        command.ReplyToCommand($"{FormatPrefix()} Music: {_skinManager.DescribeMusicKitState(player)} prePawn={_prePawnSlots.Contains(player.Slot)}");
         var musicMvps = _skinManager.TryGetSelectedMusicKitId(player, out var selectedKitId) &&
                         profile.MusicKitMvpCounts.TryGetValue(selectedKitId, out var mvps)
             ? mvps
@@ -629,6 +641,11 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
 
         if (_ready && IsLiveHuman(player))
         {
+            if (player!.Team is CsTeam.Terrorist or CsTeam.CounterTerrorist)
+            {
+                _prePawnSlots.Remove(player.Slot);
+            }
+
             AddTimer(0.25f, () =>
             {
                 if (IsLiveHuman(player))
@@ -682,15 +699,18 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
 
     // Wait / team-intro cues start on the client around these events; the kit
     // has to be on the wire before them, team_intro_end and round_start are late.
+    // Valve also fills team_intro Xuid on round_prestart; write after it lands.
     private HookResult OnRoundPrestart(EventRoundPrestart @event, GameEventInfo info)
     {
         ApplyMusicKitToLivePlayers();
+        ScheduleTeamPreviewApply();
         return HookResult.Continue;
     }
 
     private HookResult OnTeamIntroStart(EventTeamIntroStart @event, GameEventInfo info)
     {
         ApplyMusicKitToLivePlayers();
+        ScheduleTeamPreviewApply();
         return HookResult.Continue;
     }
 
@@ -705,6 +725,41 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         _pendingMvpCue = null;
         ApplyMusicKitToLivePlayers();
         return HookResult.Continue;
+    }
+
+    // Team-intro / team-select Xuid is assigned a frame or two after the event.
+    private void ScheduleTeamPreviewApply(CCSPlayerController? player = null)
+    {
+        if (!_ready || _skinManager is null)
+        {
+            return;
+        }
+
+        var slot = player?.Slot;
+        var userId = player?.UserId;
+        void apply()
+        {
+            if (!_ready || _skinManager is null)
+            {
+                return;
+            }
+
+            if (slot is null)
+            {
+                _skinManager.ApplyTeamPreviewCosmetics();
+                return;
+            }
+
+            var current = Utilities.GetPlayerFromSlot(slot.Value);
+            if (IsLiveHuman(current) && current!.UserId == userId)
+            {
+                _skinManager.ApplyTeamPreviewCosmetics(current);
+            }
+        }
+
+        Server.NextFrame(apply);
+        AddTimer(0.10f, apply, TimerFlags.STOP_ON_MAPCHANGE);
+        AddTimer(0.25f, apply, TimerFlags.STOP_ON_MAPCHANGE);
     }
 
     private HookResult OnRoundFreezeEndPre(EventRoundFreezeEnd @event, GameEventInfo info)
@@ -880,6 +935,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         {
             _menuManager?.CloseSlot(player.Slot);
             _maintenanceCooldownsBySlot.Remove(player.Slot);
+            _prePawnSlots.Remove(player.Slot);
             _skinManager?.Forget(player);
             if (_steamIdsBySlot.Remove(player.Slot, out var steamId))
             {
@@ -899,6 +955,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
             if (_ready && IsLiveHuman(player))
             {
                 _skinManager?.ApplyMusicKitWhenProfileReady(player, logFailures: false);
+                ScheduleTeamPreviewApply(player);
             }
             else if (_ready && player.IsBot)
             {
@@ -917,12 +974,16 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
 
     // First team select happens before any spawn; the auth-time preload usually
     // has the profile by now, so this is the earliest write the client can use.
+    // Valve fills the team_select Xuid some frames after this; the per-tick
+    // ensure covers the rest.
     private HookResult OnPlayerConnectFull(EventPlayerConnectFull @event, GameEventInfo info)
     {
         var player = @event.Userid;
         if (_ready && IsLiveHuman(player))
         {
-            _skinManager?.ApplyMusicKitWhenProfileReady(player!, logFailures: false);
+            _prePawnSlots.Add(player!.Slot);
+            _skinManager?.ApplyMusicKitWhenProfileReady(player, logFailures: false);
+            ScheduleTeamPreviewApply(player);
         }
 
         return HookResult.Continue;
@@ -938,8 +999,10 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         if (steamId.SteamId64 != 0)
         {
             _steamIdsBySlot[playerSlot] = steamId.SteamId64;
+            _prePawnSlots.Add(playerSlot);
             // Auth often fires before the controller is a live human. Start the
-            // profile read so team-select music is not waiting on a first spawn.
+            // profile read so team-select music and preview are not waiting on
+            // a first spawn.
             _skinManager.PreloadProfile(steamId.SteamId64);
         }
 
@@ -957,6 +1020,8 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
             return;
         }
 
+        _skinManager.ForgetTeamPreviewState();
+        _prePawnSlots.Clear();
         AddTimer(1.0f, ApplyMusicKitToLivePlayers, TimerFlags.STOP_ON_MAPCHANGE);
     }
 
@@ -968,6 +1033,10 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         }
 
         _menuManager?.OnTick();
+        // Runs after the game's frame, so a preview slot Valve filled this
+        // frame is rewritten before the same snapshot is sent.
+        _skinManager?.EnsureTeamPreviewCosmetics();
+        EnsureMusicKitForPrePawnPlayers();
 
         var now = DateTime.UtcNow;
         if (now < _nextMusicKitHealthCheckUtc)
@@ -977,6 +1046,60 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
 
         _nextMusicKitHealthCheckUtc = now.AddSeconds(1);
         EnsureMusicKitForLivePlayers();
+    }
+
+    private void OnEntityCreated(CEntityInstance entity)
+    {
+        if (_ready)
+        {
+            _skinManager?.TrackTeamPreviewEntity(entity);
+        }
+    }
+
+    private void OnEntityDeleted(CEntityInstance entity)
+    {
+        if (_ready)
+        {
+            _skinManager?.UntrackTeamPreviewEntity(entity);
+        }
+    }
+
+    private void EnsureMusicKitForPrePawnPlayers()
+    {
+        if (_skinManager is null || _prePawnSlots.Count == 0)
+        {
+            return;
+        }
+
+        List<int>? done = null;
+        foreach (var slot in _prePawnSlots)
+        {
+            var player = Utilities.GetPlayerFromSlot(slot);
+            if (!IsLiveHuman(player))
+            {
+                continue;
+            }
+
+            // An observer pawn on team None/Spectator is still pre-game: Valve
+            // keeps resetting inventory there too.
+            var pawn = player!.PlayerPawn.Value;
+            var onPlayingTeam = player.Team is CsTeam.Terrorist or CsTeam.CounterTerrorist;
+            if (onPlayingTeam && pawn is not null && pawn.IsValid)
+            {
+                (done ??= new List<int>()).Add(slot);
+                continue;
+            }
+
+            _skinManager.EnsureMusicKitWhenProfileReady(player);
+        }
+
+        if (done is not null)
+        {
+            foreach (var slot in done)
+            {
+                _prePawnSlots.Remove(slot);
+            }
+        }
     }
 
     private void EnsureMusicKitForLivePlayers()
