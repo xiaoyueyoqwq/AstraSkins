@@ -22,6 +22,7 @@ public enum MenuView
 
 public sealed class PlayerMenuState
 {
+    public bool PreferZh { get; set; }
     public int Slot { get; init; }
     public MenuView View { get; set; }
     public Stack<MenuSnapshot> BackStack { get; } = new();

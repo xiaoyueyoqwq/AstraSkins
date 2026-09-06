@@ -2,12 +2,14 @@
   {
     "id": "studded_bloodhound_gloves",
     "displayName": "Bloodhound Gloves",
+    "displayNameZh": "血猎手套",
     "itemDefinitionIndex": 5027,
     "enabled": true,
     "skins": [
       {
         "id": "studded_bloodhound_gloves:10008",
         "displayName": "Bronzed",
+        "displayNameZh": "染铜",
         "paintKit": 10008,
         "seed": 0,
         "wear": 0.06,
@@ -19,6 +21,7 @@
       {
         "id": "studded_bloodhound_gloves:10006",
         "displayName": "Charred",
+        "displayNameZh": "焦炭",
         "paintKit": 10006,
         "seed": 0,
         "wear": 0.06,
@@ -30,6 +33,7 @@
       {
         "id": "studded_bloodhound_gloves:10039",
         "displayName": "Guerrilla",
+        "displayNameZh": "游击队",
         "paintKit": 10039,
         "seed": 0,
         "wear": 0.06,
@@ -41,6 +45,7 @@
       {
         "id": "studded_bloodhound_gloves:10007",
         "displayName": "Snakebite",
+        "displayNameZh": "蛇咬",
         "paintKit": 10007,
         "seed": 0,
         "wear": 0.06,
@@ -54,12 +59,14 @@
   {
     "id": "studded_brokenfang_gloves",
     "displayName": "Broken Fang Gloves",
+    "displayNameZh": "狂牙手套",
     "itemDefinitionIndex": 4725,
     "enabled": true,
     "skins": [
       {
         "id": "studded_brokenfang_gloves:10085",
         "displayName": "Jade",
+        "displayNameZh": "翡翠",
         "paintKit": 10085,
         "seed": 0,
         "wear": 0.06,
@@ -71,6 +78,7 @@
       {
         "id": "studded_brokenfang_gloves:10087",
         "displayName": "Needle Point",
+        "displayNameZh": "针尖",
         "paintKit": 10087,
         "seed": 0,
         "wear": 0.06,
@@ -82,6 +90,7 @@
       {
         "id": "studded_brokenfang_gloves:10088",
         "displayName": "Unhinged",
+        "displayNameZh": "精神错乱",
         "paintKit": 10088,
         "seed": 0,
         "wear": 0.06,
@@ -93,6 +102,7 @@
       {
         "id": "studded_brokenfang_gloves:10086",
         "displayName": "Yellow-banded",
+        "displayNameZh": "黄色斑纹",
         "paintKit": 10086,
         "seed": 0,
         "wear": 0.06,
@@ -106,12 +116,14 @@
   {
     "id": "slick_gloves",
     "displayName": "Driver Gloves",
+    "displayNameZh": "驾驶手套",
     "itemDefinitionIndex": 5031,
     "enabled": true,
     "skins": [
       {
         "id": "slick_gloves:10072",
         "displayName": "Black Tie",
+        "displayNameZh": "西装革履",
         "paintKit": 10072,
         "seed": 0,
         "wear": 0.06,
@@ -123,6 +135,7 @@
       {
         "id": "slick_gloves:1399",
         "displayName": "Brocade Crane",
+        "displayNameZh": "深红鹤服",
         "paintKit": 1399,
         "seed": 0,
         "wear": 0.06,
@@ -134,6 +147,7 @@
       {
         "id": "slick_gloves:1400",
         "displayName": "Brocade Flowers",
+        "displayNameZh": "繁花似锦",
         "paintKit": 1400,
         "seed": 0,
         "wear": 0.06,
@@ -145,6 +159,7 @@
       {
         "id": "slick_gloves:10015",
         "displayName": "Convoy",
+        "displayNameZh": "护卫",
         "paintKit": 10015,
         "seed": 0,
         "wear": 0.06,
@@ -156,6 +171,7 @@
       {
         "id": "slick_gloves:10016",
         "displayName": "Crimson Weave",
+        "displayNameZh": "深红织物",
         "paintKit": 10016,
         "seed": 0,
         "wear": 0.06,
@@ -167,6 +183,7 @@
       {
         "id": "slick_gloves:10040",
         "displayName": "Diamondback",
+        "displayNameZh": "菱背蛇纹",
         "paintKit": 10040,
         "seed": 0,
         "wear": 0.06,
@@ -178,6 +195,7 @@
       {
         "id": "slick_gloves:1401",
         "displayName": "Dragon Fists",
+        "displayNameZh": "龙拳",
         "paintKit": 1401,
         "seed": 0,
         "wear": 0.06,
@@ -189,6 +207,7 @@
       {
         "id": "slick_gloves:1402",
         "displayName": "Garden",
+        "displayNameZh": "花园",
         "paintKit": 1402,
         "seed": 0,
         "wear": 0.06,
@@ -200,6 +219,7 @@
       {
         "id": "slick_gloves:1439",
         "displayName": "Hand Sweaters",
+        "displayNameZh": "针织手套",
         "paintKit": 1439,
         "seed": 0,
         "wear": 0.06,
@@ -211,6 +231,7 @@
       {
         "id": "slick_gloves:10042",
         "displayName": "Imperial Plaid",
+        "displayNameZh": "蓝紫格子",
         "paintKit": 10042,
         "seed": 0,
         "wear": 0.06,
@@ -222,6 +243,7 @@
       {
         "id": "slick_gloves:10041",
         "displayName": "King Snake",
+        "displayNameZh": "王蛇",
         "paintKit": 10041,
         "seed": 0,
         "wear": 0.06,
@@ -233,6 +255,7 @@
       {
         "id": "slick_gloves:10013",
         "displayName": "Lunar Weave",
+        "displayNameZh": "月色织物",
         "paintKit": 10013,
         "seed": 0,
         "wear": 0.06,
@@ -244,6 +267,7 @@
       {
         "id": "slick_gloves:10043",
         "displayName": "Overtake",
+        "displayNameZh": "超越",
         "paintKit": 10043,
         "seed": 0,
         "wear": 0.06,
@@ -255,6 +279,7 @@
       {
         "id": "slick_gloves:1412",
         "displayName": "Plum Quill",
+        "displayNameZh": "蓝紫点子",
         "paintKit": 1412,
         "seed": 0,
         "wear": 0.06,
@@ -266,6 +291,7 @@
       {
         "id": "slick_gloves:10071",
         "displayName": "Queen Jaguar",
+        "displayNameZh": "美洲豹女王",
         "paintKit": 10071,
         "seed": 0,
         "wear": 0.06,
@@ -277,6 +303,7 @@
       {
         "id": "slick_gloves:10044",
         "displayName": "Racing Green",
+        "displayNameZh": "墨绿色调",
         "paintKit": 10044,
         "seed": 0,
         "wear": 0.06,
@@ -288,6 +315,7 @@
       {
         "id": "slick_gloves:10069",
         "displayName": "Rezan the Red",
+        "displayNameZh": "绯红列赞",
         "paintKit": 10069,
         "seed": 0,
         "wear": 0.06,
@@ -299,6 +327,7 @@
       {
         "id": "slick_gloves:1404",
         "displayName": "Seigaiha",
+        "displayNameZh": "青海波",
         "paintKit": 1404,
         "seed": 0,
         "wear": 0.06,
@@ -310,6 +339,7 @@
       {
         "id": "slick_gloves:10070",
         "displayName": "Snow Leopard",
+        "displayNameZh": "雪豹",
         "paintKit": 10070,
         "seed": 0,
         "wear": 0.06,
@@ -321,6 +351,7 @@
       {
         "id": "slick_gloves:1398",
         "displayName": "Wave Chaser",
+        "displayNameZh": "逐沧浪",
         "paintKit": 1398,
         "seed": 0,
         "wear": 0.06,
@@ -334,12 +365,14 @@
   {
     "id": "leather_handwraps",
     "displayName": "Hand Wraps",
+    "displayNameZh": "裹手",
     "itemDefinitionIndex": 5032,
     "enabled": true,
     "skins": [
       {
         "id": "leather_handwraps:10056",
         "displayName": "Arboreal",
+        "displayNameZh": "森林色调",
         "paintKit": 10056,
         "seed": 0,
         "wear": 0.06,
@@ -351,6 +384,7 @@
       {
         "id": "leather_handwraps:10036",
         "displayName": "Badlands",
+        "displayNameZh": "恶土",
         "paintKit": 10036,
         "seed": 0,
         "wear": 0.06,
@@ -362,6 +396,7 @@
       {
         "id": "leather_handwraps:10084",
         "displayName": "CAUTION!",
+        "displayNameZh": "警告！",
         "paintKit": 10084,
         "seed": 0,
         "wear": 0.06,
@@ -373,6 +408,7 @@
       {
         "id": "leather_handwraps:10053",
         "displayName": "Cobalt Skulls",
+        "displayNameZh": "钴蓝骷髅",
         "paintKit": 10053,
         "seed": 0,
         "wear": 0.06,
@@ -384,6 +420,7 @@
       {
         "id": "leather_handwraps:10083",
         "displayName": "Constrictor",
+        "displayNameZh": "蟒蛇",
         "paintKit": 10083,
         "seed": 0,
         "wear": 0.06,
@@ -395,6 +432,7 @@
       {
         "id": "leather_handwraps:10081",
         "displayName": "Desert Shamagh",
+        "displayNameZh": "沙漠头巾",
         "paintKit": 10081,
         "seed": 0,
         "wear": 0.06,
@@ -406,6 +444,7 @@
       {
         "id": "leather_handwraps:10055",
         "displayName": "Duct Tape",
+        "displayNameZh": "防水布胶带",
         "paintKit": 10055,
         "seed": 0,
         "wear": 0.06,
@@ -417,6 +456,7 @@
       {
         "id": "leather_handwraps:10082",
         "displayName": "Giraffe",
+        "displayNameZh": "长颈鹿",
         "paintKit": 10082,
         "seed": 0,
         "wear": 0.06,
@@ -428,6 +468,7 @@
       {
         "id": "leather_handwraps:10009",
         "displayName": "Leather",
+        "displayNameZh": "皮革",
         "paintKit": 10009,
         "seed": 0,
         "wear": 0.06,
@@ -439,6 +480,7 @@
       {
         "id": "leather_handwraps:10054",
         "displayName": "Overprint",
+        "displayNameZh": "套印",
         "paintKit": 10054,
         "seed": 0,
         "wear": 0.06,
@@ -450,6 +492,7 @@
       {
         "id": "leather_handwraps:10021",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 10021,
         "seed": 0,
         "wear": 0.06,
@@ -461,6 +504,7 @@
       {
         "id": "leather_handwraps:10010",
         "displayName": "Spruce DDPAT",
+        "displayNameZh": "云杉 DDPAT",
         "paintKit": 10010,
         "seed": 0,
         "wear": 0.06,
@@ -474,12 +518,14 @@
   {
     "id": "studded_hydra_gloves",
     "displayName": "Hydra Gloves",
+    "displayNameZh": "九头蛇手套",
     "itemDefinitionIndex": 5035,
     "enabled": true,
     "skins": [
       {
         "id": "studded_hydra_gloves:10060",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 10060,
         "seed": 0,
         "wear": 0.06,
@@ -491,6 +537,7 @@
       {
         "id": "studded_hydra_gloves:10057",
         "displayName": "Emerald",
+        "displayNameZh": "翡翠色调",
         "paintKit": 10057,
         "seed": 0,
         "wear": 0.06,
@@ -502,6 +549,7 @@
       {
         "id": "studded_hydra_gloves:10058",
         "displayName": "Mangrove",
+        "displayNameZh": "红树林",
         "paintKit": 10058,
         "seed": 0,
         "wear": 0.06,
@@ -513,6 +561,7 @@
       {
         "id": "studded_hydra_gloves:10059",
         "displayName": "Rattler",
+        "displayNameZh": "响尾蛇",
         "paintKit": 10059,
         "seed": 0,
         "wear": 0.06,
@@ -526,12 +575,14 @@
   {
     "id": "motorcycle_gloves",
     "displayName": "Moto Gloves",
+    "displayNameZh": "摩托手套",
     "itemDefinitionIndex": 5033,
     "enabled": true,
     "skins": [
       {
         "id": "motorcycle_gloves:10080",
         "displayName": "3rd Commando Company",
+        "displayNameZh": "第三特种兵连",
         "paintKit": 10080,
         "seed": 0,
         "wear": 0.06,
@@ -543,6 +594,7 @@
       {
         "id": "motorcycle_gloves:10079",
         "displayName": "Blood Pressure",
+        "displayNameZh": "血压",
         "paintKit": 10079,
         "seed": 0,
         "wear": 0.06,
@@ -554,6 +606,7 @@
       {
         "id": "motorcycle_gloves:10027",
         "displayName": "Boom!",
+        "displayNameZh": "*嘣！*",
         "paintKit": 10027,
         "seed": 0,
         "wear": 0.06,
@@ -565,6 +618,7 @@
       {
         "id": "motorcycle_gloves:10028",
         "displayName": "Cool Mint",
+        "displayNameZh": "清凉薄荷",
         "paintKit": 10028,
         "seed": 0,
         "wear": 0.06,
@@ -576,6 +630,7 @@
       {
         "id": "motorcycle_gloves:10024",
         "displayName": "Eclipse",
+        "displayNameZh": "日蚀",
         "paintKit": 10024,
         "seed": 0,
         "wear": 0.06,
@@ -587,6 +642,7 @@
       {
         "id": "motorcycle_gloves:10077",
         "displayName": "Finish Line",
+        "displayNameZh": "终点线",
         "paintKit": 10077,
         "seed": 0,
         "wear": 0.06,
@@ -598,6 +654,7 @@
       {
         "id": "motorcycle_gloves:10049",
         "displayName": "POW!",
+        "displayNameZh": "嘭！",
         "paintKit": 10049,
         "seed": 0,
         "wear": 0.06,
@@ -609,6 +666,7 @@
       {
         "id": "motorcycle_gloves:10052",
         "displayName": "Polygon",
+        "displayNameZh": "多边形",
         "paintKit": 10052,
         "seed": 0,
         "wear": 0.06,
@@ -620,6 +678,7 @@
       {
         "id": "motorcycle_gloves:10078",
         "displayName": "Smoke Out",
+        "displayNameZh": "小心烟雾弹",
         "paintKit": 10078,
         "seed": 0,
         "wear": 0.06,
@@ -631,6 +690,7 @@
       {
         "id": "motorcycle_gloves:10026",
         "displayName": "Spearmint",
+        "displayNameZh": "薄荷",
         "paintKit": 10026,
         "seed": 0,
         "wear": 0.06,
@@ -642,6 +702,7 @@
       {
         "id": "motorcycle_gloves:10051",
         "displayName": "Transport",
+        "displayNameZh": "交运",
         "paintKit": 10051,
         "seed": 0,
         "wear": 0.06,
@@ -653,6 +714,7 @@
       {
         "id": "motorcycle_gloves:10050",
         "displayName": "Turtle",
+        "displayNameZh": "玳瑁",
         "paintKit": 10050,
         "seed": 0,
         "wear": 0.06,
@@ -666,12 +728,14 @@
   {
     "id": "specialist_gloves",
     "displayName": "Specialist Gloves",
+    "displayNameZh": "专业手套",
     "itemDefinitionIndex": 5034,
     "enabled": true,
     "skins": [
       {
         "id": "specialist_gloves:1437",
         "displayName": "Big Swell",
+        "displayNameZh": "狂澜",
         "paintKit": 1437,
         "seed": 0,
         "wear": 0.06,
@@ -683,6 +747,7 @@
       {
         "id": "specialist_gloves:1414",
         "displayName": "Blackbook",
+        "displayNameZh": "黑皮书",
         "paintKit": 1414,
         "seed": 0,
         "wear": 0.06,
@@ -694,6 +759,7 @@
       {
         "id": "specialist_gloves:10062",
         "displayName": "Buckshot",
+        "displayNameZh": "狩鹿",
         "paintKit": 10062,
         "seed": 0,
         "wear": 0.06,
@@ -705,6 +771,7 @@
       {
         "id": "specialist_gloves:1415",
         "displayName": "Chocolate Chesterfield",
+        "displayNameZh": "可可伯爵",
         "paintKit": 1415,
         "seed": 0,
         "wear": 0.06,
@@ -716,6 +783,7 @@
       {
         "id": "specialist_gloves:1440",
         "displayName": "Cloud Chaser",
+        "displayNameZh": "青云狩",
         "paintKit": 1440,
         "seed": 0,
         "wear": 0.06,
@@ -727,6 +795,7 @@
       {
         "id": "specialist_gloves:10033",
         "displayName": "Crimson Kimono",
+        "displayNameZh": "深红和服",
         "paintKit": 10033,
         "seed": 0,
         "wear": 0.06,
@@ -738,6 +807,7 @@
       {
         "id": "specialist_gloves:10061",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 10061,
         "seed": 0,
         "wear": 0.06,
@@ -749,6 +819,7 @@
       {
         "id": "specialist_gloves:10034",
         "displayName": "Emerald Web",
+        "displayNameZh": "翠绿之网",
         "paintKit": 10034,
         "seed": 0,
         "wear": 0.06,
@@ -760,6 +831,7 @@
       {
         "id": "specialist_gloves:10063",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 10063,
         "seed": 0,
         "wear": 0.06,
@@ -771,6 +843,7 @@
       {
         "id": "specialist_gloves:10068",
         "displayName": "Field Agent",
+        "displayNameZh": "一线特工",
         "paintKit": 10068,
         "seed": 0,
         "wear": 0.06,
@@ -782,6 +855,7 @@
       {
         "id": "specialist_gloves:10030",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 10030,
         "seed": 0,
         "wear": 0.06,
@@ -793,6 +867,7 @@
       {
         "id": "specialist_gloves:10035",
         "displayName": "Foundation",
+        "displayNameZh": "元勋",
         "paintKit": 10035,
         "seed": 0,
         "wear": 0.06,
@@ -804,6 +879,7 @@
       {
         "id": "specialist_gloves:1413",
         "displayName": "Lime Polycam",
+        "displayNameZh": "青柠迷彩",
         "paintKit": 1413,
         "seed": 0,
         "wear": 0.06,
@@ -815,6 +891,7 @@
       {
         "id": "specialist_gloves:10066",
         "displayName": "Lt. Commander",
+        "displayNameZh": "陆军少尉长官",
         "paintKit": 10066,
         "seed": 0,
         "wear": 0.06,
@@ -826,6 +903,7 @@
       {
         "id": "specialist_gloves:10065",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 10065,
         "seed": 0,
         "wear": 0.06,
@@ -837,6 +915,7 @@
       {
         "id": "specialist_gloves:10064",
         "displayName": "Mogul",
+        "displayNameZh": "大腕",
         "paintKit": 10064,
         "seed": 0,
         "wear": 0.06,
@@ -848,6 +927,7 @@
       {
         "id": "specialist_gloves:1438",
         "displayName": "Pillow Punchers",
+        "displayNameZh": "羽袭",
         "paintKit": 1438,
         "seed": 0,
         "wear": 0.06,
@@ -859,6 +939,7 @@
       {
         "id": "specialist_gloves:1416",
         "displayName": "Sunburst",
+        "displayNameZh": "日芒",
         "paintKit": 1416,
         "seed": 0,
         "wear": 0.06,
@@ -870,6 +951,7 @@
       {
         "id": "specialist_gloves:10067",
         "displayName": "Tiger Strike",
+        "displayNameZh": "老虎精英",
         "paintKit": 10067,
         "seed": 0,
         "wear": 0.06,
@@ -883,12 +965,14 @@
   {
     "id": "sporty_gloves",
     "displayName": "Sport Gloves",
+    "displayNameZh": "运动手套",
     "itemDefinitionIndex": 5030,
     "enabled": true,
     "skins": [
       {
         "id": "sporty_gloves:10045",
         "displayName": "Amphibious",
+        "displayNameZh": "双栖",
         "paintKit": 10045,
         "seed": 0,
         "wear": 0.06,
@@ -900,6 +984,7 @@
       {
         "id": "sporty_gloves:10019",
         "displayName": "Arid",
+        "displayNameZh": "干旱",
         "paintKit": 10019,
         "seed": 0,
         "wear": 0.06,
@@ -911,6 +996,7 @@
       {
         "id": "sporty_gloves:10074",
         "displayName": "Big Game",
+        "displayNameZh": "大型猎物",
         "paintKit": 10074,
         "seed": 0,
         "wear": 0.06,
@@ -922,6 +1008,7 @@
       {
         "id": "sporty_gloves:1407",
         "displayName": "Blaze",
+        "displayNameZh": "炽烈之炎",
         "paintKit": 1407,
         "seed": 0,
         "wear": 0.06,
@@ -933,6 +1020,7 @@
       {
         "id": "sporty_gloves:10046",
         "displayName": "Bronze Morph",
+        "displayNameZh": "青铜形态",
         "paintKit": 10046,
         "seed": 0,
         "wear": 0.06,
@@ -944,6 +1032,7 @@
       {
         "id": "sporty_gloves:1408",
         "displayName": "Creme Pinstripe",
+        "displayNameZh": "奶油细条纹",
         "paintKit": 1408,
         "seed": 0,
         "wear": 0.06,
@@ -955,6 +1044,7 @@
       {
         "id": "sporty_gloves:1406",
         "displayName": "Frosty",
+        "displayNameZh": "寒霜",
         "paintKit": 1406,
         "seed": 0,
         "wear": 0.06,
@@ -966,6 +1056,7 @@
       {
         "id": "sporty_gloves:10038",
         "displayName": "Hedge Maze",
+        "displayNameZh": "树篱迷宫",
         "paintKit": 10038,
         "seed": 0,
         "wear": 0.06,
@@ -977,6 +1068,7 @@
       {
         "id": "sporty_gloves:10076",
         "displayName": "Nocts",
+        "displayNameZh": "夜行衣",
         "paintKit": 10076,
         "seed": 0,
         "wear": 0.06,
@@ -988,6 +1080,7 @@
       {
         "id": "sporty_gloves:1417",
         "displayName": "Occult",
+        "displayNameZh": "隐知",
         "paintKit": 1417,
         "seed": 0,
         "wear": 0.06,
@@ -999,6 +1092,7 @@
       {
         "id": "sporty_gloves:10047",
         "displayName": "Omega",
+        "displayNameZh": "欧米伽",
         "paintKit": 10047,
         "seed": 0,
         "wear": 0.06,
@@ -1010,6 +1104,7 @@
       {
         "id": "sporty_gloves:10037",
         "displayName": "Pandora's Box",
+        "displayNameZh": "潘多拉之盒",
         "paintKit": 10037,
         "seed": 0,
         "wear": 0.06,
@@ -1021,6 +1116,7 @@
       {
         "id": "sporty_gloves:1409",
         "displayName": "Red Racer",
+        "displayNameZh": "赤色追风",
         "paintKit": 1409,
         "seed": 0,
         "wear": 0.06,
@@ -1032,6 +1128,7 @@
       {
         "id": "sporty_gloves:10075",
         "displayName": "Scarlet Shamagh",
+        "displayNameZh": "猩红头巾",
         "paintKit": 10075,
         "seed": 0,
         "wear": 0.06,
@@ -1043,6 +1140,7 @@
       {
         "id": "sporty_gloves:10073",
         "displayName": "Slingshot",
+        "displayNameZh": "弹弓",
         "paintKit": 10073,
         "seed": 0,
         "wear": 0.06,
@@ -1054,6 +1152,7 @@
       {
         "id": "sporty_gloves:10018",
         "displayName": "Superconductor",
+        "displayNameZh": "超导体",
         "paintKit": 10018,
         "seed": 0,
         "wear": 0.06,
@@ -1065,6 +1164,7 @@
       {
         "id": "sporty_gloves:1410",
         "displayName": "Ultra Violent",
+        "displayNameZh": "紫外狂潮",
         "paintKit": 1410,
         "seed": 0,
         "wear": 0.06,
@@ -1076,6 +1176,7 @@
       {
         "id": "sporty_gloves:10048",
         "displayName": "Vice",
+        "displayNameZh": "迈阿密风云",
         "paintKit": 10048,
         "seed": 0,
         "wear": 0.06,
@@ -1087,6 +1188,7 @@
       {
         "id": "sporty_gloves:1405",
         "displayName": "Violet Beadwork",
+        "displayNameZh": "紫罗兰珠绣",
         "paintKit": 1405,
         "seed": 0,
         "wear": 0.06,

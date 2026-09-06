@@ -10,6 +10,8 @@ ITEMS_GAME_URL = "https://raw.githubusercontent.com/SteamDatabase/GameTracking-C
 CSGO_ENGLISH_URL = "https://raw.githubusercontent.com/SteamDatabase/GameTracking-CS2/master/game/csgo/pak01_dir/resource/csgo_english.txt"
 SKINS_API_URL = "https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/skins.json"
 AGENTS_API_URL = "https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/agents.json"
+SKINS_ZH_API_URL = "https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/zh-CN/skins.json"
+AGENTS_ZH_API_URL = "https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/zh-CN/agents.json"
 MUSIC_KITS_API_URL = "https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/music_kits.json"
 MUSIC_KITS_ZH_API_URL = "https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/zh-CN/music_kits.json"
 
@@ -51,10 +53,10 @@ WEAPON_DISPLAY = {
 }
 
 CATEGORIES = [
-    {"id": "pistols", "displayName": "Pistols", "order": 10, "enabled": True},
-    {"id": "smgs", "displayName": "SMGs", "order": 20, "enabled": True},
-    {"id": "rifles", "displayName": "Rifles", "order": 30, "enabled": True},
-    {"id": "heavy", "displayName": "Heavy", "order": 40, "enabled": True},
+    {"id": "pistols", "displayName": "Pistols", "displayNameZh": "手枪", "order": 10, "enabled": True},
+    {"id": "smgs", "displayName": "SMGs", "displayNameZh": "微型冲锋枪", "order": 20, "enabled": True},
+    {"id": "rifles", "displayName": "Rifles", "displayNameZh": "步枪", "order": 30, "enabled": True},
+    {"id": "heavy", "displayName": "Heavy", "displayNameZh": "重型武器", "order": 40, "enabled": True},
 ]
 
 
@@ -607,6 +609,64 @@ def build_music_kits(api_music_kits, api_music_kits_zh):
     return kits
 
 
+def with_zh(entry, zh_name):
+    """Return a copy with displayNameZh right after displayName, or the entry itself when there is no translation."""
+    if not zh_name or zh_name == entry.get("displayName"):
+        return entry
+    result = {}
+    for key, value in entry.items():
+        result[key] = value
+        if key == "displayName":
+            result["displayNameZh"] = zh_name
+    return result
+
+
+def attach_zh_names(weapons, knives, gloves, agents, api_skins_zh, api_agents_zh):
+    """Add displayNameZh from the zh-CN copies of the same upstream lists.
+
+    Skins are matched by (weapon id, paint index) and knives/gloves by
+    (item definition index, paint index), which is how the English entries
+    were keyed in the first place. Item names come from the zh weapon field.
+    """
+    skin_zh = {}
+    weapon_zh = {}
+    for skin in api_skins_zh or []:
+        weapon = skin.get("weapon") or {}
+        paint_index = skin.get("paint_index")
+        pattern = skin.get("pattern") or {}
+        name = (pattern.get("name") or (skin.get("name") or "").split("|")[-1]).strip()
+        if paint_index is None or not name:
+            continue
+        skin_zh[(weapon.get("id"), int(paint_index))] = name
+        skin_zh[(weapon.get("weapon_id"), int(paint_index))] = name
+        if weapon.get("name"):
+            weapon_zh[weapon.get("id")] = weapon["name"]
+            weapon_zh[weapon.get("weapon_id")] = weapon["name"]
+
+    def enrich(containers, container_key):
+        for index, container in enumerate(containers):
+            key = container.get(container_key)
+            skins = [
+                with_zh(skin, "原版" if skin.get("paintKit") == 0 else skin_zh.get((key, skin.get("paintKit"))))
+                for skin in container.get("skins", [])
+            ]
+            enriched = with_zh(container, weapon_zh.get(key))
+            enriched["skins"] = skins
+            containers[index] = enriched
+
+    enrich(weapons, "entityName")
+    enrich(knives, "itemDefinitionIndex")
+    enrich(gloves, "itemDefinitionIndex")
+
+    agent_zh = {
+        str(agent.get("id")): str(agent.get("name", "")).split("|", 1)[0].strip()
+        for agent in api_agents_zh or []
+        if agent.get("id") and agent.get("name")
+    }
+    for index, agent in enumerate(agents):
+        agents[index] = with_zh(agent, agent_zh.get(agent["id"]))
+
+
 def unique_by_id(entries):
     result = []
     seen = set()
@@ -624,6 +684,8 @@ def main():
     parser.add_argument("--language", default=CSGO_ENGLISH_URL)
     parser.add_argument("--skins-api", default=SKINS_API_URL)
     parser.add_argument("--agents-api", default=AGENTS_API_URL)
+    parser.add_argument("--skins-zh-api", default=SKINS_ZH_API_URL)
+    parser.add_argument("--agents-zh-api", default=AGENTS_ZH_API_URL)
     parser.add_argument("--music-kits-api", default=MUSIC_KITS_API_URL)
     parser.add_argument("--music-kits-zh-api", default=MUSIC_KITS_ZH_API_URL)
     parser.add_argument("--output", default="data")
@@ -633,6 +695,8 @@ def main():
     translations = parse_translations(load_text(args.language))
     api_skins = json.loads(load_text(args.skins_api)) if args.skins_api else None
     api_agents = json.loads(load_text(args.agents_api)) if args.agents_api else None
+    api_skins_zh = json.loads(load_text(args.skins_zh_api)) if args.skins_zh_api else None
+    api_agents_zh = json.loads(load_text(args.agents_zh_api)) if args.agents_zh_api else None
     api_music_kits = json.loads(load_text(args.music_kits_api)) if args.music_kits_api else None
     api_music_kits_zh = json.loads(load_text(args.music_kits_zh_api)) if args.music_kits_zh_api else None
     output = Path(args.output)
@@ -642,6 +706,7 @@ def main():
     gloves = build_gloves(root, translations, api_skins)
     agents = build_agents(api_agents, root)
     music_kits = build_music_kits(api_music_kits, api_music_kits_zh)
+    attach_zh_names(weapons, knives, gloves, agents, api_skins_zh, api_agents_zh)
 
     if not any(w["skins"] for w in weapons):
         print("No weapon skins were generated; check item_sets and paint_kits in the input schema.", file=sys.stderr)

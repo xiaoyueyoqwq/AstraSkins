@@ -4,6 +4,7 @@ public sealed class CosmeticEntry
 {
     public string Id { get; set; } = string.Empty;
     public string DisplayName { get; set; } = string.Empty;
+    public string? DisplayNameZh { get; set; }
     public int PaintKit { get; set; }
     public int Seed { get; set; }
     public float Wear { get; set; }

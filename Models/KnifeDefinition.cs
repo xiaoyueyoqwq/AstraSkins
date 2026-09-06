@@ -4,6 +4,7 @@ public sealed class KnifeDefinition
 {
     public string Id { get; set; } = string.Empty;
     public string DisplayName { get; set; } = string.Empty;
+    public string? DisplayNameZh { get; set; }
     public string EntityName { get; set; } = "weapon_knife";
     public ushort ItemDefinitionIndex { get; set; }
     public bool Enabled { get; set; } = true;

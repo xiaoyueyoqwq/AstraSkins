@@ -4,6 +4,7 @@ public sealed class AgentDefinition
 {
     public string Id { get; set; } = string.Empty;
     public string DisplayName { get; set; } = string.Empty;
+    public string? DisplayNameZh { get; set; }
     public string Team { get; set; } = string.Empty;
     public string Model { get; set; } = string.Empty;
     public ushort? ItemDefinitionIndex { get; set; }

@@ -2,6 +2,7 @@
   {
     "id": "agent-4619",
     "displayName": "'Blueberries' Buckshot",
+    "displayNameZh": "“蓝莓” 铅弹",
     "team": "ct",
     "model": "agents/models/ctm_st6/ctm_st6_variantj.vmdl",
     "itemDefinitionIndex": 4619,
@@ -14,6 +15,7 @@
   {
     "id": "agent-4680",
     "displayName": "'Two Times' McCoy",
+    "displayNameZh": "“两次”麦考伊",
     "team": "ct",
     "model": "agents/models/ctm_st6/ctm_st6_variantl.vmdl",
     "itemDefinitionIndex": 4680,
@@ -26,6 +28,7 @@
   {
     "id": "agent-5403",
     "displayName": "'Two Times' McCoy",
+    "displayNameZh": "“两次”麦考伊",
     "team": "ct",
     "model": "agents/models/ctm_st6/ctm_st6_variantm.vmdl",
     "itemDefinitionIndex": 5403,
@@ -38,6 +41,7 @@
   {
     "id": "agent-4712",
     "displayName": "1st Lieutenant Farlow",
+    "displayNameZh": "第一中尉法洛",
     "team": "ct",
     "model": "agents/models/ctm_swat/ctm_swat_variantf.vmdl",
     "itemDefinitionIndex": 4712,
@@ -50,6 +54,7 @@
   {
     "id": "agent-5400",
     "displayName": "3rd Commando Company",
+    "displayNameZh": "第三特种兵连",
     "team": "ct",
     "model": "agents/models/ctm_st6/ctm_st6_variantk.vmdl",
     "itemDefinitionIndex": 5400,
@@ -62,6 +67,7 @@
   {
     "id": "agent-4752",
     "displayName": "Aspirant",
+    "displayNameZh": "准尉",
     "team": "ct",
     "model": "agents/models/ctm_gendarmerie/ctm_gendarmerie_variantd.vmdl",
     "itemDefinitionIndex": 4752,
@@ -74,6 +80,7 @@
   {
     "id": "agent-5601",
     "displayName": "B Squadron Officer",
+    "displayNameZh": "B 中队指挥官",
     "team": "ct",
     "model": "agents/models/ctm_sas/ctm_sas_variantf.vmdl",
     "itemDefinitionIndex": 5601,
@@ -86,6 +93,7 @@
   {
     "id": "agent-4714",
     "displayName": "Bio-Haz Specialist",
+    "displayNameZh": "生物防害专家",
     "team": "ct",
     "model": "agents/models/ctm_swat/ctm_swat_varianth.vmdl",
     "itemDefinitionIndex": 4714,
@@ -98,6 +106,7 @@
   {
     "id": "agent-5402",
     "displayName": "Buckshot",
+    "displayNameZh": "铅弹",
     "team": "ct",
     "model": "agents/models/ctm_st6/ctm_st6_variantg.vmdl",
     "itemDefinitionIndex": 5402,
@@ -110,6 +119,7 @@
   {
     "id": "agent-4751",
     "displayName": "Chef d'Escadron Rouchard",
+    "displayNameZh": "中队长鲁沙尔·勒库托",
     "team": "ct",
     "model": "agents/models/ctm_gendarmerie/ctm_gendarmerie_variantc.vmdl",
     "itemDefinitionIndex": 4751,
@@ -122,6 +132,7 @@
   {
     "id": "agent-4750",
     "displayName": "Chem-Haz Capitaine",
+    "displayNameZh": "化学防害上尉",
     "team": "ct",
     "model": "agents/models/ctm_gendarmerie/ctm_gendarmerie_variantb.vmdl",
     "itemDefinitionIndex": 4750,
@@ -134,6 +145,7 @@
   {
     "id": "agent-4716",
     "displayName": "Chem-Haz Specialist",
+    "displayNameZh": "化学防害专家",
     "team": "ct",
     "model": "agents/models/ctm_swat/ctm_swat_variantj.vmdl",
     "itemDefinitionIndex": 4716,
@@ -146,6 +158,7 @@
   {
     "id": "agent-4757",
     "displayName": "Cmdr. Davida 'Goggles' Fernandez",
+    "displayNameZh": "指挥官黛维达·费尔南德斯（护目镜）",
     "team": "ct",
     "model": "agents/models/ctm_diver/ctm_diver_varianta.vmdl",
     "itemDefinitionIndex": 4757,
@@ -158,6 +171,7 @@
   {
     "id": "agent-4771",
     "displayName": "Cmdr. Frank 'Wet Sox' Baroud",
+    "displayNameZh": "指挥官弗兰克·巴鲁德（湿袜）",
     "team": "ct",
     "model": "agents/models/ctm_diver/ctm_diver_variantb.vmdl",
     "itemDefinitionIndex": 4771,
@@ -170,6 +184,7 @@
   {
     "id": "agent-4711",
     "displayName": "Cmdr. Mae 'Dead Cold' Jamison",
+    "displayNameZh": "指挥官 梅 “极寒” 贾米森",
     "team": "ct",
     "model": "agents/models/ctm_swat/ctm_swat_variante.vmdl",
     "itemDefinitionIndex": 4711,
@@ -182,6 +197,7 @@
   {
     "id": "agent-5602",
     "displayName": "D Squadron Officer",
+    "displayNameZh": "D 中队军官",
     "team": "ct",
     "model": "agents/models/ctm_sas/ctm_sas_variantg.vmdl",
     "itemDefinitionIndex": 5602,
@@ -194,6 +210,7 @@
   {
     "id": "agent-4713",
     "displayName": "John 'Van Healen' Kask",
+    "displayNameZh": "约翰 “范·海伦” 卡斯克",
     "team": "ct",
     "model": "agents/models/ctm_swat/ctm_swat_variantg.vmdl",
     "itemDefinitionIndex": 4713,
@@ -206,6 +223,7 @@
   {
     "id": "agent-4756",
     "displayName": "Lieutenant 'Tree Hugger' Farlow",
+    "displayNameZh": "中尉法洛（抱树人）",
     "team": "ct",
     "model": "agents/models/ctm_swat/ctm_swat_variantk.vmdl",
     "itemDefinitionIndex": 4756,
@@ -218,6 +236,7 @@
   {
     "id": "agent-4772",
     "displayName": "Lieutenant Rex Krikey",
+    "displayNameZh": "中尉雷克斯·克里奇",
     "team": "ct",
     "model": "agents/models/ctm_diver/ctm_diver_variantc.vmdl",
     "itemDefinitionIndex": 4772,
@@ -230,6 +249,7 @@
   {
     "id": "agent-5404",
     "displayName": "Lt. Commander Ricksaw",
+    "displayNameZh": "海军上尉里克索尔",
     "team": "ct",
     "model": "agents/models/ctm_st6/ctm_st6_varianti.vmdl",
     "itemDefinitionIndex": 5404,
@@ -242,6 +262,7 @@
   {
     "id": "agent-5306",
     "displayName": "Markus Delrow",
+    "displayNameZh": "马尔库斯·戴劳",
     "team": "ct",
     "model": "agents/models/ctm_fbi/ctm_fbi_variantg.vmdl",
     "itemDefinitionIndex": 5306,
@@ -254,6 +275,7 @@
   {
     "id": "agent-5307",
     "displayName": "Michael Syfers",
+    "displayNameZh": "迈克·赛弗斯",
     "team": "ct",
     "model": "agents/models/ctm_fbi/ctm_fbi_varianth.vmdl",
     "itemDefinitionIndex": 5307,
@@ -266,6 +288,7 @@
   {
     "id": "agent-4753",
     "displayName": "Officer Jacques Beltram",
+    "displayNameZh": "军官雅克·贝尔特朗",
     "team": "ct",
     "model": "agents/models/ctm_gendarmerie/ctm_gendarmerie_variante.vmdl",
     "itemDefinitionIndex": 4753,
@@ -278,6 +301,7 @@
   {
     "id": "agent-5305",
     "displayName": "Operator",
+    "displayNameZh": "特种兵",
     "team": "ct",
     "model": "agents/models/ctm_fbi/ctm_fbi_variantf.vmdl",
     "itemDefinitionIndex": 5305,
@@ -290,6 +314,7 @@
   {
     "id": "agent-5405",
     "displayName": "Primeiro Tenente",
+    "displayNameZh": "陆军中尉普里米罗",
     "team": "ct",
     "model": "agents/models/ctm_st6/ctm_st6_variantn.vmdl",
     "itemDefinitionIndex": 5405,
@@ -302,6 +327,7 @@
   {
     "id": "agent-5401",
     "displayName": "Seal Team 6 Soldier",
+    "displayNameZh": "海豹突击队第六分队士兵",
     "team": "ct",
     "model": "agents/models/ctm_st6/ctm_st6_variante.vmdl",
     "itemDefinitionIndex": 5401,
@@ -314,6 +340,7 @@
   {
     "id": "agent-4715",
     "displayName": "Sergeant Bombson",
+    "displayNameZh": "军士长炸弹森",
     "team": "ct",
     "model": "agents/models/ctm_swat/ctm_swat_varianti.vmdl",
     "itemDefinitionIndex": 4715,
@@ -326,6 +353,7 @@
   {
     "id": "agent-4749",
     "displayName": "Sous-Lieutenant Medic",
+    "displayNameZh": "军医少尉",
     "team": "ct",
     "model": "agents/models/ctm_gendarmerie/ctm_gendarmerie_varianta.vmdl",
     "itemDefinitionIndex": 4749,
@@ -338,6 +366,7 @@
   {
     "id": "agent-5308",
     "displayName": "Special Agent Ava",
+    "displayNameZh": "爱娃特工",
     "team": "ct",
     "model": "agents/models/ctm_fbi/ctm_fbi_variantb.vmdl",
     "itemDefinitionIndex": 5308,
@@ -350,6 +379,7 @@
   {
     "id": "agent-4780",
     "displayName": "'Medium Rare' Crasswater",
+    "displayNameZh": "克拉斯沃特（三分熟）",
     "team": "t",
     "model": "agents/models/tm_jungle_raider/tm_jungle_raider_variantb2.vmdl",
     "itemDefinitionIndex": 4780,
@@ -362,6 +392,7 @@
   {
     "id": "agent-5504",
     "displayName": "'The Doctor' Romanov",
+    "displayNameZh": "“医生”罗曼诺夫",
     "team": "t",
     "model": "agents/models/tm_balkan/tm_balkan_varianth.vmdl",
     "itemDefinitionIndex": 5504,
@@ -374,6 +405,7 @@
   {
     "id": "agent-4775",
     "displayName": "Arno The Overgrown",
+    "displayNameZh": "亚诺（野草）",
     "team": "t",
     "model": "agents/models/tm_jungle_raider/tm_jungle_raider_variantc.vmdl",
     "itemDefinitionIndex": 4775,
@@ -386,6 +418,7 @@
   {
     "id": "agent-5503",
     "displayName": "Blackwolf",
+    "displayNameZh": "黑狼",
     "team": "t",
     "model": "agents/models/tm_balkan/tm_balkan_variantj.vmdl",
     "itemDefinitionIndex": 5503,
@@ -398,6 +431,7 @@
   {
     "id": "agent-4613",
     "displayName": "Bloody Darryl The Strapped",
+    "displayNameZh": "残酷的达里尔（穷鬼）",
     "team": "t",
     "model": "agents/models/tm_professional/tm_professional_varf5.vmdl",
     "itemDefinitionIndex": 4613,
@@ -410,6 +444,7 @@
   {
     "id": "agent-4776",
     "displayName": "Col. Mangos Dabisi",
+    "displayNameZh": "上校曼戈斯·达比西",
     "team": "t",
     "model": "agents/models/tm_jungle_raider/tm_jungle_raider_variantd.vmdl",
     "itemDefinitionIndex": 4776,
@@ -422,6 +457,7 @@
   {
     "id": "agent-4774",
     "displayName": "Crasswater The Forgotten",
+    "displayNameZh": "遗忘者克拉斯沃特",
     "team": "t",
     "model": "agents/models/tm_jungle_raider/tm_jungle_raider_variantb.vmdl",
     "itemDefinitionIndex": 4774,
@@ -434,6 +470,7 @@
   {
     "id": "agent-5500",
     "displayName": "Dragomir",
+    "displayNameZh": "德拉戈米尔",
     "team": "t",
     "model": "agents/models/tm_balkan/tm_balkan_variantf.vmdl",
     "itemDefinitionIndex": 5500,
@@ -446,6 +483,7 @@
   {
     "id": "agent-5505",
     "displayName": "Dragomir",
+    "displayNameZh": "德拉戈米尔",
     "team": "t",
     "model": "agents/models/tm_balkan/tm_balkan_variantl.vmdl",
     "itemDefinitionIndex": 5505,
@@ -458,6 +496,7 @@
   {
     "id": "agent-4773",
     "displayName": "Elite Trapper Solman",
+    "displayNameZh": "精锐捕兽者索尔曼",
     "team": "t",
     "model": "agents/models/tm_jungle_raider/tm_jungle_raider_varianta.vmdl",
     "itemDefinitionIndex": 4773,
@@ -470,6 +509,7 @@
   {
     "id": "agent-5206",
     "displayName": "Enforcer",
+    "displayNameZh": "执行者",
     "team": "t",
     "model": "agents/models/tm_phoenix/tm_phoenix_variantf.vmdl",
     "itemDefinitionIndex": 5206,
@@ -482,6 +522,7 @@
   {
     "id": "agent-4730",
     "displayName": "Getaway Sally",
+    "displayNameZh": "出逃的萨莉",
     "team": "t",
     "model": "agents/models/tm_professional/tm_professional_varj.vmdl",
     "itemDefinitionIndex": 4730,
@@ -494,6 +535,7 @@
   {
     "id": "agent-5105",
     "displayName": "Ground Rebel",
+    "displayNameZh": "地面叛军",
     "team": "t",
     "model": "agents/models/tm_leet/tm_leet_variantg.vmdl",
     "itemDefinitionIndex": 5105,
@@ -506,6 +548,7 @@
   {
     "id": "agent-5109",
     "displayName": "Jungle Rebel",
+    "displayNameZh": "丛林反抗者",
     "team": "t",
     "model": "agents/models/tm_leet/tm_leet_variantj.vmdl",
     "itemDefinitionIndex": 5109,
@@ -518,6 +561,7 @@
   {
     "id": "agent-4728",
     "displayName": "Little Kev",
+    "displayNameZh": "小凯夫",
     "team": "t",
     "model": "agents/models/tm_professional/tm_professional_varh.vmdl",
     "itemDefinitionIndex": 4728,
@@ -530,6 +574,7 @@
   {
     "id": "agent-5501",
     "displayName": "Maximus",
+    "displayNameZh": "马克西姆斯",
     "team": "t",
     "model": "agents/models/tm_balkan/tm_balkan_varianti.vmdl",
     "itemDefinitionIndex": 5501,
@@ -542,6 +587,7 @@
   {
     "id": "agent-4732",
     "displayName": "Number K",
+    "displayNameZh": "老K",
     "team": "t",
     "model": "agents/models/tm_professional/tm_professional_vari.vmdl",
     "itemDefinitionIndex": 4732,
@@ -554,6 +600,7 @@
   {
     "id": "agent-5106",
     "displayName": "Osiris",
+    "displayNameZh": "奥西瑞斯",
     "team": "t",
     "model": "agents/models/tm_leet/tm_leet_varianth.vmdl",
     "itemDefinitionIndex": 5106,
@@ -566,6 +613,7 @@
   {
     "id": "agent-5107",
     "displayName": "Prof. Shahmat",
+    "displayNameZh": "沙哈马特教授",
     "team": "t",
     "model": "agents/models/tm_leet/tm_leet_varianti.vmdl",
     "itemDefinitionIndex": 5107,
@@ -578,6 +626,7 @@
   {
     "id": "agent-5502",
     "displayName": "Rezan The Ready",
+    "displayNameZh": "准备就绪的列赞",
     "team": "t",
     "model": "agents/models/tm_balkan/tm_balkan_variantg.vmdl",
     "itemDefinitionIndex": 5502,
@@ -590,6 +639,7 @@
   {
     "id": "agent-4718",
     "displayName": "Rezan the Redshirt",
+    "displayNameZh": "红衫列赞",
     "team": "t",
     "model": "agents/models/tm_balkan/tm_balkan_variantk.vmdl",
     "itemDefinitionIndex": 4718,
@@ -602,6 +652,7 @@
   {
     "id": "agent-4727",
     "displayName": "Safecracker Voltzmann",
+    "displayNameZh": "飞贼波兹曼",
     "team": "t",
     "model": "agents/models/tm_professional/tm_professional_varg.vmdl",
     "itemDefinitionIndex": 4727,
@@ -614,6 +665,7 @@
   {
     "id": "agent-4735",
     "displayName": "Sir Bloody Darryl Royale",
+    "displayNameZh": "残酷的达里尔爵士（皇家）",
     "team": "t",
     "model": "agents/models/tm_professional/tm_professional_varf3.vmdl",
     "itemDefinitionIndex": 4735,
@@ -626,6 +678,7 @@
   {
     "id": "agent-4736",
     "displayName": "Sir Bloody Loudmouth Darryl",
+    "displayNameZh": "残酷的达里尔爵士（聒噪）",
     "team": "t",
     "model": "agents/models/tm_professional/tm_professional_varf4.vmdl",
     "itemDefinitionIndex": 4736,
@@ -638,6 +691,7 @@
   {
     "id": "agent-4726",
     "displayName": "Sir Bloody Miami Darryl",
+    "displayNameZh": "残酷的达里尔爵士（迈阿密）",
     "team": "t",
     "model": "agents/models/tm_professional/tm_professional_varf.vmdl",
     "itemDefinitionIndex": 4726,
@@ -650,6 +704,7 @@
   {
     "id": "agent-4733",
     "displayName": "Sir Bloody Silent Darryl",
+    "displayNameZh": "残酷的达里尔爵士（沉默）",
     "team": "t",
     "model": "agents/models/tm_professional/tm_professional_varf1.vmdl",
     "itemDefinitionIndex": 4733,
@@ -662,6 +717,7 @@
   {
     "id": "agent-4734",
     "displayName": "Sir Bloody Skullhead Darryl",
+    "displayNameZh": "残酷的达里尔爵士（头盖骨）",
     "team": "t",
     "model": "agents/models/tm_professional/tm_professional_varf2.vmdl",
     "itemDefinitionIndex": 4734,
@@ -674,6 +730,7 @@
   {
     "id": "agent-5207",
     "displayName": "Slingshot",
+    "displayNameZh": "弹弓",
     "team": "t",
     "model": "agents/models/tm_phoenix/tm_phoenix_variantg.vmdl",
     "itemDefinitionIndex": 5207,
@@ -686,6 +743,7 @@
   {
     "id": "agent-5205",
     "displayName": "Soldier",
+    "displayNameZh": "枪手",
     "team": "t",
     "model": "agents/models/tm_phoenix/tm_phoenix_varianth.vmdl",
     "itemDefinitionIndex": 5205,
@@ -698,6 +756,7 @@
   {
     "id": "agent-5208",
     "displayName": "Street Soldier",
+    "displayNameZh": "街头士兵",
     "team": "t",
     "model": "agents/models/tm_phoenix/tm_phoenix_varianti.vmdl",
     "itemDefinitionIndex": 5208,
@@ -710,6 +769,7 @@
   {
     "id": "agent-5108",
     "displayName": "The Elite Mr. Muhlik",
+    "displayNameZh": "精英穆哈里克先生",
     "team": "t",
     "model": "agents/models/tm_leet/tm_leet_variantf.vmdl",
     "itemDefinitionIndex": 5108,
@@ -722,6 +782,7 @@
   {
     "id": "agent-4781",
     "displayName": "Trapper",
+    "displayNameZh": "捕兽者",
     "team": "t",
     "model": "agents/models/tm_jungle_raider/tm_jungle_raider_variantf2.vmdl",
     "itemDefinitionIndex": 4781,
@@ -734,6 +795,7 @@
   {
     "id": "agent-4778",
     "displayName": "Trapper Aggressor",
+    "displayNameZh": "捕兽者（挑衅者）",
     "team": "t",
     "model": "agents/models/tm_jungle_raider/tm_jungle_raider_variantf.vmdl",
     "itemDefinitionIndex": 4778,
@@ -746,6 +808,7 @@
   {
     "id": "agent-4777",
     "displayName": "Vypa Sista of the Revolution",
+    "displayNameZh": "薇帕姐（革新派）",
     "team": "t",
     "model": "agents/models/tm_jungle_raider/tm_jungle_raider_variante.vmdl",
     "itemDefinitionIndex": 4777,

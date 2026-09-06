@@ -2,6 +2,7 @@
   {
     "id": "weapon_bayonet",
     "displayName": "Bayonet",
+    "displayNameZh": "刺刀",
     "entityName": "weapon_bayonet",
     "itemDefinitionIndex": 500,
     "enabled": true,
@@ -9,6 +10,7 @@
       {
         "id": "weapon_bayonet:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -19,6 +21,7 @@
       {
         "id": "weapon_bayonet:573",
         "displayName": "Autotronic",
+        "displayNameZh": "自动化",
         "paintKit": 573,
         "seed": 0,
         "wear": 0.0001,
@@ -30,6 +33,7 @@
       {
         "id": "weapon_bayonet:563",
         "displayName": "Black Laminate",
+        "displayNameZh": "黑色层压板",
         "paintKit": 563,
         "seed": 0,
         "wear": 0.0001,
@@ -41,6 +45,7 @@
       {
         "id": "weapon_bayonet:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -52,6 +57,7 @@
       {
         "id": "weapon_bayonet:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -63,6 +69,7 @@
       {
         "id": "weapon_bayonet:578",
         "displayName": "Bright Water",
+        "displayNameZh": "澄澈之水",
         "paintKit": 578,
         "seed": 0,
         "wear": 0.0001,
@@ -74,6 +81,7 @@
       {
         "id": "weapon_bayonet:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -85,6 +93,7 @@
       {
         "id": "weapon_bayonet:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -96,6 +105,7 @@
       {
         "id": "weapon_bayonet:410",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 410,
         "seed": 0,
         "wear": 0.0001,
@@ -107,6 +117,7 @@
       {
         "id": "weapon_bayonet:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -118,6 +129,7 @@
       {
         "id": "weapon_bayonet:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -129,6 +141,7 @@
       {
         "id": "weapon_bayonet:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -140,6 +153,7 @@
       {
         "id": "weapon_bayonet:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -151,6 +165,7 @@
       {
         "id": "weapon_bayonet:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -162,6 +177,7 @@
       {
         "id": "weapon_bayonet:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -173,6 +189,7 @@
       {
         "id": "weapon_bayonet:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -184,6 +201,7 @@
       {
         "id": "weapon_bayonet:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -195,6 +213,7 @@
       {
         "id": "weapon_bayonet:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -206,6 +225,7 @@
       {
         "id": "weapon_bayonet:580",
         "displayName": "Freehand",
+        "displayNameZh": "自由之手",
         "paintKit": 580,
         "seed": 0,
         "wear": 0.0001,
@@ -217,6 +237,7 @@
       {
         "id": "weapon_bayonet:568",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 568,
         "seed": 0,
         "wear": 0.0001,
@@ -228,6 +249,7 @@
       {
         "id": "weapon_bayonet:569",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 569,
         "seed": 0,
         "wear": 0.0001,
@@ -239,6 +261,7 @@
       {
         "id": "weapon_bayonet:570",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 570,
         "seed": 0,
         "wear": 0.0001,
@@ -250,6 +273,7 @@
       {
         "id": "weapon_bayonet:571",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 571,
         "seed": 0,
         "wear": 0.0001,
@@ -261,6 +285,7 @@
       {
         "id": "weapon_bayonet:572",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 572,
         "seed": 0,
         "wear": 0.0001,
@@ -272,6 +297,7 @@
       {
         "id": "weapon_bayonet:558",
         "displayName": "Lore",
+        "displayNameZh": "传说",
         "paintKit": 558,
         "seed": 0,
         "wear": 0.0001,
@@ -283,6 +309,7 @@
       {
         "id": "weapon_bayonet:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -294,6 +321,7 @@
       {
         "id": "weapon_bayonet:40",
         "displayName": "Night",
+        "displayNameZh": "噩梦之夜",
         "paintKit": 40,
         "seed": 0,
         "wear": 0.06,
@@ -305,6 +333,7 @@
       {
         "id": "weapon_bayonet:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -316,6 +345,7 @@
       {
         "id": "weapon_bayonet:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -327,6 +357,7 @@
       {
         "id": "weapon_bayonet:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -338,6 +369,7 @@
       {
         "id": "weapon_bayonet:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -349,6 +381,7 @@
       {
         "id": "weapon_bayonet:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -360,6 +393,7 @@
       {
         "id": "weapon_bayonet:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -371,6 +405,7 @@
       {
         "id": "weapon_bayonet:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -382,6 +417,7 @@
       {
         "id": "weapon_bayonet:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -395,6 +431,7 @@
   {
     "id": "weapon_knife_survival_bowie",
     "displayName": "Bowie Knife",
+    "displayNameZh": "鲍伊猎刀",
     "entityName": "weapon_knife_survival_bowie",
     "itemDefinitionIndex": 514,
     "enabled": true,
@@ -402,6 +439,7 @@
       {
         "id": "weapon_knife_survival_bowie:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -412,6 +450,7 @@
       {
         "id": "weapon_knife_survival_bowie:1114",
         "displayName": "Autotronic",
+        "displayNameZh": "自动化",
         "paintKit": 1114,
         "seed": 0,
         "wear": 0.0001,
@@ -423,6 +462,7 @@
       {
         "id": "weapon_knife_survival_bowie:1109",
         "displayName": "Black Laminate",
+        "displayNameZh": "黑色层压板",
         "paintKit": 1109,
         "seed": 0,
         "wear": 0.0001,
@@ -434,6 +474,7 @@
       {
         "id": "weapon_knife_survival_bowie:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -445,6 +486,7 @@
       {
         "id": "weapon_knife_survival_bowie:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -456,6 +498,7 @@
       {
         "id": "weapon_knife_survival_bowie:579",
         "displayName": "Bright Water",
+        "displayNameZh": "澄澈之水",
         "paintKit": 579,
         "seed": 0,
         "wear": 0.0001,
@@ -467,6 +510,7 @@
       {
         "id": "weapon_knife_survival_bowie:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -478,6 +522,7 @@
       {
         "id": "weapon_knife_survival_bowie:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -489,6 +534,7 @@
       {
         "id": "weapon_knife_survival_bowie:411",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 411,
         "seed": 0,
         "wear": 0.0001,
@@ -500,6 +546,7 @@
       {
         "id": "weapon_knife_survival_bowie:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -511,6 +558,7 @@
       {
         "id": "weapon_knife_survival_bowie:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -522,6 +570,7 @@
       {
         "id": "weapon_knife_survival_bowie:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -533,6 +582,7 @@
       {
         "id": "weapon_knife_survival_bowie:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -544,6 +594,7 @@
       {
         "id": "weapon_knife_survival_bowie:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -555,6 +606,7 @@
       {
         "id": "weapon_knife_survival_bowie:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -566,6 +618,7 @@
       {
         "id": "weapon_knife_survival_bowie:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -577,6 +630,7 @@
       {
         "id": "weapon_knife_survival_bowie:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -588,6 +642,7 @@
       {
         "id": "weapon_knife_survival_bowie:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -599,6 +654,7 @@
       {
         "id": "weapon_knife_survival_bowie:581",
         "displayName": "Freehand",
+        "displayNameZh": "自由之手",
         "paintKit": 581,
         "seed": 0,
         "wear": 0.0001,
@@ -610,6 +666,7 @@
       {
         "id": "weapon_knife_survival_bowie:568",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 568,
         "seed": 0,
         "wear": 0.0001,
@@ -621,6 +678,7 @@
       {
         "id": "weapon_knife_survival_bowie:569",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 569,
         "seed": 0,
         "wear": 0.0001,
@@ -632,6 +690,7 @@
       {
         "id": "weapon_knife_survival_bowie:570",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 570,
         "seed": 0,
         "wear": 0.0001,
@@ -643,6 +702,7 @@
       {
         "id": "weapon_knife_survival_bowie:571",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 571,
         "seed": 0,
         "wear": 0.0001,
@@ -654,6 +714,7 @@
       {
         "id": "weapon_knife_survival_bowie:572",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 572,
         "seed": 0,
         "wear": 0.0001,
@@ -665,6 +726,7 @@
       {
         "id": "weapon_knife_survival_bowie:1104",
         "displayName": "Lore",
+        "displayNameZh": "传说",
         "paintKit": 1104,
         "seed": 0,
         "wear": 0.0001,
@@ -676,6 +738,7 @@
       {
         "id": "weapon_knife_survival_bowie:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -687,6 +750,7 @@
       {
         "id": "weapon_knife_survival_bowie:40",
         "displayName": "Night",
+        "displayNameZh": "噩梦之夜",
         "paintKit": 40,
         "seed": 0,
         "wear": 0.06,
@@ -698,6 +762,7 @@
       {
         "id": "weapon_knife_survival_bowie:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -709,6 +774,7 @@
       {
         "id": "weapon_knife_survival_bowie:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -720,6 +786,7 @@
       {
         "id": "weapon_knife_survival_bowie:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -731,6 +798,7 @@
       {
         "id": "weapon_knife_survival_bowie:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -742,6 +810,7 @@
       {
         "id": "weapon_knife_survival_bowie:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -753,6 +822,7 @@
       {
         "id": "weapon_knife_survival_bowie:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -764,6 +834,7 @@
       {
         "id": "weapon_knife_survival_bowie:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -775,6 +846,7 @@
       {
         "id": "weapon_knife_survival_bowie:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -788,6 +860,7 @@
   {
     "id": "weapon_knife_butterfly",
     "displayName": "Butterfly Knife",
+    "displayNameZh": "蝴蝶刀",
     "entityName": "weapon_knife_butterfly",
     "itemDefinitionIndex": 515,
     "enabled": true,
@@ -795,6 +868,7 @@
       {
         "id": "weapon_knife_butterfly:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -805,6 +879,7 @@
       {
         "id": "weapon_knife_butterfly:1115",
         "displayName": "Autotronic",
+        "displayNameZh": "自动化",
         "paintKit": 1115,
         "seed": 0,
         "wear": 0.0001,
@@ -816,6 +891,7 @@
       {
         "id": "weapon_knife_butterfly:1110",
         "displayName": "Black Laminate",
+        "displayNameZh": "黑色层压板",
         "paintKit": 1110,
         "seed": 0,
         "wear": 0.0001,
@@ -827,6 +903,7 @@
       {
         "id": "weapon_knife_butterfly:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -838,6 +915,7 @@
       {
         "id": "weapon_knife_butterfly:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -849,6 +927,7 @@
       {
         "id": "weapon_knife_butterfly:579",
         "displayName": "Bright Water",
+        "displayNameZh": "澄澈之水",
         "paintKit": 579,
         "seed": 0,
         "wear": 0.0001,
@@ -860,6 +939,7 @@
       {
         "id": "weapon_knife_butterfly:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -871,6 +951,7 @@
       {
         "id": "weapon_knife_butterfly:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -882,6 +963,7 @@
       {
         "id": "weapon_knife_butterfly:411",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 411,
         "seed": 0,
         "wear": 0.0001,
@@ -893,6 +975,7 @@
       {
         "id": "weapon_knife_butterfly:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -904,6 +987,7 @@
       {
         "id": "weapon_knife_butterfly:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -915,6 +999,7 @@
       {
         "id": "weapon_knife_butterfly:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -926,6 +1011,7 @@
       {
         "id": "weapon_knife_butterfly:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -937,6 +1023,7 @@
       {
         "id": "weapon_knife_butterfly:617",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 617,
         "seed": 0,
         "wear": 0.0001,
@@ -948,6 +1035,7 @@
       {
         "id": "weapon_knife_butterfly:618",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 618,
         "seed": 0,
         "wear": 0.0001,
@@ -959,6 +1047,7 @@
       {
         "id": "weapon_knife_butterfly:619",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 619,
         "seed": 0,
         "wear": 0.0001,
@@ -970,6 +1059,7 @@
       {
         "id": "weapon_knife_butterfly:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -981,6 +1071,7 @@
       {
         "id": "weapon_knife_butterfly:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -992,6 +1083,7 @@
       {
         "id": "weapon_knife_butterfly:581",
         "displayName": "Freehand",
+        "displayNameZh": "自由之手",
         "paintKit": 581,
         "seed": 0,
         "wear": 0.0001,
@@ -1003,6 +1095,7 @@
       {
         "id": "weapon_knife_butterfly:568",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 568,
         "seed": 0,
         "wear": 0.0001,
@@ -1014,6 +1107,7 @@
       {
         "id": "weapon_knife_butterfly:569",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 569,
         "seed": 0,
         "wear": 0.0001,
@@ -1025,6 +1119,7 @@
       {
         "id": "weapon_knife_butterfly:570",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 570,
         "seed": 0,
         "wear": 0.0001,
@@ -1036,6 +1131,7 @@
       {
         "id": "weapon_knife_butterfly:571",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 571,
         "seed": 0,
         "wear": 0.0001,
@@ -1047,6 +1143,7 @@
       {
         "id": "weapon_knife_butterfly:572",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 572,
         "seed": 0,
         "wear": 0.0001,
@@ -1058,6 +1155,7 @@
       {
         "id": "weapon_knife_butterfly:1105",
         "displayName": "Lore",
+        "displayNameZh": "传说",
         "paintKit": 1105,
         "seed": 0,
         "wear": 0.0001,
@@ -1069,6 +1167,7 @@
       {
         "id": "weapon_knife_butterfly:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -1080,6 +1179,7 @@
       {
         "id": "weapon_knife_butterfly:40",
         "displayName": "Night",
+        "displayNameZh": "噩梦之夜",
         "paintKit": 40,
         "seed": 0,
         "wear": 0.06,
@@ -1091,6 +1191,7 @@
       {
         "id": "weapon_knife_butterfly:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -1102,6 +1203,7 @@
       {
         "id": "weapon_knife_butterfly:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -1113,6 +1215,7 @@
       {
         "id": "weapon_knife_butterfly:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -1124,6 +1227,7 @@
       {
         "id": "weapon_knife_butterfly:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -1135,6 +1239,7 @@
       {
         "id": "weapon_knife_butterfly:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -1146,6 +1251,7 @@
       {
         "id": "weapon_knife_butterfly:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -1157,6 +1263,7 @@
       {
         "id": "weapon_knife_butterfly:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -1168,6 +1275,7 @@
       {
         "id": "weapon_knife_butterfly:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -1181,6 +1289,7 @@
   {
     "id": "weapon_knife_css",
     "displayName": "Classic Knife",
+    "displayNameZh": "海豹短刀",
     "entityName": "weapon_knife_css",
     "itemDefinitionIndex": 503,
     "enabled": true,
@@ -1188,6 +1297,7 @@
       {
         "id": "weapon_knife_css:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -1198,6 +1308,7 @@
       {
         "id": "weapon_knife_css:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -1209,6 +1320,7 @@
       {
         "id": "weapon_knife_css:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -1220,6 +1332,7 @@
       {
         "id": "weapon_knife_css:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -1231,6 +1344,7 @@
       {
         "id": "weapon_knife_css:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -1242,6 +1356,7 @@
       {
         "id": "weapon_knife_css:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -1253,6 +1368,7 @@
       {
         "id": "weapon_knife_css:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -1264,6 +1380,7 @@
       {
         "id": "weapon_knife_css:735",
         "displayName": "Night Stripe",
+        "displayNameZh": "夜色",
         "paintKit": 735,
         "seed": 0,
         "wear": 0.06,
@@ -1275,6 +1392,7 @@
       {
         "id": "weapon_knife_css:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -1286,6 +1404,7 @@
       {
         "id": "weapon_knife_css:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -1297,6 +1416,7 @@
       {
         "id": "weapon_knife_css:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -1308,6 +1428,7 @@
       {
         "id": "weapon_knife_css:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -1319,6 +1440,7 @@
       {
         "id": "weapon_knife_css:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -1332,6 +1454,7 @@
   {
     "id": "weapon_knife_falchion",
     "displayName": "Falchion Knife",
+    "displayNameZh": "弯刀",
     "entityName": "weapon_knife_falchion",
     "itemDefinitionIndex": 512,
     "enabled": true,
@@ -1339,6 +1462,7 @@
       {
         "id": "weapon_knife_falchion:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -1349,6 +1473,7 @@
       {
         "id": "weapon_knife_falchion:1116",
         "displayName": "Autotronic",
+        "displayNameZh": "自动化",
         "paintKit": 1116,
         "seed": 0,
         "wear": 0.0001,
@@ -1360,6 +1485,7 @@
       {
         "id": "weapon_knife_falchion:1111",
         "displayName": "Black Laminate",
+        "displayNameZh": "黑色层压板",
         "paintKit": 1111,
         "seed": 0,
         "wear": 0.0001,
@@ -1371,6 +1497,7 @@
       {
         "id": "weapon_knife_falchion:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -1382,6 +1509,7 @@
       {
         "id": "weapon_knife_falchion:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -1393,6 +1521,7 @@
       {
         "id": "weapon_knife_falchion:579",
         "displayName": "Bright Water",
+        "displayNameZh": "澄澈之水",
         "paintKit": 579,
         "seed": 0,
         "wear": 0.0001,
@@ -1404,6 +1533,7 @@
       {
         "id": "weapon_knife_falchion:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -1415,6 +1545,7 @@
       {
         "id": "weapon_knife_falchion:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -1426,6 +1557,7 @@
       {
         "id": "weapon_knife_falchion:411",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 411,
         "seed": 0,
         "wear": 0.0001,
@@ -1437,6 +1569,7 @@
       {
         "id": "weapon_knife_falchion:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -1448,6 +1581,7 @@
       {
         "id": "weapon_knife_falchion:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -1459,6 +1593,7 @@
       {
         "id": "weapon_knife_falchion:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -1470,6 +1605,7 @@
       {
         "id": "weapon_knife_falchion:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -1481,6 +1617,7 @@
       {
         "id": "weapon_knife_falchion:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -1492,6 +1629,7 @@
       {
         "id": "weapon_knife_falchion:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -1503,6 +1641,7 @@
       {
         "id": "weapon_knife_falchion:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -1514,6 +1653,7 @@
       {
         "id": "weapon_knife_falchion:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -1525,6 +1665,7 @@
       {
         "id": "weapon_knife_falchion:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -1536,6 +1677,7 @@
       {
         "id": "weapon_knife_falchion:581",
         "displayName": "Freehand",
+        "displayNameZh": "自由之手",
         "paintKit": 581,
         "seed": 0,
         "wear": 0.0001,
@@ -1547,6 +1689,7 @@
       {
         "id": "weapon_knife_falchion:568",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 568,
         "seed": 0,
         "wear": 0.0001,
@@ -1558,6 +1701,7 @@
       {
         "id": "weapon_knife_falchion:569",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 569,
         "seed": 0,
         "wear": 0.0001,
@@ -1569,6 +1713,7 @@
       {
         "id": "weapon_knife_falchion:570",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 570,
         "seed": 0,
         "wear": 0.0001,
@@ -1580,6 +1725,7 @@
       {
         "id": "weapon_knife_falchion:571",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 571,
         "seed": 0,
         "wear": 0.0001,
@@ -1591,6 +1737,7 @@
       {
         "id": "weapon_knife_falchion:572",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 572,
         "seed": 0,
         "wear": 0.0001,
@@ -1602,6 +1749,7 @@
       {
         "id": "weapon_knife_falchion:1106",
         "displayName": "Lore",
+        "displayNameZh": "传说",
         "paintKit": 1106,
         "seed": 0,
         "wear": 0.0001,
@@ -1613,6 +1761,7 @@
       {
         "id": "weapon_knife_falchion:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -1624,6 +1773,7 @@
       {
         "id": "weapon_knife_falchion:40",
         "displayName": "Night",
+        "displayNameZh": "噩梦之夜",
         "paintKit": 40,
         "seed": 0,
         "wear": 0.06,
@@ -1635,6 +1785,7 @@
       {
         "id": "weapon_knife_falchion:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -1646,6 +1797,7 @@
       {
         "id": "weapon_knife_falchion:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -1657,6 +1809,7 @@
       {
         "id": "weapon_knife_falchion:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -1668,6 +1821,7 @@
       {
         "id": "weapon_knife_falchion:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -1679,6 +1833,7 @@
       {
         "id": "weapon_knife_falchion:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -1690,6 +1845,7 @@
       {
         "id": "weapon_knife_falchion:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -1701,6 +1857,7 @@
       {
         "id": "weapon_knife_falchion:621",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 621,
         "seed": 0,
         "wear": 0.06,
@@ -1712,6 +1869,7 @@
       {
         "id": "weapon_knife_falchion:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -1725,6 +1883,7 @@
   {
     "id": "weapon_knife_flip",
     "displayName": "Flip Knife",
+    "displayNameZh": "折叠刀",
     "entityName": "weapon_knife_flip",
     "itemDefinitionIndex": 505,
     "enabled": true,
@@ -1732,6 +1891,7 @@
       {
         "id": "weapon_knife_flip:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -1742,6 +1902,7 @@
       {
         "id": "weapon_knife_flip:574",
         "displayName": "Autotronic",
+        "displayNameZh": "自动化",
         "paintKit": 574,
         "seed": 0,
         "wear": 0.0001,
@@ -1753,6 +1914,7 @@
       {
         "id": "weapon_knife_flip:564",
         "displayName": "Black Laminate",
+        "displayNameZh": "黑色层压板",
         "paintKit": 564,
         "seed": 0,
         "wear": 0.0001,
@@ -1764,6 +1926,7 @@
       {
         "id": "weapon_knife_flip:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -1775,6 +1938,7 @@
       {
         "id": "weapon_knife_flip:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -1786,6 +1950,7 @@
       {
         "id": "weapon_knife_flip:578",
         "displayName": "Bright Water",
+        "displayNameZh": "澄澈之水",
         "paintKit": 578,
         "seed": 0,
         "wear": 0.0001,
@@ -1797,6 +1962,7 @@
       {
         "id": "weapon_knife_flip:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -1808,6 +1974,7 @@
       {
         "id": "weapon_knife_flip:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -1819,6 +1986,7 @@
       {
         "id": "weapon_knife_flip:410",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 410,
         "seed": 0,
         "wear": 0.0001,
@@ -1830,6 +1998,7 @@
       {
         "id": "weapon_knife_flip:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -1841,6 +2010,7 @@
       {
         "id": "weapon_knife_flip:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -1852,6 +2022,7 @@
       {
         "id": "weapon_knife_flip:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -1863,6 +2034,7 @@
       {
         "id": "weapon_knife_flip:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -1874,6 +2046,7 @@
       {
         "id": "weapon_knife_flip:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -1885,6 +2058,7 @@
       {
         "id": "weapon_knife_flip:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -1896,6 +2070,7 @@
       {
         "id": "weapon_knife_flip:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -1907,6 +2082,7 @@
       {
         "id": "weapon_knife_flip:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -1918,6 +2094,7 @@
       {
         "id": "weapon_knife_flip:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -1929,6 +2106,7 @@
       {
         "id": "weapon_knife_flip:580",
         "displayName": "Freehand",
+        "displayNameZh": "自由之手",
         "paintKit": 580,
         "seed": 0,
         "wear": 0.0001,
@@ -1940,6 +2118,7 @@
       {
         "id": "weapon_knife_flip:568",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 568,
         "seed": 0,
         "wear": 0.0001,
@@ -1951,6 +2130,7 @@
       {
         "id": "weapon_knife_flip:569",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 569,
         "seed": 0,
         "wear": 0.0001,
@@ -1962,6 +2142,7 @@
       {
         "id": "weapon_knife_flip:570",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 570,
         "seed": 0,
         "wear": 0.0001,
@@ -1973,6 +2154,7 @@
       {
         "id": "weapon_knife_flip:571",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 571,
         "seed": 0,
         "wear": 0.0001,
@@ -1984,6 +2166,7 @@
       {
         "id": "weapon_knife_flip:572",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 572,
         "seed": 0,
         "wear": 0.0001,
@@ -1995,6 +2178,7 @@
       {
         "id": "weapon_knife_flip:559",
         "displayName": "Lore",
+        "displayNameZh": "传说",
         "paintKit": 559,
         "seed": 0,
         "wear": 0.0001,
@@ -2006,6 +2190,7 @@
       {
         "id": "weapon_knife_flip:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -2017,6 +2202,7 @@
       {
         "id": "weapon_knife_flip:40",
         "displayName": "Night",
+        "displayNameZh": "噩梦之夜",
         "paintKit": 40,
         "seed": 0,
         "wear": 0.06,
@@ -2028,6 +2214,7 @@
       {
         "id": "weapon_knife_flip:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -2039,6 +2226,7 @@
       {
         "id": "weapon_knife_flip:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -2050,6 +2238,7 @@
       {
         "id": "weapon_knife_flip:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -2061,6 +2250,7 @@
       {
         "id": "weapon_knife_flip:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -2072,6 +2262,7 @@
       {
         "id": "weapon_knife_flip:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -2083,6 +2274,7 @@
       {
         "id": "weapon_knife_flip:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -2094,6 +2286,7 @@
       {
         "id": "weapon_knife_flip:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -2105,6 +2298,7 @@
       {
         "id": "weapon_knife_flip:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -2118,6 +2312,7 @@
   {
     "id": "weapon_knife_gut",
     "displayName": "Gut Knife",
+    "displayNameZh": "穿肠刀",
     "entityName": "weapon_knife_gut",
     "itemDefinitionIndex": 506,
     "enabled": true,
@@ -2125,6 +2320,7 @@
       {
         "id": "weapon_knife_gut:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -2135,6 +2331,7 @@
       {
         "id": "weapon_knife_gut:575",
         "displayName": "Autotronic",
+        "displayNameZh": "自动化",
         "paintKit": 575,
         "seed": 0,
         "wear": 0.0001,
@@ -2146,6 +2343,7 @@
       {
         "id": "weapon_knife_gut:565",
         "displayName": "Black Laminate",
+        "displayNameZh": "黑色层压板",
         "paintKit": 565,
         "seed": 0,
         "wear": 0.0001,
@@ -2157,6 +2355,7 @@
       {
         "id": "weapon_knife_gut:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -2168,6 +2367,7 @@
       {
         "id": "weapon_knife_gut:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -2179,6 +2379,7 @@
       {
         "id": "weapon_knife_gut:578",
         "displayName": "Bright Water",
+        "displayNameZh": "澄澈之水",
         "paintKit": 578,
         "seed": 0,
         "wear": 0.0001,
@@ -2190,6 +2391,7 @@
       {
         "id": "weapon_knife_gut:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -2201,6 +2403,7 @@
       {
         "id": "weapon_knife_gut:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -2212,6 +2415,7 @@
       {
         "id": "weapon_knife_gut:410",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 410,
         "seed": 0,
         "wear": 0.0001,
@@ -2223,6 +2427,7 @@
       {
         "id": "weapon_knife_gut:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -2234,6 +2439,7 @@
       {
         "id": "weapon_knife_gut:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -2245,6 +2451,7 @@
       {
         "id": "weapon_knife_gut:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -2256,6 +2463,7 @@
       {
         "id": "weapon_knife_gut:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -2267,6 +2475,7 @@
       {
         "id": "weapon_knife_gut:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -2278,6 +2487,7 @@
       {
         "id": "weapon_knife_gut:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -2289,6 +2499,7 @@
       {
         "id": "weapon_knife_gut:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -2300,6 +2511,7 @@
       {
         "id": "weapon_knife_gut:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -2311,6 +2523,7 @@
       {
         "id": "weapon_knife_gut:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -2322,6 +2535,7 @@
       {
         "id": "weapon_knife_gut:580",
         "displayName": "Freehand",
+        "displayNameZh": "自由之手",
         "paintKit": 580,
         "seed": 0,
         "wear": 0.0001,
@@ -2333,6 +2547,7 @@
       {
         "id": "weapon_knife_gut:568",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 568,
         "seed": 0,
         "wear": 0.0001,
@@ -2344,6 +2559,7 @@
       {
         "id": "weapon_knife_gut:569",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 569,
         "seed": 0,
         "wear": 0.0001,
@@ -2355,6 +2571,7 @@
       {
         "id": "weapon_knife_gut:570",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 570,
         "seed": 0,
         "wear": 0.0001,
@@ -2366,6 +2583,7 @@
       {
         "id": "weapon_knife_gut:571",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 571,
         "seed": 0,
         "wear": 0.0001,
@@ -2377,6 +2595,7 @@
       {
         "id": "weapon_knife_gut:572",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 572,
         "seed": 0,
         "wear": 0.0001,
@@ -2388,6 +2607,7 @@
       {
         "id": "weapon_knife_gut:560",
         "displayName": "Lore",
+        "displayNameZh": "传说",
         "paintKit": 560,
         "seed": 0,
         "wear": 0.0001,
@@ -2399,6 +2619,7 @@
       {
         "id": "weapon_knife_gut:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -2410,6 +2631,7 @@
       {
         "id": "weapon_knife_gut:40",
         "displayName": "Night",
+        "displayNameZh": "噩梦之夜",
         "paintKit": 40,
         "seed": 0,
         "wear": 0.06,
@@ -2421,6 +2643,7 @@
       {
         "id": "weapon_knife_gut:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -2432,6 +2655,7 @@
       {
         "id": "weapon_knife_gut:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -2443,6 +2667,7 @@
       {
         "id": "weapon_knife_gut:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -2454,6 +2679,7 @@
       {
         "id": "weapon_knife_gut:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -2465,6 +2691,7 @@
       {
         "id": "weapon_knife_gut:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -2476,6 +2703,7 @@
       {
         "id": "weapon_knife_gut:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -2487,6 +2715,7 @@
       {
         "id": "weapon_knife_gut:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -2498,6 +2727,7 @@
       {
         "id": "weapon_knife_gut:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -2511,6 +2741,7 @@
   {
     "id": "weapon_knife_tactical",
     "displayName": "Huntsman Knife",
+    "displayNameZh": "猎杀者匕首",
     "entityName": "weapon_knife_tactical",
     "itemDefinitionIndex": 509,
     "enabled": true,
@@ -2518,6 +2749,7 @@
       {
         "id": "weapon_knife_tactical:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -2528,6 +2760,7 @@
       {
         "id": "weapon_knife_tactical:1117",
         "displayName": "Autotronic",
+        "displayNameZh": "自动化",
         "paintKit": 1117,
         "seed": 0,
         "wear": 0.0001,
@@ -2539,6 +2772,7 @@
       {
         "id": "weapon_knife_tactical:1112",
         "displayName": "Black Laminate",
+        "displayNameZh": "黑色层压板",
         "paintKit": 1112,
         "seed": 0,
         "wear": 0.0001,
@@ -2550,6 +2784,7 @@
       {
         "id": "weapon_knife_tactical:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -2561,6 +2796,7 @@
       {
         "id": "weapon_knife_tactical:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -2572,6 +2808,7 @@
       {
         "id": "weapon_knife_tactical:579",
         "displayName": "Bright Water",
+        "displayNameZh": "澄澈之水",
         "paintKit": 579,
         "seed": 0,
         "wear": 0.0001,
@@ -2583,6 +2820,7 @@
       {
         "id": "weapon_knife_tactical:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -2594,6 +2832,7 @@
       {
         "id": "weapon_knife_tactical:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -2605,6 +2844,7 @@
       {
         "id": "weapon_knife_tactical:411",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 411,
         "seed": 0,
         "wear": 0.0001,
@@ -2616,6 +2856,7 @@
       {
         "id": "weapon_knife_tactical:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -2627,6 +2868,7 @@
       {
         "id": "weapon_knife_tactical:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -2638,6 +2880,7 @@
       {
         "id": "weapon_knife_tactical:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -2649,6 +2892,7 @@
       {
         "id": "weapon_knife_tactical:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -2660,6 +2904,7 @@
       {
         "id": "weapon_knife_tactical:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -2671,6 +2916,7 @@
       {
         "id": "weapon_knife_tactical:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -2682,6 +2928,7 @@
       {
         "id": "weapon_knife_tactical:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -2693,6 +2940,7 @@
       {
         "id": "weapon_knife_tactical:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -2704,6 +2952,7 @@
       {
         "id": "weapon_knife_tactical:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -2715,6 +2964,7 @@
       {
         "id": "weapon_knife_tactical:581",
         "displayName": "Freehand",
+        "displayNameZh": "自由之手",
         "paintKit": 581,
         "seed": 0,
         "wear": 0.0001,
@@ -2726,6 +2976,7 @@
       {
         "id": "weapon_knife_tactical:568",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 568,
         "seed": 0,
         "wear": 0.0001,
@@ -2737,6 +2988,7 @@
       {
         "id": "weapon_knife_tactical:569",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 569,
         "seed": 0,
         "wear": 0.0001,
@@ -2748,6 +3000,7 @@
       {
         "id": "weapon_knife_tactical:570",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 570,
         "seed": 0,
         "wear": 0.0001,
@@ -2759,6 +3012,7 @@
       {
         "id": "weapon_knife_tactical:571",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 571,
         "seed": 0,
         "wear": 0.0001,
@@ -2770,6 +3024,7 @@
       {
         "id": "weapon_knife_tactical:572",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 572,
         "seed": 0,
         "wear": 0.0001,
@@ -2781,6 +3036,7 @@
       {
         "id": "weapon_knife_tactical:1107",
         "displayName": "Lore",
+        "displayNameZh": "传说",
         "paintKit": 1107,
         "seed": 0,
         "wear": 0.0001,
@@ -2792,6 +3048,7 @@
       {
         "id": "weapon_knife_tactical:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -2803,6 +3060,7 @@
       {
         "id": "weapon_knife_tactical:40",
         "displayName": "Night",
+        "displayNameZh": "噩梦之夜",
         "paintKit": 40,
         "seed": 0,
         "wear": 0.06,
@@ -2814,6 +3072,7 @@
       {
         "id": "weapon_knife_tactical:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -2825,6 +3084,7 @@
       {
         "id": "weapon_knife_tactical:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -2836,6 +3096,7 @@
       {
         "id": "weapon_knife_tactical:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -2847,6 +3108,7 @@
       {
         "id": "weapon_knife_tactical:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -2858,6 +3120,7 @@
       {
         "id": "weapon_knife_tactical:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -2869,6 +3132,7 @@
       {
         "id": "weapon_knife_tactical:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -2880,6 +3144,7 @@
       {
         "id": "weapon_knife_tactical:620",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 620,
         "seed": 0,
         "wear": 0.06,
@@ -2891,6 +3156,7 @@
       {
         "id": "weapon_knife_tactical:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -2904,6 +3170,7 @@
   {
     "id": "weapon_knife_karambit",
     "displayName": "Karambit",
+    "displayNameZh": "爪子刀",
     "entityName": "weapon_knife_karambit",
     "itemDefinitionIndex": 507,
     "enabled": true,
@@ -2911,6 +3178,7 @@
       {
         "id": "weapon_knife_karambit:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -2921,6 +3189,7 @@
       {
         "id": "weapon_knife_karambit:576",
         "displayName": "Autotronic",
+        "displayNameZh": "自动化",
         "paintKit": 576,
         "seed": 0,
         "wear": 0.0001,
@@ -2932,6 +3201,7 @@
       {
         "id": "weapon_knife_karambit:566",
         "displayName": "Black Laminate",
+        "displayNameZh": "黑色层压板",
         "paintKit": 566,
         "seed": 0,
         "wear": 0.0001,
@@ -2943,6 +3213,7 @@
       {
         "id": "weapon_knife_karambit:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -2954,6 +3225,7 @@
       {
         "id": "weapon_knife_karambit:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -2965,6 +3237,7 @@
       {
         "id": "weapon_knife_karambit:578",
         "displayName": "Bright Water",
+        "displayNameZh": "澄澈之水",
         "paintKit": 578,
         "seed": 0,
         "wear": 0.0001,
@@ -2976,6 +3249,7 @@
       {
         "id": "weapon_knife_karambit:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -2987,6 +3261,7 @@
       {
         "id": "weapon_knife_karambit:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -2998,6 +3273,7 @@
       {
         "id": "weapon_knife_karambit:410",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 410,
         "seed": 0,
         "wear": 0.0001,
@@ -3009,6 +3285,7 @@
       {
         "id": "weapon_knife_karambit:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -3020,6 +3297,7 @@
       {
         "id": "weapon_knife_karambit:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -3031,6 +3309,7 @@
       {
         "id": "weapon_knife_karambit:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -3042,6 +3321,7 @@
       {
         "id": "weapon_knife_karambit:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -3053,6 +3333,7 @@
       {
         "id": "weapon_knife_karambit:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -3064,6 +3345,7 @@
       {
         "id": "weapon_knife_karambit:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -3075,6 +3357,7 @@
       {
         "id": "weapon_knife_karambit:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -3086,6 +3369,7 @@
       {
         "id": "weapon_knife_karambit:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -3097,6 +3381,7 @@
       {
         "id": "weapon_knife_karambit:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -3108,6 +3393,7 @@
       {
         "id": "weapon_knife_karambit:582",
         "displayName": "Freehand",
+        "displayNameZh": "自由之手",
         "paintKit": 582,
         "seed": 0,
         "wear": 0.0001,
@@ -3119,6 +3405,7 @@
       {
         "id": "weapon_knife_karambit:568",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 568,
         "seed": 0,
         "wear": 0.0001,
@@ -3130,6 +3417,7 @@
       {
         "id": "weapon_knife_karambit:569",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 569,
         "seed": 0,
         "wear": 0.0001,
@@ -3141,6 +3429,7 @@
       {
         "id": "weapon_knife_karambit:570",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 570,
         "seed": 0,
         "wear": 0.0001,
@@ -3152,6 +3441,7 @@
       {
         "id": "weapon_knife_karambit:571",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 571,
         "seed": 0,
         "wear": 0.0001,
@@ -3163,6 +3453,7 @@
       {
         "id": "weapon_knife_karambit:572",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 572,
         "seed": 0,
         "wear": 0.0001,
@@ -3174,6 +3465,7 @@
       {
         "id": "weapon_knife_karambit:561",
         "displayName": "Lore",
+        "displayNameZh": "传说",
         "paintKit": 561,
         "seed": 0,
         "wear": 0.0001,
@@ -3185,6 +3477,7 @@
       {
         "id": "weapon_knife_karambit:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -3196,6 +3489,7 @@
       {
         "id": "weapon_knife_karambit:40",
         "displayName": "Night",
+        "displayNameZh": "噩梦之夜",
         "paintKit": 40,
         "seed": 0,
         "wear": 0.06,
@@ -3207,6 +3501,7 @@
       {
         "id": "weapon_knife_karambit:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -3218,6 +3513,7 @@
       {
         "id": "weapon_knife_karambit:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -3229,6 +3525,7 @@
       {
         "id": "weapon_knife_karambit:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -3240,6 +3537,7 @@
       {
         "id": "weapon_knife_karambit:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -3251,6 +3549,7 @@
       {
         "id": "weapon_knife_karambit:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -3262,6 +3561,7 @@
       {
         "id": "weapon_knife_karambit:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -3273,6 +3573,7 @@
       {
         "id": "weapon_knife_karambit:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -3284,6 +3585,7 @@
       {
         "id": "weapon_knife_karambit:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -3297,6 +3599,7 @@
   {
     "id": "weapon_knife_kukri",
     "displayName": "Kukri Knife",
+    "displayNameZh": "廓尔喀刀",
     "entityName": "weapon_knife_kukri",
     "itemDefinitionIndex": 526,
     "enabled": true,
@@ -3304,6 +3607,7 @@
       {
         "id": "weapon_knife_kukri:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -3314,6 +3618,7 @@
       {
         "id": "weapon_knife_kukri:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -3325,6 +3630,7 @@
       {
         "id": "weapon_knife_kukri:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -3336,6 +3642,7 @@
       {
         "id": "weapon_knife_kukri:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -3347,6 +3654,7 @@
       {
         "id": "weapon_knife_kukri:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -3358,6 +3666,7 @@
       {
         "id": "weapon_knife_kukri:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -3369,6 +3678,7 @@
       {
         "id": "weapon_knife_kukri:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -3380,6 +3690,7 @@
       {
         "id": "weapon_knife_kukri:735",
         "displayName": "Night Stripe",
+        "displayNameZh": "夜色",
         "paintKit": 735,
         "seed": 0,
         "wear": 0.06,
@@ -3391,6 +3702,7 @@
       {
         "id": "weapon_knife_kukri:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -3402,6 +3714,7 @@
       {
         "id": "weapon_knife_kukri:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -3413,6 +3726,7 @@
       {
         "id": "weapon_knife_kukri:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -3424,6 +3738,7 @@
       {
         "id": "weapon_knife_kukri:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -3435,6 +3750,7 @@
       {
         "id": "weapon_knife_kukri:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -3448,6 +3764,7 @@
   {
     "id": "weapon_knife_m9_bayonet",
     "displayName": "M9 Bayonet",
+    "displayNameZh": "M9 刺刀",
     "entityName": "weapon_knife_m9_bayonet",
     "itemDefinitionIndex": 508,
     "enabled": true,
@@ -3455,6 +3772,7 @@
       {
         "id": "weapon_knife_m9_bayonet:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -3465,6 +3783,7 @@
       {
         "id": "weapon_knife_m9_bayonet:577",
         "displayName": "Autotronic",
+        "displayNameZh": "自动化",
         "paintKit": 577,
         "seed": 0,
         "wear": 0.0001,
@@ -3476,6 +3795,7 @@
       {
         "id": "weapon_knife_m9_bayonet:567",
         "displayName": "Black Laminate",
+        "displayNameZh": "黑色层压板",
         "paintKit": 567,
         "seed": 0,
         "wear": 0.0001,
@@ -3487,6 +3807,7 @@
       {
         "id": "weapon_knife_m9_bayonet:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -3498,6 +3819,7 @@
       {
         "id": "weapon_knife_m9_bayonet:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -3509,6 +3831,7 @@
       {
         "id": "weapon_knife_m9_bayonet:579",
         "displayName": "Bright Water",
+        "displayNameZh": "澄澈之水",
         "paintKit": 579,
         "seed": 0,
         "wear": 0.0001,
@@ -3520,6 +3843,7 @@
       {
         "id": "weapon_knife_m9_bayonet:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -3531,6 +3855,7 @@
       {
         "id": "weapon_knife_m9_bayonet:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -3542,6 +3867,7 @@
       {
         "id": "weapon_knife_m9_bayonet:411",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 411,
         "seed": 0,
         "wear": 0.0001,
@@ -3553,6 +3879,7 @@
       {
         "id": "weapon_knife_m9_bayonet:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -3564,6 +3891,7 @@
       {
         "id": "weapon_knife_m9_bayonet:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -3575,6 +3903,7 @@
       {
         "id": "weapon_knife_m9_bayonet:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -3586,6 +3915,7 @@
       {
         "id": "weapon_knife_m9_bayonet:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -3597,6 +3927,7 @@
       {
         "id": "weapon_knife_m9_bayonet:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -3608,6 +3939,7 @@
       {
         "id": "weapon_knife_m9_bayonet:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -3619,6 +3951,7 @@
       {
         "id": "weapon_knife_m9_bayonet:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -3630,6 +3963,7 @@
       {
         "id": "weapon_knife_m9_bayonet:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -3641,6 +3975,7 @@
       {
         "id": "weapon_knife_m9_bayonet:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -3652,6 +3987,7 @@
       {
         "id": "weapon_knife_m9_bayonet:581",
         "displayName": "Freehand",
+        "displayNameZh": "自由之手",
         "paintKit": 581,
         "seed": 0,
         "wear": 0.0001,
@@ -3663,6 +3999,7 @@
       {
         "id": "weapon_knife_m9_bayonet:568",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 568,
         "seed": 0,
         "wear": 0.0001,
@@ -3674,6 +4011,7 @@
       {
         "id": "weapon_knife_m9_bayonet:569",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 569,
         "seed": 0,
         "wear": 0.0001,
@@ -3685,6 +4023,7 @@
       {
         "id": "weapon_knife_m9_bayonet:570",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 570,
         "seed": 0,
         "wear": 0.0001,
@@ -3696,6 +4035,7 @@
       {
         "id": "weapon_knife_m9_bayonet:571",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 571,
         "seed": 0,
         "wear": 0.0001,
@@ -3707,6 +4047,7 @@
       {
         "id": "weapon_knife_m9_bayonet:572",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 572,
         "seed": 0,
         "wear": 0.0001,
@@ -3718,6 +4059,7 @@
       {
         "id": "weapon_knife_m9_bayonet:562",
         "displayName": "Lore",
+        "displayNameZh": "传说",
         "paintKit": 562,
         "seed": 0,
         "wear": 0.0001,
@@ -3729,6 +4071,7 @@
       {
         "id": "weapon_knife_m9_bayonet:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -3740,6 +4083,7 @@
       {
         "id": "weapon_knife_m9_bayonet:40",
         "displayName": "Night",
+        "displayNameZh": "噩梦之夜",
         "paintKit": 40,
         "seed": 0,
         "wear": 0.06,
@@ -3751,6 +4095,7 @@
       {
         "id": "weapon_knife_m9_bayonet:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -3762,6 +4107,7 @@
       {
         "id": "weapon_knife_m9_bayonet:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -3773,6 +4119,7 @@
       {
         "id": "weapon_knife_m9_bayonet:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -3784,6 +4131,7 @@
       {
         "id": "weapon_knife_m9_bayonet:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -3795,6 +4143,7 @@
       {
         "id": "weapon_knife_m9_bayonet:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -3806,6 +4155,7 @@
       {
         "id": "weapon_knife_m9_bayonet:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -3817,6 +4167,7 @@
       {
         "id": "weapon_knife_m9_bayonet:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -3828,6 +4179,7 @@
       {
         "id": "weapon_knife_m9_bayonet:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -3841,6 +4193,7 @@
   {
     "id": "weapon_knife_gypsy_jackknife",
     "displayName": "Navaja Knife",
+    "displayNameZh": "折刀",
     "entityName": "weapon_knife_gypsy_jackknife",
     "itemDefinitionIndex": 520,
     "enabled": true,
@@ -3848,6 +4201,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -3858,6 +4212,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -3869,6 +4224,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -3880,6 +4236,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -3891,6 +4248,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -3902,6 +4260,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:857",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 857,
         "seed": 0,
         "wear": 0.0001,
@@ -3913,6 +4272,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -3924,6 +4284,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -3935,6 +4296,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -3946,6 +4308,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -3957,6 +4320,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -3968,6 +4332,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -3979,6 +4344,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -3990,6 +4356,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -4001,6 +4368,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -4012,6 +4380,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -4023,6 +4392,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:735",
         "displayName": "Night Stripe",
+        "displayNameZh": "夜色",
         "paintKit": 735,
         "seed": 0,
         "wear": 0.06,
@@ -4034,6 +4404,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -4045,6 +4416,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -4056,6 +4428,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -4067,6 +4440,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -4078,6 +4452,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -4089,6 +4464,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -4100,6 +4476,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -4111,6 +4488,7 @@
       {
         "id": "weapon_knife_gypsy_jackknife:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -4124,6 +4502,7 @@
   {
     "id": "weapon_knife_outdoor",
     "displayName": "Nomad Knife",
+    "displayNameZh": "流浪者匕首",
     "entityName": "weapon_knife_outdoor",
     "itemDefinitionIndex": 521,
     "enabled": true,
@@ -4131,6 +4510,7 @@
       {
         "id": "weapon_knife_outdoor:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -4141,6 +4521,7 @@
       {
         "id": "weapon_knife_outdoor:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -4152,6 +4533,7 @@
       {
         "id": "weapon_knife_outdoor:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -4163,6 +4545,7 @@
       {
         "id": "weapon_knife_outdoor:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -4174,6 +4557,7 @@
       {
         "id": "weapon_knife_outdoor:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -4185,6 +4569,7 @@
       {
         "id": "weapon_knife_outdoor:410",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 410,
         "seed": 0,
         "wear": 0.0001,
@@ -4196,6 +4581,7 @@
       {
         "id": "weapon_knife_outdoor:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -4207,6 +4593,7 @@
       {
         "id": "weapon_knife_outdoor:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -4218,6 +4605,7 @@
       {
         "id": "weapon_knife_outdoor:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -4229,6 +4617,7 @@
       {
         "id": "weapon_knife_outdoor:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -4240,6 +4629,7 @@
       {
         "id": "weapon_knife_outdoor:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -4251,6 +4641,7 @@
       {
         "id": "weapon_knife_outdoor:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -4262,6 +4653,7 @@
       {
         "id": "weapon_knife_outdoor:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -4273,6 +4665,7 @@
       {
         "id": "weapon_knife_outdoor:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -4284,6 +4677,7 @@
       {
         "id": "weapon_knife_outdoor:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -4295,6 +4689,7 @@
       {
         "id": "weapon_knife_outdoor:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -4306,6 +4701,7 @@
       {
         "id": "weapon_knife_outdoor:735",
         "displayName": "Night Stripe",
+        "displayNameZh": "夜色",
         "paintKit": 735,
         "seed": 0,
         "wear": 0.06,
@@ -4317,6 +4713,7 @@
       {
         "id": "weapon_knife_outdoor:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -4328,6 +4725,7 @@
       {
         "id": "weapon_knife_outdoor:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -4339,6 +4737,7 @@
       {
         "id": "weapon_knife_outdoor:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -4350,6 +4749,7 @@
       {
         "id": "weapon_knife_outdoor:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -4361,6 +4761,7 @@
       {
         "id": "weapon_knife_outdoor:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -4372,6 +4773,7 @@
       {
         "id": "weapon_knife_outdoor:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -4383,6 +4785,7 @@
       {
         "id": "weapon_knife_outdoor:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -4394,6 +4797,7 @@
       {
         "id": "weapon_knife_outdoor:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -4407,6 +4811,7 @@
   {
     "id": "weapon_knife_cord",
     "displayName": "Paracord Knife",
+    "displayNameZh": "系绳匕首",
     "entityName": "weapon_knife_cord",
     "itemDefinitionIndex": 517,
     "enabled": true,
@@ -4414,6 +4819,7 @@
       {
         "id": "weapon_knife_cord:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -4424,6 +4830,7 @@
       {
         "id": "weapon_knife_cord:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -4435,6 +4842,7 @@
       {
         "id": "weapon_knife_cord:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -4446,6 +4854,7 @@
       {
         "id": "weapon_knife_cord:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -4457,6 +4866,7 @@
       {
         "id": "weapon_knife_cord:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -4468,6 +4878,7 @@
       {
         "id": "weapon_knife_cord:410",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 410,
         "seed": 0,
         "wear": 0.0001,
@@ -4479,6 +4890,7 @@
       {
         "id": "weapon_knife_cord:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -4490,6 +4902,7 @@
       {
         "id": "weapon_knife_cord:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -4501,6 +4914,7 @@
       {
         "id": "weapon_knife_cord:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -4512,6 +4926,7 @@
       {
         "id": "weapon_knife_cord:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -4523,6 +4938,7 @@
       {
         "id": "weapon_knife_cord:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -4534,6 +4950,7 @@
       {
         "id": "weapon_knife_cord:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -4545,6 +4962,7 @@
       {
         "id": "weapon_knife_cord:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -4556,6 +4974,7 @@
       {
         "id": "weapon_knife_cord:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -4567,6 +4986,7 @@
       {
         "id": "weapon_knife_cord:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -4578,6 +4998,7 @@
       {
         "id": "weapon_knife_cord:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -4589,6 +5010,7 @@
       {
         "id": "weapon_knife_cord:735",
         "displayName": "Night Stripe",
+        "displayNameZh": "夜色",
         "paintKit": 735,
         "seed": 0,
         "wear": 0.06,
@@ -4600,6 +5022,7 @@
       {
         "id": "weapon_knife_cord:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -4611,6 +5034,7 @@
       {
         "id": "weapon_knife_cord:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -4622,6 +5046,7 @@
       {
         "id": "weapon_knife_cord:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -4633,6 +5058,7 @@
       {
         "id": "weapon_knife_cord:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -4644,6 +5070,7 @@
       {
         "id": "weapon_knife_cord:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -4655,6 +5082,7 @@
       {
         "id": "weapon_knife_cord:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -4666,6 +5094,7 @@
       {
         "id": "weapon_knife_cord:621",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 621,
         "seed": 0,
         "wear": 0.06,
@@ -4677,6 +5106,7 @@
       {
         "id": "weapon_knife_cord:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -4690,6 +5120,7 @@
   {
     "id": "weapon_knife_push",
     "displayName": "Shadow Daggers",
+    "displayNameZh": "暗影双匕",
     "entityName": "weapon_knife_push",
     "itemDefinitionIndex": 516,
     "enabled": true,
@@ -4697,6 +5128,7 @@
       {
         "id": "weapon_knife_push:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -4707,6 +5139,7 @@
       {
         "id": "weapon_knife_push:1118",
         "displayName": "Autotronic",
+        "displayNameZh": "自动化",
         "paintKit": 1118,
         "seed": 0,
         "wear": 0.0001,
@@ -4718,6 +5151,7 @@
       {
         "id": "weapon_knife_push:1113",
         "displayName": "Black Laminate",
+        "displayNameZh": "黑色层压板",
         "paintKit": 1113,
         "seed": 0,
         "wear": 0.0001,
@@ -4729,6 +5163,7 @@
       {
         "id": "weapon_knife_push:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -4740,6 +5175,7 @@
       {
         "id": "weapon_knife_push:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -4751,6 +5187,7 @@
       {
         "id": "weapon_knife_push:579",
         "displayName": "Bright Water",
+        "displayNameZh": "澄澈之水",
         "paintKit": 579,
         "seed": 0,
         "wear": 0.0001,
@@ -4762,6 +5199,7 @@
       {
         "id": "weapon_knife_push:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -4773,6 +5211,7 @@
       {
         "id": "weapon_knife_push:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -4784,6 +5223,7 @@
       {
         "id": "weapon_knife_push:411",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 411,
         "seed": 0,
         "wear": 0.0001,
@@ -4795,6 +5235,7 @@
       {
         "id": "weapon_knife_push:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -4806,6 +5247,7 @@
       {
         "id": "weapon_knife_push:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -4817,6 +5259,7 @@
       {
         "id": "weapon_knife_push:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -4828,6 +5271,7 @@
       {
         "id": "weapon_knife_push:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -4839,6 +5283,7 @@
       {
         "id": "weapon_knife_push:617",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 617,
         "seed": 0,
         "wear": 0.0001,
@@ -4850,6 +5295,7 @@
       {
         "id": "weapon_knife_push:618",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 618,
         "seed": 0,
         "wear": 0.0001,
@@ -4861,6 +5307,7 @@
       {
         "id": "weapon_knife_push:619",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 619,
         "seed": 0,
         "wear": 0.0001,
@@ -4872,6 +5319,7 @@
       {
         "id": "weapon_knife_push:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -4883,6 +5331,7 @@
       {
         "id": "weapon_knife_push:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -4894,6 +5343,7 @@
       {
         "id": "weapon_knife_push:581",
         "displayName": "Freehand",
+        "displayNameZh": "自由之手",
         "paintKit": 581,
         "seed": 0,
         "wear": 0.0001,
@@ -4905,6 +5355,7 @@
       {
         "id": "weapon_knife_push:568",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 568,
         "seed": 0,
         "wear": 0.0001,
@@ -4916,6 +5367,7 @@
       {
         "id": "weapon_knife_push:569",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 569,
         "seed": 0,
         "wear": 0.0001,
@@ -4927,6 +5379,7 @@
       {
         "id": "weapon_knife_push:570",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 570,
         "seed": 0,
         "wear": 0.0001,
@@ -4938,6 +5391,7 @@
       {
         "id": "weapon_knife_push:571",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 571,
         "seed": 0,
         "wear": 0.0001,
@@ -4949,6 +5403,7 @@
       {
         "id": "weapon_knife_push:572",
         "displayName": "Gamma Doppler",
+        "displayNameZh": "伽玛多普勒",
         "paintKit": 572,
         "seed": 0,
         "wear": 0.0001,
@@ -4960,6 +5415,7 @@
       {
         "id": "weapon_knife_push:1108",
         "displayName": "Lore",
+        "displayNameZh": "传说",
         "paintKit": 1108,
         "seed": 0,
         "wear": 0.0001,
@@ -4971,6 +5427,7 @@
       {
         "id": "weapon_knife_push:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -4982,6 +5439,7 @@
       {
         "id": "weapon_knife_push:40",
         "displayName": "Night",
+        "displayNameZh": "噩梦之夜",
         "paintKit": 40,
         "seed": 0,
         "wear": 0.06,
@@ -4993,6 +5451,7 @@
       {
         "id": "weapon_knife_push:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -5004,6 +5463,7 @@
       {
         "id": "weapon_knife_push:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -5015,6 +5475,7 @@
       {
         "id": "weapon_knife_push:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -5026,6 +5487,7 @@
       {
         "id": "weapon_knife_push:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -5037,6 +5499,7 @@
       {
         "id": "weapon_knife_push:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -5048,6 +5511,7 @@
       {
         "id": "weapon_knife_push:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -5059,6 +5523,7 @@
       {
         "id": "weapon_knife_push:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -5070,6 +5535,7 @@
       {
         "id": "weapon_knife_push:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -5083,6 +5549,7 @@
   {
     "id": "weapon_knife_skeleton",
     "displayName": "Skeleton Knife",
+    "displayNameZh": "骷髅匕首",
     "entityName": "weapon_knife_skeleton",
     "itemDefinitionIndex": 525,
     "enabled": true,
@@ -5090,6 +5557,7 @@
       {
         "id": "weapon_knife_skeleton:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -5100,6 +5568,7 @@
       {
         "id": "weapon_knife_skeleton:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -5111,6 +5580,7 @@
       {
         "id": "weapon_knife_skeleton:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -5122,6 +5592,7 @@
       {
         "id": "weapon_knife_skeleton:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -5133,6 +5604,7 @@
       {
         "id": "weapon_knife_skeleton:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -5144,6 +5616,7 @@
       {
         "id": "weapon_knife_skeleton:410",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 410,
         "seed": 0,
         "wear": 0.0001,
@@ -5155,6 +5628,7 @@
       {
         "id": "weapon_knife_skeleton:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -5166,6 +5640,7 @@
       {
         "id": "weapon_knife_skeleton:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -5177,6 +5652,7 @@
       {
         "id": "weapon_knife_skeleton:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -5188,6 +5664,7 @@
       {
         "id": "weapon_knife_skeleton:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -5199,6 +5676,7 @@
       {
         "id": "weapon_knife_skeleton:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -5210,6 +5688,7 @@
       {
         "id": "weapon_knife_skeleton:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -5221,6 +5700,7 @@
       {
         "id": "weapon_knife_skeleton:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -5232,6 +5712,7 @@
       {
         "id": "weapon_knife_skeleton:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -5243,6 +5724,7 @@
       {
         "id": "weapon_knife_skeleton:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -5254,6 +5736,7 @@
       {
         "id": "weapon_knife_skeleton:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -5265,6 +5748,7 @@
       {
         "id": "weapon_knife_skeleton:735",
         "displayName": "Night Stripe",
+        "displayNameZh": "夜色",
         "paintKit": 735,
         "seed": 0,
         "wear": 0.06,
@@ -5276,6 +5760,7 @@
       {
         "id": "weapon_knife_skeleton:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -5287,6 +5772,7 @@
       {
         "id": "weapon_knife_skeleton:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -5298,6 +5784,7 @@
       {
         "id": "weapon_knife_skeleton:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -5309,6 +5796,7 @@
       {
         "id": "weapon_knife_skeleton:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -5320,6 +5808,7 @@
       {
         "id": "weapon_knife_skeleton:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -5331,6 +5820,7 @@
       {
         "id": "weapon_knife_skeleton:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -5342,6 +5832,7 @@
       {
         "id": "weapon_knife_skeleton:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -5353,6 +5844,7 @@
       {
         "id": "weapon_knife_skeleton:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -5366,6 +5858,7 @@
   {
     "id": "weapon_knife_stiletto",
     "displayName": "Stiletto Knife",
+    "displayNameZh": "短剑",
     "entityName": "weapon_knife_stiletto",
     "itemDefinitionIndex": 522,
     "enabled": true,
@@ -5373,6 +5866,7 @@
       {
         "id": "weapon_knife_stiletto:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -5383,6 +5877,7 @@
       {
         "id": "weapon_knife_stiletto:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -5394,6 +5889,7 @@
       {
         "id": "weapon_knife_stiletto:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -5405,6 +5901,7 @@
       {
         "id": "weapon_knife_stiletto:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -5416,6 +5913,7 @@
       {
         "id": "weapon_knife_stiletto:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -5427,6 +5925,7 @@
       {
         "id": "weapon_knife_stiletto:857",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 857,
         "seed": 0,
         "wear": 0.0001,
@@ -5438,6 +5937,7 @@
       {
         "id": "weapon_knife_stiletto:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -5449,6 +5949,7 @@
       {
         "id": "weapon_knife_stiletto:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -5460,6 +5961,7 @@
       {
         "id": "weapon_knife_stiletto:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -5471,6 +5973,7 @@
       {
         "id": "weapon_knife_stiletto:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -5482,6 +5985,7 @@
       {
         "id": "weapon_knife_stiletto:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -5493,6 +5997,7 @@
       {
         "id": "weapon_knife_stiletto:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -5504,6 +6009,7 @@
       {
         "id": "weapon_knife_stiletto:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -5515,6 +6021,7 @@
       {
         "id": "weapon_knife_stiletto:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -5526,6 +6033,7 @@
       {
         "id": "weapon_knife_stiletto:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -5537,6 +6045,7 @@
       {
         "id": "weapon_knife_stiletto:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -5548,6 +6057,7 @@
       {
         "id": "weapon_knife_stiletto:735",
         "displayName": "Night Stripe",
+        "displayNameZh": "夜色",
         "paintKit": 735,
         "seed": 0,
         "wear": 0.06,
@@ -5559,6 +6069,7 @@
       {
         "id": "weapon_knife_stiletto:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -5570,6 +6081,7 @@
       {
         "id": "weapon_knife_stiletto:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -5581,6 +6093,7 @@
       {
         "id": "weapon_knife_stiletto:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -5592,6 +6105,7 @@
       {
         "id": "weapon_knife_stiletto:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -5603,6 +6117,7 @@
       {
         "id": "weapon_knife_stiletto:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -5614,6 +6129,7 @@
       {
         "id": "weapon_knife_stiletto:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -5625,6 +6141,7 @@
       {
         "id": "weapon_knife_stiletto:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -5636,6 +6153,7 @@
       {
         "id": "weapon_knife_stiletto:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -5649,6 +6167,7 @@
   {
     "id": "weapon_knife_canis",
     "displayName": "Survival Knife",
+    "displayNameZh": "求生匕首",
     "entityName": "weapon_knife_canis",
     "itemDefinitionIndex": 518,
     "enabled": true,
@@ -5656,6 +6175,7 @@
       {
         "id": "weapon_knife_canis:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -5666,6 +6186,7 @@
       {
         "id": "weapon_knife_canis:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -5677,6 +6198,7 @@
       {
         "id": "weapon_knife_canis:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -5688,6 +6210,7 @@
       {
         "id": "weapon_knife_canis:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -5699,6 +6222,7 @@
       {
         "id": "weapon_knife_canis:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -5710,6 +6234,7 @@
       {
         "id": "weapon_knife_canis:410",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 410,
         "seed": 0,
         "wear": 0.0001,
@@ -5721,6 +6246,7 @@
       {
         "id": "weapon_knife_canis:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -5732,6 +6258,7 @@
       {
         "id": "weapon_knife_canis:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -5743,6 +6270,7 @@
       {
         "id": "weapon_knife_canis:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -5754,6 +6282,7 @@
       {
         "id": "weapon_knife_canis:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -5765,6 +6294,7 @@
       {
         "id": "weapon_knife_canis:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -5776,6 +6306,7 @@
       {
         "id": "weapon_knife_canis:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -5787,6 +6318,7 @@
       {
         "id": "weapon_knife_canis:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -5798,6 +6330,7 @@
       {
         "id": "weapon_knife_canis:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -5809,6 +6342,7 @@
       {
         "id": "weapon_knife_canis:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -5820,6 +6354,7 @@
       {
         "id": "weapon_knife_canis:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -5831,6 +6366,7 @@
       {
         "id": "weapon_knife_canis:735",
         "displayName": "Night Stripe",
+        "displayNameZh": "夜色",
         "paintKit": 735,
         "seed": 0,
         "wear": 0.06,
@@ -5842,6 +6378,7 @@
       {
         "id": "weapon_knife_canis:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -5853,6 +6390,7 @@
       {
         "id": "weapon_knife_canis:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -5864,6 +6402,7 @@
       {
         "id": "weapon_knife_canis:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -5875,6 +6414,7 @@
       {
         "id": "weapon_knife_canis:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -5886,6 +6426,7 @@
       {
         "id": "weapon_knife_canis:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -5897,6 +6438,7 @@
       {
         "id": "weapon_knife_canis:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -5908,6 +6450,7 @@
       {
         "id": "weapon_knife_canis:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -5919,6 +6462,7 @@
       {
         "id": "weapon_knife_canis:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -5932,6 +6476,7 @@
   {
     "id": "weapon_knife_widowmaker",
     "displayName": "Talon Knife",
+    "displayNameZh": "锯齿爪刀",
     "entityName": "weapon_knife_widowmaker",
     "itemDefinitionIndex": 523,
     "enabled": true,
@@ -5939,6 +6484,7 @@
       {
         "id": "weapon_knife_widowmaker:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -5949,6 +6495,7 @@
       {
         "id": "weapon_knife_widowmaker:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -5960,6 +6507,7 @@
       {
         "id": "weapon_knife_widowmaker:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -5971,6 +6519,7 @@
       {
         "id": "weapon_knife_widowmaker:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -5982,6 +6531,7 @@
       {
         "id": "weapon_knife_widowmaker:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -5993,6 +6543,7 @@
       {
         "id": "weapon_knife_widowmaker:858",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 858,
         "seed": 0,
         "wear": 0.0001,
@@ -6004,6 +6555,7 @@
       {
         "id": "weapon_knife_widowmaker:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -6015,6 +6567,7 @@
       {
         "id": "weapon_knife_widowmaker:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -6026,6 +6579,7 @@
       {
         "id": "weapon_knife_widowmaker:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -6037,6 +6591,7 @@
       {
         "id": "weapon_knife_widowmaker:852",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 852,
         "seed": 0,
         "wear": 0.0001,
@@ -6048,6 +6603,7 @@
       {
         "id": "weapon_knife_widowmaker:853",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 853,
         "seed": 0,
         "wear": 0.0001,
@@ -6059,6 +6615,7 @@
       {
         "id": "weapon_knife_widowmaker:854",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 854,
         "seed": 0,
         "wear": 0.0001,
@@ -6070,6 +6627,7 @@
       {
         "id": "weapon_knife_widowmaker:855",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 855,
         "seed": 0,
         "wear": 0.0001,
@@ -6081,6 +6639,7 @@
       {
         "id": "weapon_knife_widowmaker:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -6092,6 +6651,7 @@
       {
         "id": "weapon_knife_widowmaker:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -6103,6 +6663,7 @@
       {
         "id": "weapon_knife_widowmaker:856",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 856,
         "seed": 0,
         "wear": 0.0001,
@@ -6114,6 +6675,7 @@
       {
         "id": "weapon_knife_widowmaker:735",
         "displayName": "Night Stripe",
+        "displayNameZh": "夜色",
         "paintKit": 735,
         "seed": 0,
         "wear": 0.06,
@@ -6125,6 +6687,7 @@
       {
         "id": "weapon_knife_widowmaker:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -6136,6 +6699,7 @@
       {
         "id": "weapon_knife_widowmaker:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -6147,6 +6711,7 @@
       {
         "id": "weapon_knife_widowmaker:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -6158,6 +6723,7 @@
       {
         "id": "weapon_knife_widowmaker:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -6169,6 +6735,7 @@
       {
         "id": "weapon_knife_widowmaker:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -6180,6 +6747,7 @@
       {
         "id": "weapon_knife_widowmaker:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -6191,6 +6759,7 @@
       {
         "id": "weapon_knife_widowmaker:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -6202,6 +6771,7 @@
       {
         "id": "weapon_knife_widowmaker:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
@@ -6215,6 +6785,7 @@
   {
     "id": "weapon_knife_ursus",
     "displayName": "Ursus Knife",
+    "displayNameZh": "熊刀",
     "entityName": "weapon_knife_ursus",
     "itemDefinitionIndex": 519,
     "enabled": true,
@@ -6222,6 +6793,7 @@
       {
         "id": "weapon_knife_ursus:0",
         "displayName": "Vanilla",
+        "displayNameZh": "原版",
         "paintKit": 0,
         "seed": 0,
         "wear": 0.0001,
@@ -6232,6 +6804,7 @@
       {
         "id": "weapon_knife_ursus:42",
         "displayName": "Blue Steel",
+        "displayNameZh": "蓝钢",
         "paintKit": 42,
         "seed": 0,
         "wear": 0.0001,
@@ -6243,6 +6816,7 @@
       {
         "id": "weapon_knife_ursus:77",
         "displayName": "Boreal Forest",
+        "displayNameZh": "北方森林",
         "paintKit": 77,
         "seed": 0,
         "wear": 0.06,
@@ -6254,6 +6828,7 @@
       {
         "id": "weapon_knife_ursus:44",
         "displayName": "Case Hardened",
+        "displayNameZh": "表面淬火",
         "paintKit": 44,
         "seed": 0,
         "wear": 0.0001,
@@ -6265,6 +6840,7 @@
       {
         "id": "weapon_knife_ursus:12",
         "displayName": "Crimson Web",
+        "displayNameZh": "深红之网",
         "paintKit": 12,
         "seed": 0,
         "wear": 0.06,
@@ -6276,6 +6852,7 @@
       {
         "id": "weapon_knife_ursus:857",
         "displayName": "Damascus Steel",
+        "displayNameZh": "大马士革钢",
         "paintKit": 857,
         "seed": 0,
         "wear": 0.0001,
@@ -6287,6 +6864,7 @@
       {
         "id": "weapon_knife_ursus:415",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 415,
         "seed": 0,
         "wear": 0.0001,
@@ -6298,6 +6876,7 @@
       {
         "id": "weapon_knife_ursus:416",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 416,
         "seed": 0,
         "wear": 0.0001,
@@ -6309,6 +6888,7 @@
       {
         "id": "weapon_knife_ursus:417",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 417,
         "seed": 0,
         "wear": 0.0001,
@@ -6320,6 +6900,7 @@
       {
         "id": "weapon_knife_ursus:418",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 418,
         "seed": 0,
         "wear": 0.0001,
@@ -6331,6 +6912,7 @@
       {
         "id": "weapon_knife_ursus:419",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 419,
         "seed": 0,
         "wear": 0.0001,
@@ -6342,6 +6924,7 @@
       {
         "id": "weapon_knife_ursus:420",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 420,
         "seed": 0,
         "wear": 0.0001,
@@ -6353,6 +6936,7 @@
       {
         "id": "weapon_knife_ursus:421",
         "displayName": "Doppler",
+        "displayNameZh": "多普勒",
         "paintKit": 421,
         "seed": 0,
         "wear": 0.0001,
@@ -6364,6 +6948,7 @@
       {
         "id": "weapon_knife_ursus:38",
         "displayName": "Fade",
+        "displayNameZh": "渐变之色",
         "paintKit": 38,
         "seed": 0,
         "wear": 0.0001,
@@ -6375,6 +6960,7 @@
       {
         "id": "weapon_knife_ursus:5",
         "displayName": "Forest DDPAT",
+        "displayNameZh": "森林 DDPAT",
         "paintKit": 5,
         "seed": 0,
         "wear": 0.06,
@@ -6386,6 +6972,7 @@
       {
         "id": "weapon_knife_ursus:413",
         "displayName": "Marble Fade",
+        "displayNameZh": "渐变大理石",
         "paintKit": 413,
         "seed": 0,
         "wear": 0.0001,
@@ -6397,6 +6984,7 @@
       {
         "id": "weapon_knife_ursus:735",
         "displayName": "Night Stripe",
+        "displayNameZh": "夜色",
         "paintKit": 735,
         "seed": 0,
         "wear": 0.06,
@@ -6408,6 +6996,7 @@
       {
         "id": "weapon_knife_ursus:414",
         "displayName": "Rust Coat",
+        "displayNameZh": "外表生锈",
         "paintKit": 414,
         "seed": 0,
         "wear": 0.4,
@@ -6419,6 +7008,7 @@
       {
         "id": "weapon_knife_ursus:72",
         "displayName": "Safari Mesh",
+        "displayNameZh": "狩猎网格",
         "paintKit": 72,
         "seed": 0,
         "wear": 0.06,
@@ -6430,6 +7020,7 @@
       {
         "id": "weapon_knife_ursus:175",
         "displayName": "Scorched",
+        "displayNameZh": "枯焦之色",
         "paintKit": 175,
         "seed": 0,
         "wear": 0.06,
@@ -6441,6 +7032,7 @@
       {
         "id": "weapon_knife_ursus:59",
         "displayName": "Slaughter",
+        "displayNameZh": "屠夫",
         "paintKit": 59,
         "seed": 0,
         "wear": 0.01,
@@ -6452,6 +7044,7 @@
       {
         "id": "weapon_knife_ursus:43",
         "displayName": "Stained",
+        "displayNameZh": "人工染色",
         "paintKit": 43,
         "seed": 0,
         "wear": 0.0001,
@@ -6463,6 +7056,7 @@
       {
         "id": "weapon_knife_ursus:409",
         "displayName": "Tiger Tooth",
+        "displayNameZh": "虎牙",
         "paintKit": 409,
         "seed": 0,
         "wear": 0.0001,
@@ -6474,6 +7068,7 @@
       {
         "id": "weapon_knife_ursus:98",
         "displayName": "Ultraviolet",
+        "displayNameZh": "致命紫罗兰",
         "paintKit": 98,
         "seed": 0,
         "wear": 0.06,
@@ -6485,6 +7080,7 @@
       {
         "id": "weapon_knife_ursus:143",
         "displayName": "Urban Masked",
+        "displayNameZh": "都市伪装",
         "paintKit": 143,
         "seed": 0,
         "wear": 0.06,
