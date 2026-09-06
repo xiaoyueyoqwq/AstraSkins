@@ -323,7 +323,8 @@ public sealed class SkinManager : IDisposable
         // MVP / round cues. Team select and connect have no pawn yet; those
         // still need the kit written.
         var existingPawn = player.PlayerPawn.Value;
-        if (existingPawn is not null && existingPawn.IsValid && !player.PawnIsAlive)
+        var onPlayingTeam = player.Team is CsTeam.Terrorist or CsTeam.CounterTerrorist;
+        if (onPlayingTeam && existingPawn is not null && existingPawn.IsValid && !player.PawnIsAlive)
         {
             return;
         }

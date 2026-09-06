@@ -49,7 +49,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
     public PluginConfig Config { get; set; } = new();
 
     public override string ModuleName => "Astra Skins";
-    public override string ModuleVersion => "1.0.10-mkfix10-preview-rekick";
+    public override string ModuleVersion => "1.0.10-mkfix12-preview-rekick";
     public override string ModuleAuthor => "Ayrton09";
     public override string ModuleDescription => string.Empty;
 
@@ -641,7 +641,11 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
 
         if (_ready && IsLiveHuman(player))
         {
-            _prePawnSlots.Remove(player!.Slot);
+            if (player!.Team is CsTeam.Terrorist or CsTeam.CounterTerrorist)
+            {
+                _prePawnSlots.Remove(player.Slot);
+            }
+
             AddTimer(0.25f, () =>
             {
                 if (IsLiveHuman(player))
@@ -1076,8 +1080,11 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
                 continue;
             }
 
+            // An observer pawn on team None/Spectator is still pre-game: Valve
+            // keeps resetting inventory there too.
             var pawn = player!.PlayerPawn.Value;
-            if (pawn is not null && pawn.IsValid)
+            var onPlayingTeam = player.Team is CsTeam.Terrorist or CsTeam.CounterTerrorist;
+            if (onPlayingTeam && pawn is not null && pawn.IsValid)
             {
                 (done ??= new List<int>()).Add(slot);
                 continue;
