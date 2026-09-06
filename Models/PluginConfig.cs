@@ -19,6 +19,11 @@ public sealed class PluginConfig : BasePluginConfig
     // players see; StatTrak stays opt-in through !stattrak unless enabled.
     public bool EnableAllWeaponsStatTrak { get; set; } = false;
     public bool EnableMusicKitMvpCounter { get; set; } = false;
+    // A player who has not picked a team yet owns no team_select preview slot,
+    // so their first team select shows stock models. Seating them in a free
+    // slot on both sides shows their cosmetics there, at the cost of other
+    // players seeing them listed on both teams until they pick one.
+    public bool SeatUnassignedPlayersInTeamSelectPreview { get; set; } = true;
     public DefinitionPathConfig Definitions { get; set; } = new();
     public bool EnableAdminReloadCommand { get; set; } = true;
     public string AdminReloadPermission { get; set; } = "@css/config";

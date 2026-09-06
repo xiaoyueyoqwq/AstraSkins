@@ -49,6 +49,12 @@ public sealed class SkinManager : IDisposable
     // than Valve's Xuid assignment, drop Xuid to 0 for one tick and restore it
     // so the client rebuilds with our items already present.
     private const int MaxTeamPreviewRekicks = 2;
+    // Valve only assigns team_select Xuids to players already on a team. A
+    // freshly connected human (team None) owns no slot, so the first team
+    // select screen has nothing we can write. Seat them in a free slot on each
+    // side until they pick a team; Valve then takes over the chosen side.
+    public bool SeatUnassignedPlayersInTeamSelect { get; set; } = true;
+    private readonly Dictionary<uint, ulong> _teamSelectSeats = new();
 
     private sealed class TeamPreviewSlotState
     {
@@ -323,7 +329,8 @@ public sealed class SkinManager : IDisposable
         // MVP / round cues. Team select and connect have no pawn yet; those
         // still need the kit written.
         var existingPawn = player.PlayerPawn.Value;
-        if (existingPawn is not null && existingPawn.IsValid && !player.PawnIsAlive)
+        var onPlayingTeam = player.Team is CsTeam.Terrorist or CsTeam.CounterTerrorist;
+        if (onPlayingTeam && existingPawn is not null && existingPawn.IsValid && !player.PawnIsAlive)
         {
             return;
         }
@@ -882,11 +889,142 @@ public sealed class SkinManager : IDisposable
         }
     }
 
+    private void SeatUnassignedPlayers()
+    {
+        if (!SeatUnassignedPlayersInTeamSelect)
+        {
+            return;
+        }
+
+        List<ulong>? waiting = null;
+        for (var slot = 0; slot < Server.MaxPlayers; slot++)
+        {
+            var player = Utilities.GetPlayerFromSlot(slot);
+            if (player is null || !IsUsablePlayer(player) || player.Team != CsTeam.None)
+            {
+                continue;
+            }
+
+            var steamId = player.SteamID;
+            if (_loadedProfiles.Contains(steamId) && _profiles.ContainsKey(steamId))
+            {
+                (waiting ??= new List<ulong>()).Add(steamId);
+            }
+        }
+
+        if (waiting is null && _teamSelectSeats.Count == 0)
+        {
+            return;
+        }
+
+        var seatedBySide = new Dictionary<string, HashSet<ulong>>(StringComparer.Ordinal);
+        var freeBySide = new Dictionary<string, List<CCSGO_TeamPreviewCharacterPosition>>(StringComparer.Ordinal);
+        List<uint>? dropSeats = null;
+        foreach (var preview in EnumerateTeamPreviewPositions())
+        {
+            var designer = preview.DesignerName;
+            if (designer is null || !designer.StartsWith("team_select_", StringComparison.Ordinal))
+            {
+                continue;
+            }
+
+            var side = TeamKeyFromDesignerName(designer);
+            if (side is null)
+            {
+                continue;
+            }
+
+            var xuid = preview.Xuid;
+            if (_teamSelectSeats.TryGetValue(preview.Index, out var seatXuid))
+            {
+                if (xuid != seatXuid)
+                {
+                    // Valve reassigned the slot; it is theirs now.
+                    (dropSeats ??= new List<uint>()).Add(preview.Index);
+                }
+                else
+                {
+                    var owner = FindUsablePlayerBySteamId(seatXuid);
+                    var ownerSide = owner is null ? null : GetPlayerTeamKey(owner);
+                    if (owner is null || owner.Team != CsTeam.None)
+                    {
+                        (dropSeats ??= new List<uint>()).Add(preview.Index);
+                        // Joined this side: Valve writes the same Xuid here, leave it.
+                        // Anything else: vacate so the other side does not keep a ghost.
+                        if (ownerSide != side)
+                        {
+                            preview.Xuid = 0;
+                            TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_xuid");
+                            xuid = 0;
+                        }
+                    }
+                }
+            }
+
+            if (xuid != 0)
+            {
+                if (!seatedBySide.TryGetValue(side, out var seated))
+                {
+                    seatedBySide[side] = seated = new HashSet<ulong>();
+                }
+
+                seated.Add(xuid);
+            }
+            else
+            {
+                if (!freeBySide.TryGetValue(side, out var free))
+                {
+                    freeBySide[side] = free = new List<CCSGO_TeamPreviewCharacterPosition>();
+                }
+
+                free.Add(preview);
+            }
+        }
+
+        if (dropSeats is not null)
+        {
+            foreach (var index in dropSeats)
+            {
+                _teamSelectSeats.Remove(index);
+            }
+        }
+
+        if (waiting is null)
+        {
+            return;
+        }
+
+        foreach (var (side, free) in freeBySide)
+        {
+            free.Sort((a, b) => a.Ordinal.CompareTo(b.Ordinal));
+            seatedBySide.TryGetValue(side, out var seated);
+            var next = 0;
+            foreach (var steamId in waiting)
+            {
+                if (seated is not null && seated.Contains(steamId))
+                {
+                    continue;
+                }
+
+                if (next >= free.Count)
+                {
+                    break;
+                }
+
+                var preview = free[next++];
+                preview.Xuid = steamId;
+                TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_xuid");
+                _teamSelectSeats[preview.Index] = steamId;
+            }
+        }
+    }
+
     public void ForgetTeamPreviewState()
     {
         _teamPreviewSignatures.Clear();
         _teamPreviewEntities.Clear();
         _teamPreviewSlots.Clear();
+        _teamSelectSeats.Clear();
         _nextTeamPreviewRescanUtc = DateTime.MinValue;
     }
 
@@ -925,6 +1063,7 @@ public sealed class SkinManager : IDisposable
             {
                 _teamPreviewSignatures.Remove(entity.Index);
                 _teamPreviewSlots.Remove(entity.Index);
+                _teamSelectSeats.Remove(entity.Index);
             }
         }
         catch (Exception ex)
@@ -948,6 +1087,7 @@ public sealed class SkinManager : IDisposable
         try
         {
             var tick = Server.TickCount;
+            SeatUnassignedPlayers();
             foreach (var preview in EnumerateTeamPreviewPositions())
             {
                 var index = preview.Index;
@@ -1050,9 +1190,10 @@ public sealed class SkinManager : IDisposable
                     : _teamPreviewSignatures.TryGetValue(preview.Index, out var expected)
                         ? expected == signature ? "written" : "stale"
                         : FindUsablePlayerBySteamId(xuid) is null ? "unmanaged" : "pending";
+                var seat = _teamSelectSeats.ContainsKey(preview.Index) ? " seated" : string.Empty;
                 var timeline = slot is null
-                    ? string.Empty
-                    : $" seenTick={slot.FirstSeenTick} writeLag={(slot.FirstWriteTick < 0 ? "n/a" : (slot.FirstWriteTick - slot.FirstSeenTick).ToString())} " +
+                    ? seat
+                    : $"{seat} seenTick={slot.FirstSeenTick} writeLag={(slot.FirstWriteTick < 0 ? "n/a" : (slot.FirstWriteTick - slot.FirstSeenTick).ToString())} " +
                       $"profileReady={slot.ProfileReadyAtFirstSeen} rewrites={slot.Rewrites} rekicks={slot.Rekicks}";
                 lines.Add(
                     $"{preview.DesignerName}#{preview.Index} v{preview.Variant} o{preview.Ordinal} xuid={xuid} " +
@@ -2692,6 +2833,7 @@ public sealed class SkinManager : IDisposable
             _teamPreviewEntities.Remove(index);
             _teamPreviewSignatures.Remove(index);
             _teamPreviewSlots.Remove(index);
+            _teamSelectSeats.Remove(index);
         }
     }
 
