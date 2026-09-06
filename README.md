@@ -172,6 +172,7 @@ If `data/music_kits.json` is missing, the category simply stays hidden.
   "ApplyPlayerCosmeticsOnBotTakeover": false,
   "EnableAllWeaponsStatTrak": false,
   "EnableMusicKitMvpCounter": false,
+  "SeatUnassignedPlayersInTeamSelectPreview": true,
   "Definitions": {
     "Weapons": "data/weapons.json",
     "Knives": "data/knives.json",
@@ -201,6 +202,7 @@ If `data/music_kits.json` is missing, the category simply stays hidden.
 | `ApplyPlayerCosmeticsOnBotTakeover` | Apply the human player's cosmetics to the possessed bot pawn; off by default to preserve bot loadouts |
 | `EnableAllWeaponsStatTrak` | Start StatTrak at 0 for every weapon or knife with a selected skin |
 | `EnableMusicKitMvpCounter` | Track per-player MVP counts for selected music kits |
+| `SeatUnassignedPlayersInTeamSelectPreview` | Show a not-yet-assigned player's cosmetics on their first team select by seating them in a free preview slot on both sides; others see them listed on both teams until they pick one |
 
 ### SQLite
 
