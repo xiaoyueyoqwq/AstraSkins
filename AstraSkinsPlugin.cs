@@ -90,6 +90,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         RegisterEventHandler<EventRoundMvp>(OnRoundMvp, HookMode.Pre);
         RegisterEventHandler<EventPlayerDisconnect>(OnPlayerDisconnect);
         RegisterEventHandler<EventPlayerTeam>(OnPlayerTeam);
+        RegisterEventHandler<EventPlayerTeam>(OnBotTeamMusicReapply, HookMode.Pre);
         HookGiveNamedItem();
 
         if (hotReload && _ready)
@@ -698,8 +699,9 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         var player = @event.Userid;
         if (_ready && player is { IsValid: true, IsBot: true })
         {
-            // Bot spawns can make Valve reinitialize controller music for every
-            // player. Reapply after the new entity and inventory have settled.
+            // Bot spawns can reset every human's kit. The victory cue can fire
+            // before the 1s reconcile, so write now and once after settle.
+            ApplyMusicKitToLivePlayers();
             ScheduleMusicKitReapply(0.25f);
         }
 
@@ -759,7 +761,11 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
     private HookResult OnRoundPrestart(EventRoundPrestart @event, GameEventInfo info)
     {
         _pendingMvpCue = null;
-        // Valve fills team_intro Xuid on this event; write after the assignment lands.
+        // Valve can reset kits again on the round boundary; wait cues sample
+        // before the 1s reconcile. Preview Xuid is filled on this event.
+        // MusicKitID is cleared on the next frame; write again there.
+        ApplyMusicKitToLivePlayers();
+        Server.NextFrame(ApplyMusicKitToLivePlayers);
         ScheduleTeamPreviewApply();
         return HookResult.Continue;
     }
@@ -988,6 +994,24 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
             }
         }
 
+        return HookResult.Continue;
+    }
+
+    // bot_add of a dead bot may never spawn. Valve still resets human kits
+    // when the bot joins a team; victory/wait cues fire before the 1s reconcile.
+    private HookResult OnBotTeamMusicReapply(EventPlayerTeam @event, GameEventInfo info)
+    {
+        var player = @event.Userid;
+        if (!_ready || player is not { IsValid: true, IsBot: true })
+        {
+            return HookResult.Continue;
+        }
+
+        ApplyMusicKitToLivePlayers();
+        // Inventory MusicID is reset to 1 on the next frame after the bot
+        // joins a team; the Pre write still matches and is skipped.
+        Server.NextFrame(ApplyMusicKitToLivePlayers);
+        ScheduleMusicKitReapply(0.25f);
         return HookResult.Continue;
     }
 
