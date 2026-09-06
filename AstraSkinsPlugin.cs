@@ -56,6 +56,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         AddCommand("css_wsrefresh", "Reapply selected skins.", CommandRefresh);
         AddCommand("css_wsreset", "Reset all selected skins.", CommandReset);
         AddCommand("css_wsreload", "Reload Astra Skins definitions.", CommandReload);
+        AddCommand("css_wsresetplayer", "Reset a player's selections by SteamID64.", CommandResetPlayer);
         AddCommand("css_wsdebug", "Show Astra Skins diagnostic information.", CommandDebug);
         AddCommand("css_seed", "Set a custom paint seed for the held weapon.", CommandSeed);
         AddCommand("css_wear", "Set a custom wear value for the held weapon.", CommandWear);
@@ -303,6 +304,82 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         command.ReplyToCommand($"{FormatPrefix()} {Localizer.ForPlayer(player, messageKey)}");
     }
 
+    // Admin reset by SteamID64: works whether the target is connected or not,
+    // so an offensive name tag can be cleared without waiting for the player.
+    private void CommandResetPlayer(CCSPlayerController? player, CommandInfo command)
+    {
+        if (_config is null || _skinManager is null)
+        {
+            command.ReplyToCommand($"{FormatPrefix()} {Localizer.ForPlayer(player, "astra.not_initialized")}");
+            return;
+        }
+
+        if (!_config.EnableAdminResetCommand)
+        {
+            command.ReplyToCommand($"{FormatPrefix()} {Localizer.ForPlayer(player, "astra.adminreset_disabled")}");
+            return;
+        }
+
+        if (player is not null && !AdminManager.PlayerHasPermissions(player, _config.AdminResetPermission))
+        {
+            command.ReplyToCommand($"{FormatPrefix()} {Localizer.ForPlayer(player, "astra.adminreset_no_permission")}");
+            return;
+        }
+
+        if (command.ArgCount < 2 || !ulong.TryParse(command.GetArg(1).Trim(), NumberStyles.None, CultureInfo.InvariantCulture, out var steamId) || steamId == 0)
+        {
+            command.ReplyToCommand($"{FormatPrefix()} {Localizer.ForPlayer(player, "astra.adminreset_usage")}");
+            return;
+        }
+
+        var category = command.ArgCount > 2 ? command.GetArg(2).Trim().ToLowerInvariant() : "all";
+        var target = Utilities.GetPlayers().FirstOrDefault(p => IsLiveHuman(p) && p.SteamID == steamId);
+        bool done;
+        if (target is null)
+        {
+            done = _skinManager.ResetStored(steamId, category);
+        }
+        else if (category is "all" or "*")
+        {
+            _menuManager?.Close(target, clearScreen: true);
+            _skinManager.Reset(target);
+            done = true;
+        }
+        else
+        {
+            _menuManager?.Close(target, clearScreen: true);
+            done = _skinManager.ResetCategory(target, category);
+        }
+
+        if (!done)
+        {
+            command.ReplyToCommand($"{FormatPrefix()} {Localizer.ForPlayer(player, "astra.adminreset_usage")}");
+            return;
+        }
+
+        command.ReplyToCommand($"{FormatPrefix()} {Localizer.ForPlayer(player, "astra.adminreset_done", category, steamId, target is null ? "offline" : "online")}");
+        Logger.LogInformation("Astra Skins admin reset: {Category} for {SteamId} ({State}) by {Admin}", category, steamId, target is null ? "offline" : "online", player?.SteamID.ToString() ?? "console");
+    }
+
+    private bool ContainsBlockedWord(string nameTag)
+    {
+        var words = _config?.Customization.BlockedNameTagWords;
+        if (words is null || words.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (var word in words)
+        {
+            if (!string.IsNullOrWhiteSpace(word) && nameTag.Contains(word.Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void CommandReload(CCSPlayerController? player, CommandInfo command)
     {
         if (_config is null)
@@ -523,6 +600,12 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
                 command.ReplyToCommand($"{FormatPrefix()} {Localizer.ForPlayer(player, "astra.nametag_usage")}");
                 return;
             }
+
+            if (ContainsBlockedWord(nameTag))
+            {
+                command.ReplyToCommand($"{FormatPrefix()} {Localizer.ForPlayer(player, "astra.nametag_blocked")}");
+                return;
+            }
         }
 
         if (!RequireMaintenanceCooldown(player!, command))
@@ -704,7 +787,6 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         }
 
         Server.NextFrame(apply);
-        AddTimer(0.10f, apply, TimerFlags.STOP_ON_MAPCHANGE);
         AddTimer(0.25f, apply, TimerFlags.STOP_ON_MAPCHANGE);
     }
 
@@ -841,6 +923,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
 
     private void OnMapStart(string mapName)
     {
+        _skinManager?.ResetTeamPreviewTracking();
         if (!_ready || _skinManager is null)
         {
             return;
@@ -857,6 +940,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         }
 
         _menuManager?.OnTick();
+        _skinManager?.ReconcileTeamPreview();
 
         var now = DateTime.UtcNow;
         if (now < _nextMusicKitHealthCheckUtc)

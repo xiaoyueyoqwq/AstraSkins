@@ -24,6 +24,8 @@ public sealed class PluginConfig : BasePluginConfig
     public string AdminReloadPermission { get; set; } = "@css/config";
     public bool EnableAdminDebugCommand { get; set; } = true;
     public string AdminDebugPermission { get; set; } = "@css/config";
+    public bool EnableAdminResetCommand { get; set; } = true;
+    public string AdminResetPermission { get; set; } = "@css/config";
 }
 
 public sealed class SqliteConfig
@@ -56,6 +58,10 @@ public sealed class CustomizationConfig
     public string Permission { get; set; } = string.Empty;
     // 20 matches the name tag length the real game allows.
     public int MaxNameTagLength { get; set; } = 20;
+    // Case-insensitive substrings a name tag may not contain. Empty by
+    // default; each server adds its own. Avoid words that occur inside
+    // normal words, since the match is by substring.
+    public List<string> BlockedNameTagWords { get; set; } = new();
 }
 
 public sealed class DefinitionPathConfig

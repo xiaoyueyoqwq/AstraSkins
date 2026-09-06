@@ -22,7 +22,8 @@
   "Customization": {
     "Enabled": true,
     "Permission": "",
-    "MaxNameTagLength": 20
+    "MaxNameTagLength": 20,
+    "BlockedNameTagWords": []
   },
   "ApplyPlayerCosmeticsOnBotTakeover": false,
   "EnableStatTrakByDefault": false,
@@ -38,5 +39,7 @@
   "EnableAdminReloadCommand": true,
   "AdminReloadPermission": "@css/config",
   "EnableAdminDebugCommand": true,
-  "AdminDebugPermission": "@css/config"
+  "AdminDebugPermission": "@css/config",
+  "EnableAdminResetCommand": true,
+  "AdminResetPermission": "@css/config"
 }

@@ -609,6 +609,39 @@ public sealed class SkinManager : IDisposable
         ApplyMusicKitState(player, 0, 0, logFailures: true);
     }
 
+    // Admin reset for a player who is not connected: drop storage and cache so
+    // the next read starts clean. Connected players go through the pawn-aware
+    // Reset/ResetCategory instead.
+    public bool ResetStored(ulong steamId64, string category)
+    {
+        if (_disposed || steamId64 == 0)
+        {
+            return false;
+        }
+
+        var all = category is "all" or "*";
+        var normalized = all ? null : NormalizeResetCategory(category);
+        if (!all && normalized is null)
+        {
+            return false;
+        }
+
+        BumpProfileEpoch(steamId64);
+        _profiles.Remove(steamId64);
+        _loadedProfiles.Remove(steamId64);
+        _applyAfterLoadRequests.Remove(steamId64);
+        if (all)
+        {
+            QueueStorageWrite($"admin profile reset for {steamId64}", () => _storage.ResetProfile(steamId64));
+        }
+        else
+        {
+            QueueStorageWrite($"admin category reset ({normalized}) for {steamId64}", () => _storage.ResetCategory(steamId64, normalized!));
+        }
+
+        return true;
+    }
+
     public bool ResetCategory(CCSPlayerController player, string category)
     {
         var normalized = NormalizeResetCategory(category);
@@ -689,6 +722,75 @@ public sealed class SkinManager : IDisposable
         ApplyWeapons(player, pawn!, profile, logFailures);
         ApplyGloves(player, pawn!, profile, logFailures);
         ApplyAgent(player, pawn!, profile, logFailures);
+    }
+
+    // Preview slots keep their Xuid for a while (team select at connect, the
+    // whole intro), so remember which owner each slot was painted for and only
+    // write again when it changes. Keyed by entity index, cleared on map start.
+    private readonly Dictionary<uint, ulong> _teamPreviewPaintedFor = new();
+    // The preview slots are map entities, so keep their handles instead of
+    // scanning the entity list every tick; rescan at most once a second when
+    // the cache is empty or stale.
+    private readonly List<CCSGO_TeamPreviewCharacterPosition> _teamPreviewEntities = new();
+    private DateTime _nextTeamPreviewScanUtc = DateTime.MinValue;
+
+    public void ResetTeamPreviewTracking()
+    {
+        _teamPreviewPaintedFor.Clear();
+        _teamPreviewEntities.Clear();
+        _nextTeamPreviewScanUtc = DateTime.MinValue;
+    }
+
+    // Runs every tick: the team select screen renders the preview the moment
+    // it opens, so the write has to land on the same tick Valve assigns the
+    // owner. Cheap because it only reads one field per cached entity.
+    public void ReconcileTeamPreview()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        try
+        {
+            if (_teamPreviewEntities.Count == 0 || _teamPreviewEntities.Any(p => !p.IsValid))
+            {
+                var now = DateTime.UtcNow;
+                if (now < _nextTeamPreviewScanUtc)
+                {
+                    return;
+                }
+
+                _nextTeamPreviewScanUtc = now.AddSeconds(1);
+                _teamPreviewEntities.Clear();
+                _teamPreviewEntities.AddRange(EnumerateTeamPreviewPositions());
+                if (_teamPreviewEntities.Count == 0)
+                {
+                    return;
+                }
+            }
+
+            foreach (var preview in _teamPreviewEntities)
+            {
+                var xuid = preview.Xuid;
+                if (xuid == 0)
+                {
+                    _teamPreviewPaintedFor.Remove(preview.Index);
+                    continue;
+                }
+
+                if (_teamPreviewPaintedFor.TryGetValue(preview.Index, out var paintedFor) && paintedFor == xuid)
+                {
+                    continue;
+                }
+
+                ApplyTeamPreviewToPosition(preview, null, logFailures: false);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Astra Skins failed to reconcile team preview entities.");
+        }
     }
 
     // Team intro / team select read CCSGO_TeamPreviewCharacterPosition, not the
@@ -1873,12 +1975,112 @@ public sealed class SkinManager : IDisposable
                     continue;
                 }
 
+                if (isKnife)
+                {
+                    // Clearing the paint in place leaves the custom knife model
+                    // until the next round; hand out the stock knife now.
+                    ReplaceKnifeWithDefault(player, weapon);
+                    continue;
+                }
+
+                // Same for guns: a paint cleared in place stays visible until
+                // the entity is re-created. Only catalog weapons that carry a
+                // paint are replaced, so grenades and the C4 are never touched.
+                if (!string.IsNullOrWhiteSpace(weaponName) && weapon.FallbackPaintKit > 0)
+                {
+                    ReplaceWeaponWithStock(player, weapon, weaponName);
+                    continue;
+                }
+
                 ClearWeaponCosmetic(player, weapon);
             }
         }
         else if (logFailures)
         {
             _logger.LogWarning("Astra Skins cannot clear weapon cosmetics for player {SteamId}: weapon services are unavailable.", player.SteamID);
+        }
+    }
+
+    // Mirror of RefreshOwnedWeaponWithSelection for the reset case: same kill
+    // and give with the ammo carried over, no paint on the new entity because
+    // the profile is already empty when the GiveNamedItem hook runs.
+    private void ReplaceWeaponWithStock(CCSPlayerController player, CBasePlayerWeapon oldWeapon, string weaponEntity)
+    {
+        try
+        {
+            var wasActive = IsActiveWeapon(player, oldWeapon);
+            var oldClip = Math.Max(0, oldWeapon.Clip1);
+            var oldReserve = oldWeapon.ReserveAmmo.Length > 0 ? Math.Max(0, oldWeapon.ReserveAmmo[0]) : 0;
+
+            ClearWeaponCosmetic(player, oldWeapon);
+            oldWeapon.AddEntityIOEvent("Kill", oldWeapon, null, string.Empty, 0.01f);
+
+            var newWeapon = player.GiveNamedItem<CBasePlayerWeapon>(weaponEntity);
+            if (newWeapon is null)
+            {
+                _logger.LogWarning("Astra Skins could not create the stock {WeaponEntity} for player {SteamId} after a reset.", weaponEntity, player.SteamID);
+                return;
+            }
+
+            Server.NextFrame(() =>
+            {
+                if (!IsUsablePlayer(player) || !newWeapon.IsValid)
+                {
+                    return;
+                }
+
+                RestoreAmmo(newWeapon, oldClip, oldReserve);
+                _scheduleDelayed?.Invoke(0.2f, () =>
+                {
+                    if (IsUsablePlayer(player) && newWeapon.IsValid)
+                    {
+                        RestoreAmmo(newWeapon, oldClip, oldReserve);
+                    }
+                });
+
+                if (wasActive)
+                {
+                    player.ExecuteClientCommand(IsPistol(weaponEntity) ? "slot2" : "slot1");
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Astra Skins failed to replace {WeaponEntity} with the stock one for player {SteamId}.", weaponEntity, player.SteamID);
+        }
+    }
+
+    // The GiveNamedItem hook sees the already cleared profile, so the new knife
+    // comes out stock without any further work here.
+    private void ReplaceKnifeWithDefault(CCSPlayerController player, CBasePlayerWeapon oldKnife)
+    {
+        try
+        {
+            var wasActive = IsActiveWeapon(player, oldKnife);
+            ClearWeaponCosmetic(player, oldKnife);
+            oldKnife.AddEntityIOEvent("Kill", oldKnife, null, string.Empty, 0.01f);
+
+            var newKnife = player.GiveNamedItem<CBasePlayerWeapon>("weapon_knife");
+            if (newKnife is null)
+            {
+                _logger.LogWarning("Astra Skins could not create the stock knife for player {SteamId} after a reset.", player.SteamID);
+                return;
+            }
+
+            if (wasActive)
+            {
+                Server.NextFrame(() =>
+                {
+                    if (IsUsablePlayer(player) && newKnife.IsValid)
+                    {
+                        player.ExecuteClientCommand("slot3");
+                    }
+                });
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Astra Skins failed to replace the knife with the stock one for player {SteamId}.", player.SteamID);
         }
     }
 
@@ -2378,6 +2580,7 @@ public sealed class SkinManager : IDisposable
             ApplyTeamPreviewAgent(preview, owner, profile, team, logFailures);
             ApplyTeamPreviewGloves(preview, owner, profile, logFailures);
             ApplyTeamPreviewWeapon(preview, owner, profile, logFailures);
+            _teamPreviewPaintedFor[preview.Index] = xuid;
         }
         catch (Exception ex)
         {

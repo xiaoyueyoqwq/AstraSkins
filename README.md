@@ -22,8 +22,8 @@
 - 🔎 **Search** — `!ws <text>` finds any skin, knife, glove, agent, or music kit without scrolling through pages.
 - 🎵 **Music kits** — pick any of 99 kits from the menu, with an optional per-kit MVP counter shown on the scoreboard.
 - 💾 **Persistent selections** — SQLite or MySQL, keyed by SteamID64. Selections survive reconnects, map changes, and restarts.
-- 🌍 **7 languages** — per-player localization (English, Spanish, Chinese, Portuguese, German, French, Russian).
-- 🎬 **Team intro** shows your agent, gloves, and weapon skins on the match intro and team select screens, not the defaults.
+- 🌍 **7 languages** — per-player localization (English, Spanish, Chinese, Portuguese, German, French, Russian). Chinese players also get skin, knife, glove, agent, category, and music kit names in Chinese, and can search in either language.
+- 🎬 **Team intro** shows your agent, gloves, and weapon skins on the match intro and on the team select screen once you are on a team (the very first team select after connecting has no owner assigned by the engine, so it keeps the defaults).
 - 🗣️ **Agent radio voices** — agents keep their voice lines where the CS2 schema exposes the voice data.
 - 🤖 **Bot takeover aware** leaves a possessed bot's loadout alone by default, so bot cosmetics plugins keep working. Opt in to see your own skins on the bot instead.
 - 🛡️ **Permission gating** — restrict individual skins, knives, gloves, agents, or the whole customization feature to admin flags.
@@ -102,6 +102,7 @@ StatTrak works the same way: enable it on a weapon or knife and the counter goes
 | --- | --- | --- |
 | `!wsreload` | `@css/config` | Reload the JSON definitions and reapply skins to everyone |
 | `!wsdebug` | `@css/config` | Diagnostics: load counts, database mode, and the caller's selections |
+| `css_wsresetplayer <steamid64> [all\|weapons\|knife\|gloves\|agents\|music]` | `@css/config` | Reset a player's selections by SteamID64, connected or not (server console or admin) |
 
 Both can be disabled entirely in the config.
 
@@ -168,7 +169,8 @@ If `data/music_kits.json` is missing, the category simply stays hidden.
   "Customization": {
     "Enabled": true,
     "Permission": "",
-    "MaxNameTagLength": 20
+    "MaxNameTagLength": 20,
+    "BlockedNameTagWords": []
   },
   "ApplyPlayerCosmeticsOnBotTakeover": false,
   "EnableStatTrakByDefault": false,
@@ -184,7 +186,9 @@ If `data/music_kits.json` is missing, the category simply stays hidden.
   "EnableAdminReloadCommand": true,
   "AdminReloadPermission": "@css/config",
   "EnableAdminDebugCommand": true,
-  "AdminDebugPermission": "@css/config"
+  "AdminDebugPermission": "@css/config",
+  "EnableAdminResetCommand": true,
+  "AdminResetPermission": "@css/config"
 }
 ```
 
@@ -199,6 +203,7 @@ If `data/music_kits.json` is missing, the category simply stays hidden.
 | `Customization.Enabled` | Master switch for `!seed` / `!wear` / `!nametag` |
 | `Customization.Permission` | Restrict customization to a flag; empty = everyone |
 | `Customization.MaxNameTagLength` | Name tag cap, 4–32 (default 20 matches the real game) |
+| `Customization.BlockedNameTagWords` | Words a name tag may not contain, matched as case-insensitive substrings. Empty by default, each server adds its own, for example `["badword", "slur"]`. Avoid short or common words (`puta` would also block `computadora`) |
 | `ApplyPlayerCosmeticsOnBotTakeover` | Off by default: a bot you take over keeps its own loadout. Set to `true` to apply your knife, agent and music kit to the possessed bot (guns and gloves already in hand keep their look) |
 | `EnableStatTrakByDefault` | Every weapon and knife with a selected skin starts with a StatTrak counter at 0; players can still turn it off per item with `!stattrak reset` |
 | `EnableMusicKitMvpCounter` | Track per-player MVP counts for selected music kits |
