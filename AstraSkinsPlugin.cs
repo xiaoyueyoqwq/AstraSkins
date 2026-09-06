@@ -49,7 +49,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
     public PluginConfig Config { get; set; } = new();
 
     public override string ModuleName => "Astra Skins";
-    public override string ModuleVersion => "1.0.10-mkfix11-preview-seat";
+    public override string ModuleVersion => "1.0.10-mkfix12";
     public override string ModuleAuthor => "Ayrton09";
     public override string ModuleDescription => string.Empty;
 
@@ -81,9 +81,6 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         RegisterListener<Listeners.OnClientAuthorized>(OnClientAuthorized);
         RegisterListener<Listeners.OnMapStart>(OnMapStart);
         RegisterListener<Listeners.OnTick>(OnTick);
-        RegisterListener<Listeners.OnEntityCreated>(OnEntityCreated);
-        RegisterListener<Listeners.OnEntitySpawned>(OnEntityCreated);
-        RegisterListener<Listeners.OnEntityDeleted>(OnEntityDeleted);
         RegisterListener<Listeners.OnPlayerButtonsChanged>(OnPlayerButtonsChanged);
         RegisterListener<Listeners.OnServerPrecacheResources>(OnServerPrecacheResources);
         RegisterEventHandler<EventPlayerSpawn>(OnPlayerSpawnPre, HookMode.Pre);
@@ -144,10 +141,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         _storage = storage;
         _skinManager = new SkinManager(storage, catalog, Logger,
             (delay, action) => AddTimer(delay, () => action(), TimerFlags.STOP_ON_MAPCHANGE),
-            config.EnableAllWeaponsStatTrak)
-        {
-            SeatUnassignedPlayersInTeamSelect = config.SeatUnassignedPlayersInTeamSelectPreview
-        };
+            config.EnableAllWeaponsStatTrak);
         _menuManager = new MenuManager(_skinManager, config, Localizer, Logger);
         _nextMusicKitHealthCheckUtc = DateTime.MinValue;
         _ready = true;
@@ -395,12 +389,8 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         var knifeSkinCount = catalog.Knives.Sum(k => k.Skins.Count);
         var gloveSkinCount = catalog.Gloves.Sum(g => g.Skins.Count);
         var agentVoiceCount = catalog.Agents.Count(a => !string.IsNullOrWhiteSpace(a.VoicePrefix));
-        command.ReplyToCommand($"{FormatPrefix()} Debug: ready={_ready}, db={_config.DatabaseMode}, inputCooldown={_config.Menu.CooldownMilliseconds}ms, selectionCooldown={_config.Menu.SelectionCooldownMilliseconds}ms, seatUnassigned={_config.SeatUnassignedPlayersInTeamSelectPreview}");
+        command.ReplyToCommand($"{FormatPrefix()} Debug: ready={_ready}, db={_config.DatabaseMode}, inputCooldown={_config.Menu.CooldownMilliseconds}ms, selectionCooldown={_config.Menu.SelectionCooldownMilliseconds}ms");
         command.ReplyToCommand($"{FormatPrefix()} Data: weapons={catalog.Weapons.Count}/{weaponSkinCount}, knives={catalog.Knives.Count}/{knifeSkinCount}, gloves={catalog.Gloves.Count}/{gloveSkinCount}, agents={catalog.Agents.Count} voices={agentVoiceCount}, musicKits={catalog.MusicKits.Count}");
-        foreach (var line in _skinManager.DescribeTeamPreviewState())
-        {
-            command.ReplyToCommand($"{FormatPrefix()} Preview: {line}");
-        }
 
         if (player is null || !IsLiveHuman(player))
         {
@@ -730,7 +720,8 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         return HookResult.Continue;
     }
 
-    // Team-intro / team-select Xuid is assigned a frame or two after the event.
+    // Valve assigns preview Xuid a frame or two after these events. Write items
+    // onto already-owned slots only; do not forge m_xuid.
     private void ScheduleTeamPreviewApply(CCSPlayerController? player = null)
     {
         if (!_ready || _skinManager is null)
@@ -975,10 +966,6 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         return HookResult.Continue;
     }
 
-    // First team select happens before any spawn; the auth-time preload usually
-    // has the profile by now, so this is the earliest write the client can use.
-    // Valve fills the team_select Xuid some frames after this; the per-tick
-    // ensure covers the rest.
     private HookResult OnPlayerConnectFull(EventPlayerConnectFull @event, GameEventInfo info)
     {
         var player = @event.Userid;
@@ -986,7 +973,6 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         {
             _prePawnSlots.Add(player!.Slot);
             _skinManager?.ApplyMusicKitWhenProfileReady(player, logFailures: false);
-            ScheduleTeamPreviewApply(player);
         }
 
         return HookResult.Continue;
@@ -1004,8 +990,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
             _steamIdsBySlot[playerSlot] = steamId.SteamId64;
             _prePawnSlots.Add(playerSlot);
             // Auth often fires before the controller is a live human. Start the
-            // profile read so team-select music and preview are not waiting on
-            // a first spawn.
+            // profile read so wait-music writes are not waiting on a first spawn.
             _skinManager.PreloadProfile(steamId.SteamId64);
         }
 
@@ -1023,7 +1008,6 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
             return;
         }
 
-        _skinManager.ForgetTeamPreviewState();
         _prePawnSlots.Clear();
         AddTimer(1.0f, ApplyMusicKitToLivePlayers, TimerFlags.STOP_ON_MAPCHANGE);
     }
@@ -1036,9 +1020,6 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         }
 
         _menuManager?.OnTick();
-        // Runs after the game's frame, so a preview slot Valve filled this
-        // frame is rewritten before the same snapshot is sent.
-        _skinManager?.EnsureTeamPreviewCosmetics();
         EnsureMusicKitForPrePawnPlayers();
 
         var now = DateTime.UtcNow;
@@ -1049,22 +1030,6 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
 
         _nextMusicKitHealthCheckUtc = now.AddSeconds(1);
         EnsureMusicKitForLivePlayers();
-    }
-
-    private void OnEntityCreated(CEntityInstance entity)
-    {
-        if (_ready)
-        {
-            _skinManager?.TrackTeamPreviewEntity(entity);
-        }
-    }
-
-    private void OnEntityDeleted(CEntityInstance entity)
-    {
-        if (_ready)
-        {
-            _skinManager?.UntrackTeamPreviewEntity(entity);
-        }
     }
 
     private void EnsureMusicKitForPrePawnPlayers()

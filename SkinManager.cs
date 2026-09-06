@@ -33,47 +33,6 @@ public sealed class SkinManager : IDisposable
     private readonly HashSet<ulong> _loadedProfiles = new();
     private readonly HashSet<ulong> _loadingProfiles = new();
     private readonly HashSet<ulong> _applyAfterLoadRequests = new();
-    // Last state written to each CCSGO_TeamPreviewCharacterPosition, keyed by
-    // entity index. Valve rewrites these items when it (re)assigns Xuid; the
-    // periodic ensure only writes again when the entity no longer matches.
-    private readonly Dictionary<uint, TeamPreviewSignature> _teamPreviewSignatures = new();
-    // Preview entities by index -> raw entity handle. Kept so the per-tick
-    // ensure resolves entities directly instead of scanning designer names.
-    private readonly Dictionary<uint, uint> _teamPreviewEntities = new();
-    // Per-slot occupancy timeline (ticks) plus the Xuid re-kick bookkeeping.
-    private readonly Dictionary<uint, TeamPreviewSlotState> _teamPreviewSlots = new();
-    private DateTime _nextTeamPreviewRescanUtc = DateTime.MinValue;
-    private static readonly TimeSpan TeamPreviewRescanInterval = TimeSpan.FromSeconds(5);
-    // The client builds a preview character when m_xuid changes and copies the
-    // items it sees in that snapshot. If our items land in a later snapshot
-    // than Valve's Xuid assignment, drop Xuid to 0 for one tick and restore it
-    // so the client rebuilds with our items already present.
-    private const int MaxTeamPreviewRekicks = 2;
-    // Valve only assigns team_select Xuids to players already on a team. A
-    // freshly connected human (team None) owns no slot, so the first team
-    // select screen has nothing we can write. Seat them in a free slot on each
-    // side until they pick a team; Valve then takes over the chosen side.
-    public bool SeatUnassignedPlayersInTeamSelect { get; set; } = true;
-    private readonly Dictionary<uint, ulong> _teamSelectSeats = new();
-
-    private sealed class TeamPreviewSlotState
-    {
-        public ulong Xuid;
-        public int FirstSeenTick;
-        public int FirstWriteTick = -1;
-        public bool ProfileReadyAtFirstSeen;
-        public int Rewrites;
-        public int Rekicks;
-        public ulong RekickRestoreXuid;
-    }
-
-    private readonly record struct TeamPreviewSignature(
-        ulong Xuid,
-        ushort AgentDefinitionIndex,
-        ushort GlovesDefinitionIndex,
-        uint GlovesItemIdLow,
-        ushort WeaponDefinitionIndex,
-        uint WeaponItemIdLow);
     private readonly HashSet<ulong> _activeSteamIds = new();
     // Times the ensure pass found the music fields differing from the profile
     // after they had already been written once.
@@ -187,7 +146,6 @@ public sealed class SkinManager : IDisposable
         _loadedProfiles.Clear();
         _loadingProfiles.Clear();
         _applyAfterLoadRequests.Clear();
-        _teamPreviewSignatures.Clear();
         _profiles.Clear();
         _profileEpochs.Clear();
 
@@ -859,8 +817,10 @@ public sealed class SkinManager : IDisposable
         ApplyAgent(player, pawn!, profile, logFailures);
     }
 
-    // Team intro / team select read CCSGO_TeamPreviewCharacterPosition, not the
-    // live pawn. Only write slots whose Xuid matches a human we own.
+    // Team intro reads CCSGO_TeamPreviewCharacterPosition item fields, not the
+    // live pawn. Only write slots Valve already assigned to a human we own;
+    // do not forge m_xuid. First-connect team-select and buy-menu hover are
+    // Steam-inventory client surfaces and are not spoofed here.
     public void ApplyTeamPreviewCosmetics(CCSPlayerController? player = null, bool logFailures = false)
     {
         if (_disposed)
@@ -886,330 +846,6 @@ public sealed class SkinManager : IDisposable
             {
                 _logger.LogWarning(ex, "Astra Skins failed to enumerate team preview entities.");
             }
-        }
-    }
-
-    private void SeatUnassignedPlayers()
-    {
-        if (!SeatUnassignedPlayersInTeamSelect)
-        {
-            return;
-        }
-
-        List<ulong>? waiting = null;
-        for (var slot = 0; slot < Server.MaxPlayers; slot++)
-        {
-            var player = Utilities.GetPlayerFromSlot(slot);
-            if (player is null || !IsUsablePlayer(player) || player.Team != CsTeam.None)
-            {
-                continue;
-            }
-
-            var steamId = player.SteamID;
-            if (_loadedProfiles.Contains(steamId) && _profiles.ContainsKey(steamId))
-            {
-                (waiting ??= new List<ulong>()).Add(steamId);
-            }
-        }
-
-        if (waiting is null && _teamSelectSeats.Count == 0)
-        {
-            return;
-        }
-
-        var seatedBySide = new Dictionary<string, HashSet<ulong>>(StringComparer.Ordinal);
-        var freeBySide = new Dictionary<string, List<CCSGO_TeamPreviewCharacterPosition>>(StringComparer.Ordinal);
-        List<uint>? dropSeats = null;
-        foreach (var preview in EnumerateTeamPreviewPositions())
-        {
-            var designer = preview.DesignerName;
-            if (designer is null || !designer.StartsWith("team_select_", StringComparison.Ordinal))
-            {
-                continue;
-            }
-
-            var side = TeamKeyFromDesignerName(designer);
-            if (side is null)
-            {
-                continue;
-            }
-
-            var xuid = preview.Xuid;
-            if (_teamSelectSeats.TryGetValue(preview.Index, out var seatXuid))
-            {
-                if (xuid != seatXuid)
-                {
-                    // Valve reassigned the slot; it is theirs now.
-                    (dropSeats ??= new List<uint>()).Add(preview.Index);
-                }
-                else
-                {
-                    var owner = FindUsablePlayerBySteamId(seatXuid);
-                    var ownerSide = owner is null ? null : GetPlayerTeamKey(owner);
-                    if (owner is null || owner.Team != CsTeam.None)
-                    {
-                        (dropSeats ??= new List<uint>()).Add(preview.Index);
-                        // Joined this side: Valve writes the same Xuid here, leave it.
-                        // Anything else: vacate so the other side does not keep a ghost.
-                        if (ownerSide != side)
-                        {
-                            preview.Xuid = 0;
-                            TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_xuid");
-                            xuid = 0;
-                        }
-                    }
-                }
-            }
-
-            if (xuid != 0)
-            {
-                if (!seatedBySide.TryGetValue(side, out var seated))
-                {
-                    seatedBySide[side] = seated = new HashSet<ulong>();
-                }
-
-                seated.Add(xuid);
-            }
-            else
-            {
-                if (!freeBySide.TryGetValue(side, out var free))
-                {
-                    freeBySide[side] = free = new List<CCSGO_TeamPreviewCharacterPosition>();
-                }
-
-                free.Add(preview);
-            }
-        }
-
-        if (dropSeats is not null)
-        {
-            foreach (var index in dropSeats)
-            {
-                _teamSelectSeats.Remove(index);
-            }
-        }
-
-        if (waiting is null)
-        {
-            return;
-        }
-
-        foreach (var (side, free) in freeBySide)
-        {
-            free.Sort((a, b) => a.Ordinal.CompareTo(b.Ordinal));
-            seatedBySide.TryGetValue(side, out var seated);
-            var next = 0;
-            foreach (var steamId in waiting)
-            {
-                if (seated is not null && seated.Contains(steamId))
-                {
-                    continue;
-                }
-
-                if (next >= free.Count)
-                {
-                    break;
-                }
-
-                var preview = free[next++];
-                preview.Xuid = steamId;
-                TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_xuid");
-                _teamSelectSeats[preview.Index] = steamId;
-            }
-        }
-    }
-
-    public void ForgetTeamPreviewState()
-    {
-        _teamPreviewSignatures.Clear();
-        _teamPreviewEntities.Clear();
-        _teamPreviewSlots.Clear();
-        _teamSelectSeats.Clear();
-        _nextTeamPreviewRescanUtc = DateTime.MinValue;
-    }
-
-    public void TrackTeamPreviewEntity(CEntityInstance entity)
-    {
-        if (_disposed || entity is null || !entity.IsValid)
-        {
-            return;
-        }
-
-        try
-        {
-            if (Array.IndexOf(TeamPreviewDesignerNames, entity.DesignerName) < 0)
-            {
-                return;
-            }
-
-            _teamPreviewEntities[entity.Index] = entity.EntityHandle.Raw;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogDebug(ex, "Astra Skins failed to track a team preview entity.");
-        }
-    }
-
-    public void UntrackTeamPreviewEntity(CEntityInstance entity)
-    {
-        if (_disposed || entity is null)
-        {
-            return;
-        }
-
-        try
-        {
-            if (_teamPreviewEntities.Remove(entity.Index))
-            {
-                _teamPreviewSignatures.Remove(entity.Index);
-                _teamPreviewSlots.Remove(entity.Index);
-                _teamSelectSeats.Remove(entity.Index);
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogDebug(ex, "Astra Skins failed to untrack a team preview entity.");
-        }
-    }
-
-    // Team select on a first connect has no event that fires after Valve fills
-    // Xuid, so poll every tick: any preview slot owned by a live human whose
-    // items differ from what was last written is written again in the same
-    // frame, before the snapshot goes out. Matching slots cost a few schema
-    // reads and send nothing.
-    public void EnsureTeamPreviewCosmetics()
-    {
-        if (_disposed)
-        {
-            return;
-        }
-
-        try
-        {
-            var tick = Server.TickCount;
-            SeatUnassignedPlayers();
-            foreach (var preview in EnumerateTeamPreviewPositions())
-            {
-                var index = preview.Index;
-                _teamPreviewSlots.TryGetValue(index, out var slot);
-
-                // Second half of a re-kick: the previous snapshot carried Xuid 0
-                // with our items, now the Xuid comes back and the client rebuilds.
-                if (slot is not null && slot.RekickRestoreXuid != 0)
-                {
-                    var restore = slot.RekickRestoreXuid;
-                    slot.RekickRestoreXuid = 0;
-                    if (preview.Xuid == 0)
-                    {
-                        preview.Xuid = restore;
-                        TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_xuid");
-                    }
-                }
-
-                var xuid = preview.Xuid;
-                if (xuid == 0)
-                {
-                    _teamPreviewSignatures.Remove(index);
-                    _teamPreviewSlots.Remove(index);
-                    continue;
-                }
-
-                if (slot is null || slot.Xuid != xuid)
-                {
-                    slot = new TeamPreviewSlotState
-                    {
-                        Xuid = xuid,
-                        FirstSeenTick = tick,
-                        ProfileReadyAtFirstSeen = _loadedProfiles.Contains(xuid)
-                    };
-                    _teamPreviewSlots[index] = slot;
-                    _teamPreviewSignatures.Remove(index);
-                }
-
-                var hadSignature = _teamPreviewSignatures.TryGetValue(index, out var expected);
-                if (hadSignature && expected == ReadTeamPreviewSignature(preview))
-                {
-                    continue;
-                }
-
-                if (!ApplyTeamPreviewToPosition(preview, null, logFailures: false))
-                {
-                    continue;
-                }
-
-                var isFirstWrite = slot.FirstWriteTick < 0;
-                if (isFirstWrite)
-                {
-                    slot.FirstWriteTick = tick;
-                }
-                else if (hadSignature)
-                {
-                    slot.Rewrites++;
-                }
-
-                // Same tick as the Xuid assignment means the client never saw
-                // Valve's items, nothing to undo. Anything later needs the re-kick.
-                var clientSawOtherItems = isFirstWrite ? tick > slot.FirstSeenTick : hadSignature;
-                if (clientSawOtherItems && slot.Rekicks < MaxTeamPreviewRekicks)
-                {
-                    slot.Rekicks++;
-                    slot.RekickRestoreXuid = xuid;
-                    preview.Xuid = 0;
-                    TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_xuid");
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogDebug(ex, "Astra Skins failed to ensure team preview cosmetics.");
-        }
-    }
-
-    public IEnumerable<string> DescribeTeamPreviewState()
-    {
-        if (_disposed)
-        {
-            yield break;
-        }
-
-        var lines = new List<string>();
-        try
-        {
-            foreach (var preview in EnumerateTeamPreviewPositions())
-            {
-                var xuid = preview.Xuid;
-                _teamPreviewSlots.TryGetValue(preview.Index, out var slot);
-                if (xuid == 0 && slot?.RekickRestoreXuid is > 0)
-                {
-                    xuid = slot.RekickRestoreXuid;
-                }
-
-                var signature = ReadTeamPreviewSignature(preview);
-                var status = xuid == 0
-                    ? "idle"
-                    : _teamPreviewSignatures.TryGetValue(preview.Index, out var expected)
-                        ? expected == signature ? "written" : "stale"
-                        : FindUsablePlayerBySteamId(xuid) is null ? "unmanaged" : "pending";
-                var seat = _teamSelectSeats.ContainsKey(preview.Index) ? " seated" : string.Empty;
-                var timeline = slot is null
-                    ? seat
-                    : $"{seat} seenTick={slot.FirstSeenTick} writeLag={(slot.FirstWriteTick < 0 ? "n/a" : (slot.FirstWriteTick - slot.FirstSeenTick).ToString())} " +
-                      $"profileReady={slot.ProfileReadyAtFirstSeen} rewrites={slot.Rewrites} rekicks={slot.Rekicks}";
-                lines.Add(
-                    $"{preview.DesignerName}#{preview.Index} v{preview.Variant} o{preview.Ordinal} xuid={xuid} " +
-                    $"agent={signature.AgentDefinitionIndex} gloves={signature.GlovesDefinitionIndex}/{signature.GlovesItemIdLow} " +
-                    $"weapon={signature.WeaponDefinitionIndex}/{signature.WeaponItemIdLow} weaponName={preview.WeaponName} " +
-                    $"{status}{timeline}");
-            }
-        }
-        catch (Exception ex)
-        {
-            lines.Add($"preview enumeration failed: {ex.Message}");
-        }
-
-        foreach (var line in lines)
-        {
-            yield return line;
         }
     }
 
@@ -2796,48 +2432,7 @@ public sealed class SkinManager : IDisposable
             voicePrefix.Contains("fem", StringComparison.OrdinalIgnoreCase);
     }
 
-    private IEnumerable<CCSGO_TeamPreviewCharacterPosition> EnumerateTeamPreviewPositions()
-    {
-        var now = DateTime.UtcNow;
-        if (now >= _nextTeamPreviewRescanUtc)
-        {
-            _nextTeamPreviewRescanUtc = now.Add(TeamPreviewRescanInterval);
-            RescanTeamPreviewEntities();
-        }
-
-        if (_teamPreviewEntities.Count == 0)
-        {
-            yield break;
-        }
-
-        List<uint>? stale = null;
-        foreach (var (index, rawHandle) in _teamPreviewEntities)
-        {
-            var preview = Utilities.GetEntityFromIndex<CCSGO_TeamPreviewCharacterPosition>((int)index);
-            if (preview is null || !preview.IsValid || preview.EntityHandle.Raw != rawHandle)
-            {
-                (stale ??= new List<uint>()).Add(index);
-                continue;
-            }
-
-            yield return preview;
-        }
-
-        if (stale is null)
-        {
-            yield break;
-        }
-
-        foreach (var index in stale)
-        {
-            _teamPreviewEntities.Remove(index);
-            _teamPreviewSignatures.Remove(index);
-            _teamPreviewSlots.Remove(index);
-            _teamSelectSeats.Remove(index);
-        }
-    }
-
-    private void RescanTeamPreviewEntities()
+    private static IEnumerable<CCSGO_TeamPreviewCharacterPosition> EnumerateTeamPreviewPositions()
     {
         foreach (var designerName in TeamPreviewDesignerNames)
         {
@@ -2845,15 +2440,14 @@ public sealed class SkinManager : IDisposable
             {
                 if (preview is not null && preview.IsValid)
                 {
-                    _teamPreviewEntities[preview.Index] = preview.EntityHandle.Raw;
+                    yield return preview;
                 }
             }
         }
     }
 
     // Slot scan rather than Utilities.GetPlayers(): that helper drops
-    // controllers whose connect state is not yet PlayerConnected, which is
-    // exactly where a first-connect team select can sit.
+    // controllers whose connect state is not yet PlayerConnected.
     private static CCSPlayerController? FindUsablePlayerBySteamId(ulong steamId64)
     {
         if (steamId64 == 0)
@@ -2873,7 +2467,7 @@ public sealed class SkinManager : IDisposable
         return null;
     }
 
-    private bool ApplyTeamPreviewToPosition(
+    private void ApplyTeamPreviewToPosition(
         CCSGO_TeamPreviewCharacterPosition preview,
         CCSPlayerController? filterPlayer,
         bool logFailures)
@@ -2882,13 +2476,13 @@ public sealed class SkinManager : IDisposable
         {
             if (preview is null || !preview.IsValid)
             {
-                return false;
+                return;
             }
 
             var xuid = preview.Xuid;
             if (xuid == 0)
             {
-                return false;
+                return;
             }
 
             CCSPlayerController? owner;
@@ -2896,7 +2490,7 @@ public sealed class SkinManager : IDisposable
             {
                 if (!IsUsablePlayer(filterPlayer) || filterPlayer.SteamID != xuid)
                 {
-                    return false;
+                    return;
                 }
 
                 owner = filterPlayer;
@@ -2906,28 +2500,26 @@ public sealed class SkinManager : IDisposable
                 owner = FindUsablePlayerBySteamId(xuid);
                 if (owner is null)
                 {
-                    return false;
+                    return;
                 }
             }
 
             if (!TryGetSteamId64(owner, out var steamId))
             {
-                return false;
+                return;
             }
 
             if (!_loadedProfiles.Contains(steamId) || !_profiles.TryGetValue(steamId, out var profile))
             {
                 _activeSteamIds.Add(steamId);
                 LoadProfileInBackground(steamId, applyAfterLoad: true, logFailures);
-                return false;
+                return;
             }
 
             var team = TeamKeyFromDesignerName(preview.DesignerName) ?? GetPlayerTeamKey(owner);
             ApplyTeamPreviewAgent(preview, owner, profile, team, logFailures);
             ApplyTeamPreviewGloves(preview, owner, profile, logFailures);
             ApplyTeamPreviewWeapon(preview, owner, profile, logFailures);
-            _teamPreviewSignatures[preview.Index] = ReadTeamPreviewSignature(preview);
-            return true;
         }
         catch (Exception ex)
         {
@@ -2935,23 +2527,7 @@ public sealed class SkinManager : IDisposable
             {
                 _logger.LogWarning(ex, "Astra Skins failed to apply team preview cosmetics to a preview entity.");
             }
-
-            return false;
         }
-    }
-
-    private static TeamPreviewSignature ReadTeamPreviewSignature(CCSGO_TeamPreviewCharacterPosition preview)
-    {
-        var agent = preview.AgentItem;
-        var gloves = preview.GlovesItem;
-        var weapon = preview.WeaponItem;
-        return new TeamPreviewSignature(
-            preview.Xuid,
-            agent.Handle == IntPtr.Zero ? (ushort)0 : agent.ItemDefinitionIndex,
-            gloves.Handle == IntPtr.Zero ? (ushort)0 : gloves.ItemDefinitionIndex,
-            gloves.Handle == IntPtr.Zero ? 0u : gloves.ItemIDLow,
-            weapon.Handle == IntPtr.Zero ? (ushort)0 : weapon.ItemDefinitionIndex,
-            weapon.Handle == IntPtr.Zero ? 0u : weapon.ItemIDLow);
     }
 
     private void ApplyTeamPreviewAgent(
