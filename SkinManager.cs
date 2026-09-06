@@ -40,9 +40,26 @@ public sealed class SkinManager : IDisposable
     // Preview entities by index -> raw entity handle. Kept so the per-tick
     // ensure resolves entities directly instead of scanning designer names.
     private readonly Dictionary<uint, uint> _teamPreviewEntities = new();
-    private readonly Dictionary<uint, int> _teamPreviewRewriteCounts = new();
+    // Per-slot occupancy timeline (ticks) plus the Xuid re-kick bookkeeping.
+    private readonly Dictionary<uint, TeamPreviewSlotState> _teamPreviewSlots = new();
     private DateTime _nextTeamPreviewRescanUtc = DateTime.MinValue;
     private static readonly TimeSpan TeamPreviewRescanInterval = TimeSpan.FromSeconds(5);
+    // The client builds a preview character when m_xuid changes and copies the
+    // items it sees in that snapshot. If our items land in a later snapshot
+    // than Valve's Xuid assignment, drop Xuid to 0 for one tick and restore it
+    // so the client rebuilds with our items already present.
+    private const int MaxTeamPreviewRekicks = 2;
+
+    private sealed class TeamPreviewSlotState
+    {
+        public ulong Xuid;
+        public int FirstSeenTick;
+        public int FirstWriteTick = -1;
+        public bool ProfileReadyAtFirstSeen;
+        public int Rewrites;
+        public int Rekicks;
+        public ulong RekickRestoreXuid;
+    }
 
     private readonly record struct TeamPreviewSignature(
         ulong Xuid,
@@ -52,6 +69,9 @@ public sealed class SkinManager : IDisposable
         ushort WeaponDefinitionIndex,
         uint WeaponItemIdLow);
     private readonly HashSet<ulong> _activeSteamIds = new();
+    // Times the ensure pass found the music fields differing from the profile
+    // after they had already been written once.
+    private readonly Dictionary<ulong, (int Count, int LastTick)> _musicKitCorrections = new();
     private readonly Dictionary<ulong, ulong> _profileEpochs = new();
     private readonly object _storageQueueLock = new();
     private Task _storageQueue = Task.CompletedTask;
@@ -224,6 +244,7 @@ public sealed class SkinManager : IDisposable
         _loadedProfiles.Remove(steamId64);
         _applyAfterLoadRequests.Remove(steamId64);
         _activeSteamIds.Remove(steamId64);
+        _musicKitCorrections.Remove(steamId64);
 
         // A read still in flight must come back stale: bump the epoch instead
         // of deleting it so the callback can tell this lifecycle ended.
@@ -327,7 +348,31 @@ public sealed class SkinManager : IDisposable
             return;
         }
 
-        ApplyMusicKitState(player, kitId, mvpCount, logFailures);
+        if (ApplyMusicKitState(player, kitId, mvpCount, logFailures))
+        {
+            // First write is the initial apply; any later write means something
+            // (Valve inventory sync, engine reset) undid it after our last pass.
+            var hadStats = _musicKitCorrections.TryGetValue(steamId, out var stats);
+            _musicKitCorrections[steamId] = (hadStats ? stats.Count + 1 : 0, Server.TickCount);
+        }
+    }
+
+    public string DescribeMusicKitState(CCSPlayerController player)
+    {
+        if (!TryGetSteamId64(player, out var steamId))
+        {
+            return "invalid steamid";
+        }
+
+        var inventory = player.InventoryServices;
+        var stats = _musicKitCorrections.GetValueOrDefault(steamId);
+        var expected = _loadedProfiles.Contains(steamId) && _profiles.TryGetValue(steamId, out var profile)
+            ? ResolveMusicKitState(profile).KitId
+            : -1;
+        return $"expectedKit={(expected < 0 ? "profile-not-loaded" : expected.ToString())} controllerKit={player.MusicKitID} " +
+               $"controllerMvps={player.MusicKitMVPs} mvpNoMusic={player.MvpNoMusic} " +
+               $"inventoryMusicId={(inventory is null ? "null" : inventory.MusicID.ToString())} " +
+               $"corrections={stats.Count} lastCorrectionTick={(stats.Count == 0 ? "n/a" : stats.LastTick.ToString())} tick={Server.TickCount}";
     }
 
     // While possessing a bot the controller's PlayerPawn still points at the
@@ -618,8 +663,9 @@ public sealed class SkinManager : IDisposable
     // that pointer has to be flagged or the value only leaves the server when
     // Valve touches the component. Only fields that differ are written and
     // flagged so repeated calls from round events do not resend anything.
-    private void ApplyMusicKitState(CCSPlayerController player, int kitId, int mvpCount, bool logFailures)
+    private bool ApplyMusicKitState(CCSPlayerController player, int kitId, int mvpCount, bool logFailures)
     {
+        var changed = false;
         try
         {
             var inventory = player.InventoryServices;
@@ -628,12 +674,14 @@ public sealed class SkinManager : IDisposable
             {
                 inventory.MusicID = inventoryKitId;
                 Utilities.SetStateChanged(player, "CCSPlayerController", "m_pInventoryServices");
+                changed = true;
             }
 
             if (player.MusicKitID != kitId)
             {
                 player.MusicKitID = kitId;
                 Utilities.SetStateChanged(player, "CCSPlayerController", "m_iMusicKitID");
+                changed = true;
             }
 
             var clampedMvpCount = Math.Max(0, mvpCount);
@@ -641,12 +689,14 @@ public sealed class SkinManager : IDisposable
             {
                 player.MusicKitMVPs = clampedMvpCount;
                 Utilities.SetStateChanged(player, "CCSPlayerController", "m_iMusicKitMVPs");
+                changed = true;
             }
 
             if (player.MvpNoMusic)
             {
                 player.MvpNoMusic = false;
                 Utilities.SetStateChanged(player, "CCSPlayerController", "m_bMvpNoMusic");
+                changed = true;
             }
         }
         catch (Exception ex)
@@ -656,6 +706,8 @@ public sealed class SkinManager : IDisposable
                 _logger.LogWarning(ex, "Astra Skins failed to apply music kit for {SteamId}.", TryGetSteamId64(player, out var steamId) ? steamId : 0);
             }
         }
+
+        return changed;
     }
 
     public bool TryGetSelectedMusicKitId(CCSPlayerController player, out int musicKitId)
@@ -834,7 +886,7 @@ public sealed class SkinManager : IDisposable
     {
         _teamPreviewSignatures.Clear();
         _teamPreviewEntities.Clear();
-        _teamPreviewRewriteCounts.Clear();
+        _teamPreviewSlots.Clear();
         _nextTeamPreviewRescanUtc = DateTime.MinValue;
     }
 
@@ -872,7 +924,7 @@ public sealed class SkinManager : IDisposable
             if (_teamPreviewEntities.Remove(entity.Index))
             {
                 _teamPreviewSignatures.Remove(entity.Index);
-                _teamPreviewRewriteCounts.Remove(entity.Index);
+                _teamPreviewSlots.Remove(entity.Index);
             }
         }
         catch (Exception ex)
@@ -895,24 +947,75 @@ public sealed class SkinManager : IDisposable
 
         try
         {
+            var tick = Server.TickCount;
             foreach (var preview in EnumerateTeamPreviewPositions())
             {
+                var index = preview.Index;
+                _teamPreviewSlots.TryGetValue(index, out var slot);
+
+                // Second half of a re-kick: the previous snapshot carried Xuid 0
+                // with our items, now the Xuid comes back and the client rebuilds.
+                if (slot is not null && slot.RekickRestoreXuid != 0)
+                {
+                    var restore = slot.RekickRestoreXuid;
+                    slot.RekickRestoreXuid = 0;
+                    if (preview.Xuid == 0)
+                    {
+                        preview.Xuid = restore;
+                        TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_xuid");
+                    }
+                }
+
                 var xuid = preview.Xuid;
                 if (xuid == 0)
                 {
-                    _teamPreviewSignatures.Remove(preview.Index);
+                    _teamPreviewSignatures.Remove(index);
+                    _teamPreviewSlots.Remove(index);
                     continue;
                 }
 
-                var hadSignature = _teamPreviewSignatures.TryGetValue(preview.Index, out var expected);
+                if (slot is null || slot.Xuid != xuid)
+                {
+                    slot = new TeamPreviewSlotState
+                    {
+                        Xuid = xuid,
+                        FirstSeenTick = tick,
+                        ProfileReadyAtFirstSeen = _loadedProfiles.Contains(xuid)
+                    };
+                    _teamPreviewSlots[index] = slot;
+                    _teamPreviewSignatures.Remove(index);
+                }
+
+                var hadSignature = _teamPreviewSignatures.TryGetValue(index, out var expected);
                 if (hadSignature && expected == ReadTeamPreviewSignature(preview))
                 {
                     continue;
                 }
 
-                if (ApplyTeamPreviewToPosition(preview, null, logFailures: false) && hadSignature && expected.Xuid == xuid)
+                if (!ApplyTeamPreviewToPosition(preview, null, logFailures: false))
                 {
-                    _teamPreviewRewriteCounts[preview.Index] = _teamPreviewRewriteCounts.GetValueOrDefault(preview.Index) + 1;
+                    continue;
+                }
+
+                var isFirstWrite = slot.FirstWriteTick < 0;
+                if (isFirstWrite)
+                {
+                    slot.FirstWriteTick = tick;
+                }
+                else if (hadSignature)
+                {
+                    slot.Rewrites++;
+                }
+
+                // Same tick as the Xuid assignment means the client never saw
+                // Valve's items, nothing to undo. Anything later needs the re-kick.
+                var clientSawOtherItems = isFirstWrite ? tick > slot.FirstSeenTick : hadSignature;
+                if (clientSawOtherItems && slot.Rekicks < MaxTeamPreviewRekicks)
+                {
+                    slot.Rekicks++;
+                    slot.RekickRestoreXuid = xuid;
+                    preview.Xuid = 0;
+                    TrySetStateChanged(preview, "CCSGO_TeamPreviewCharacterPosition", "m_xuid");
                 }
             }
         }
@@ -935,17 +1038,27 @@ public sealed class SkinManager : IDisposable
             foreach (var preview in EnumerateTeamPreviewPositions())
             {
                 var xuid = preview.Xuid;
+                _teamPreviewSlots.TryGetValue(preview.Index, out var slot);
+                if (xuid == 0 && slot?.RekickRestoreXuid is > 0)
+                {
+                    xuid = slot.RekickRestoreXuid;
+                }
+
                 var signature = ReadTeamPreviewSignature(preview);
                 var status = xuid == 0
                     ? "idle"
                     : _teamPreviewSignatures.TryGetValue(preview.Index, out var expected)
                         ? expected == signature ? "written" : "stale"
                         : FindUsablePlayerBySteamId(xuid) is null ? "unmanaged" : "pending";
+                var timeline = slot is null
+                    ? string.Empty
+                    : $" seenTick={slot.FirstSeenTick} writeLag={(slot.FirstWriteTick < 0 ? "n/a" : (slot.FirstWriteTick - slot.FirstSeenTick).ToString())} " +
+                      $"profileReady={slot.ProfileReadyAtFirstSeen} rewrites={slot.Rewrites} rekicks={slot.Rekicks}";
                 lines.Add(
                     $"{preview.DesignerName}#{preview.Index} v{preview.Variant} o{preview.Ordinal} xuid={xuid} " +
                     $"agent={signature.AgentDefinitionIndex} gloves={signature.GlovesDefinitionIndex}/{signature.GlovesItemIdLow} " +
                     $"weapon={signature.WeaponDefinitionIndex}/{signature.WeaponItemIdLow} weaponName={preview.WeaponName} " +
-                    $"{status} rewrites={_teamPreviewRewriteCounts.GetValueOrDefault(preview.Index)}");
+                    $"{status}{timeline}");
             }
         }
         catch (Exception ex)
@@ -2578,7 +2691,7 @@ public sealed class SkinManager : IDisposable
         {
             _teamPreviewEntities.Remove(index);
             _teamPreviewSignatures.Remove(index);
-            _teamPreviewRewriteCounts.Remove(index);
+            _teamPreviewSlots.Remove(index);
         }
     }
 
