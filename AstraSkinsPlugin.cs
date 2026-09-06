@@ -49,7 +49,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
     public PluginConfig Config { get; set; } = new();
 
     public override string ModuleName => "Astra Skins";
-    public override string ModuleVersion => "1.0.10-mkfix11-preview-seat";
+    public override string ModuleVersion => "1.0.10-mkfix10-preview-rekick";
     public override string ModuleAuthor => "Ayrton09";
     public override string ModuleDescription => string.Empty;
 
@@ -144,10 +144,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         _storage = storage;
         _skinManager = new SkinManager(storage, catalog, Logger,
             (delay, action) => AddTimer(delay, () => action(), TimerFlags.STOP_ON_MAPCHANGE),
-            config.EnableAllWeaponsStatTrak)
-        {
-            SeatUnassignedPlayersInTeamSelect = config.SeatUnassignedPlayersInTeamSelectPreview
-        };
+            config.EnableAllWeaponsStatTrak);
         _menuManager = new MenuManager(_skinManager, config, Localizer, Logger);
         _nextMusicKitHealthCheckUtc = DateTime.MinValue;
         _ready = true;
@@ -395,7 +392,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         var knifeSkinCount = catalog.Knives.Sum(k => k.Skins.Count);
         var gloveSkinCount = catalog.Gloves.Sum(g => g.Skins.Count);
         var agentVoiceCount = catalog.Agents.Count(a => !string.IsNullOrWhiteSpace(a.VoicePrefix));
-        command.ReplyToCommand($"{FormatPrefix()} Debug: ready={_ready}, db={_config.DatabaseMode}, inputCooldown={_config.Menu.CooldownMilliseconds}ms, selectionCooldown={_config.Menu.SelectionCooldownMilliseconds}ms, seatUnassigned={_config.SeatUnassignedPlayersInTeamSelectPreview}");
+        command.ReplyToCommand($"{FormatPrefix()} Debug: ready={_ready}, db={_config.DatabaseMode}, inputCooldown={_config.Menu.CooldownMilliseconds}ms, selectionCooldown={_config.Menu.SelectionCooldownMilliseconds}ms");
         command.ReplyToCommand($"{FormatPrefix()} Data: weapons={catalog.Weapons.Count}/{weaponSkinCount}, knives={catalog.Knives.Count}/{knifeSkinCount}, gloves={catalog.Gloves.Count}/{gloveSkinCount}, agents={catalog.Agents.Count} voices={agentVoiceCount}, musicKits={catalog.MusicKits.Count}");
         foreach (var line in _skinManager.DescribeTeamPreviewState())
         {
@@ -644,11 +641,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
 
         if (_ready && IsLiveHuman(player))
         {
-            if (player!.Team is CsTeam.Terrorist or CsTeam.CounterTerrorist)
-            {
-                _prePawnSlots.Remove(player.Slot);
-            }
-
+            _prePawnSlots.Remove(player!.Slot);
             AddTimer(0.25f, () =>
             {
                 if (IsLiveHuman(player))
@@ -1083,11 +1076,8 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
                 continue;
             }
 
-            // An observer pawn on team None/Spectator is still pre-game: Valve
-            // keeps resetting inventory there too.
             var pawn = player!.PlayerPawn.Value;
-            var onPlayingTeam = player.Team is CsTeam.Terrorist or CsTeam.CounterTerrorist;
-            if (onPlayingTeam && pawn is not null && pawn.IsValid)
+            if (pawn is not null && pawn.IsValid)
             {
                 (done ??= new List<int>()).Add(slot);
                 continue;

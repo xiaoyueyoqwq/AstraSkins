@@ -27,7 +27,6 @@
   "ApplyPlayerCosmeticsOnBotTakeover": false,
   "EnableAllWeaponsStatTrak": false,
   "EnableMusicKitMvpCounter": false,
-  "SeatUnassignedPlayersInTeamSelectPreview": true,
   "Definitions": {
     "Weapons": "data/weapons.json",
     "Knives": "data/knives.json",
