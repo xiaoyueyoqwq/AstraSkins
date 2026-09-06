@@ -26,9 +26,21 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
     private MenuManager? _menuManager;
     private readonly Dictionary<int, ulong> _steamIdsBySlot = new();
     private readonly Dictionary<int, DateTime> _maintenanceCooldownsBySlot = new();
+    // Set on round_mvp, consumed if that same player then dies to planted_c4.
+    // DeathCam on the MVP's own client replaces the anthem; the 1s kit
+    // reconcile does not replay the cue.
+    private PendingMvpCue? _pendingMvpCue;
     private DateTime _nextMusicKitHealthCheckUtc = DateTime.MinValue;
     private bool _ready;
     private bool _giveNamedItemHooked;
+
+    private readonly record struct PendingMvpCue(
+        int UserId,
+        ulong SteamId,
+        long MusicKitId,
+        long MusicKitMvps,
+        int Reason,
+        long Value);
 
     public PluginConfig Config { get; set; } = new();
 
@@ -97,6 +109,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         _skinManager = null;
         _menuManager = null;
         _steamIdsBySlot.Clear();
+        _pendingMvpCue = null;
         _ready = false;
     }
 
@@ -662,6 +675,7 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
 
     private HookResult OnRoundPrestart(EventRoundPrestart @event, GameEventInfo info)
     {
+        _pendingMvpCue = null;
         // Valve fills team_intro Xuid on this event; write after the assignment lands.
         ScheduleTeamPreviewApply();
         return HookResult.Continue;
@@ -744,6 +758,29 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
         if (player is not null && player.IsValid)
         {
             _menuManager?.Close(player);
+
+            // Solo T plant: round_mvp fires, then planted_c4 kills the MVP.
+            // Other clients still hear the anthem; the dead MVP's client plays
+            // DeathCam instead. Replay the cue to that one client.
+            if (_ready &&
+                IsLiveHuman(player) &&
+                string.Equals(@event.Weapon, "planted_c4", StringComparison.OrdinalIgnoreCase) &&
+                _pendingMvpCue is { } pendingMvp &&
+                pendingMvp.UserId == player.UserId &&
+                pendingMvp.SteamId == player.SteamID)
+            {
+                var slot = player.Slot;
+                var userId = player.UserId;
+                AddTimer(0.1f, () =>
+                {
+                    var current = Utilities.GetPlayerFromSlot(slot);
+                    if (_ready && current is { IsValid: true } &&
+                        !current.IsBot && current.SteamID == pendingMvp.SteamId && current.UserId == userId)
+                    {
+                        ReplayMvpCueToClient(current, pendingMvp);
+                    }
+                }, TimerFlags.STOP_ON_MAPCHANGE);
+            }
         }
 
         var attacker = @event.Attacker;
@@ -780,9 +817,63 @@ public sealed class AstraSkinsPlugin : BasePlugin, IPluginConfig<PluginConfig>
             {
                 @event.Musickitmvps = _skinManager.RecordMusicKitMvp(player, musicKitId);
             }
+
+            if (@event.Nomusic == 0 && @event.Musickitid > 0)
+            {
+                _pendingMvpCue = new PendingMvpCue(
+                    player.UserId ?? -1,
+                    player.SteamID,
+                    @event.Musickitid,
+                    @event.Musickitmvps,
+                    @event.Reason,
+                    @event.Value);
+            }
         }
 
         return HookResult.Continue;
+    }
+
+    private void ReplayMvpCueToClient(CCSPlayerController player, PendingMvpCue pendingMvp)
+    {
+        EventRoundMvp? replay = null;
+        try
+        {
+            replay = new EventRoundMvp(force: true)
+            {
+                Userid = player,
+                Musickitid = pendingMvp.MusicKitId,
+                Musickitmvps = pendingMvp.MusicKitMvps,
+                Nomusic = 0,
+                Reason = pendingMvp.Reason,
+                Value = pendingMvp.Value
+            };
+
+            replay.FireEventToClient(player);
+            Logger.LogInformation(
+                "Astra Skins replayed round_mvp cue to C4-killed MVP: steam={SteamId}, slot={Slot}, kit={MusicKitId}, mvpCount={MusicKitMvps}",
+                player.SteamID,
+                player.Slot,
+                pendingMvp.MusicKitId,
+                pendingMvp.MusicKitMvps);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning(ex, "Astra Skins failed to replay round_mvp cue to C4-killed MVP {SteamId}.", player.SteamID);
+        }
+        finally
+        {
+            if (replay is not null)
+            {
+                try
+                {
+                    replay.Free();
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogWarning(ex, "Astra Skins failed to free replayed round_mvp event.");
+                }
+            }
+        }
     }
 
     private HookResult OnPlayerDisconnect(EventPlayerDisconnect @event, GameEventInfo info)
